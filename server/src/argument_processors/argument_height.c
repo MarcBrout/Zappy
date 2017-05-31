@@ -1,5 +1,5 @@
 #include <stdlib.h>
-#include "types.h"
+#include "config.h"
 
 int argument_height(t_config *config, char **argv, int *pos)
 {

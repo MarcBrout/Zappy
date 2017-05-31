@@ -1,7 +1,7 @@
-#include <types.h>
 #include <stdlib.h>
 #include <string.h>
 #include "arguments.h"
+#include "config.h"
 
 static const t_arg commands[7] =
     {

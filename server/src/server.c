@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include "arguments.h"
-#include "types.h"
+#include "config.h"
 
 int main(int ac, char **av)
 {
