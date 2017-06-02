@@ -1,5 +1,5 @@
 #include <string.h>
-#include "config.h"
+#include "arguments/config.h"
 
 int argument_name(t_config *config, char **argv, int *pos)
 {

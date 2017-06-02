@@ -1,5 +1,5 @@
 #include <stdlib.h>
-#include "config.h"
+#include "arguments/config.h"
 
 int argument_width(t_config *config, char **argv, int *pos)
 {

@@ -12,4 +12,4 @@ int argument_name(t_config *config, char **argv, int *pos);
 int argument_nbclients(t_config *config, char **argv, int *pos);
 int argument_time(t_config *config, char **argv, int *pos);
 
-#endif /* !ZAPPY_ARGUMENTS_H_ */
+#endif /* !ARGUMENTS_H_ */

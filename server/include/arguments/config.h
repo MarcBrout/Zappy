@@ -2,8 +2,8 @@
 // Created by brout_m on 31/05/17.
 //
 
-#ifndef TYPES_H_
-# define TYPES_H_
+#ifndef CONFIG_H_
+# define CONFIG_H_
 # define MAX_WIDTH 255
 # define MAX_HEIGHT 255
 # define MAX_CLIENT 21
@@ -32,4 +32,4 @@ struct s_config
   uint16_t time;
 };
 
-#endif /* !TYPES_H_ */
+#endif /* !CONFIG_H_ */

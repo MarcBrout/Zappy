@@ -1,4 +1,4 @@
-#include <config.h>
+#include <arguments/config.h>
 #include <stdlib.h>
 
 int argument_port(t_config *config, char **argv, int *pos)
