@@ -13,7 +13,7 @@ typedef enum e_object Object;
 typedef unsigned int Level;
 typedef enum e_direction Direction;
 typedef enum e_rdirection RDirection;
-typedef enum int ID;
+typedef int ID;
 
 enum e_object
 {

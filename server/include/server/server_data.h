@@ -5,9 +5,10 @@
 #ifndef SERVER_DATA_H_
 # define SERVER_DATA_H_
 
-#include <stdbool.h>
+# include <stdbool.h>
 # include "arguments/config.h"
-# include "server/server_types.h"
+# include "server_types.h"
+# include "circular_tools.h"
 
 typedef struct s_server t_server;
 typedef struct s_client t_client;
@@ -51,7 +52,8 @@ struct s_client
   t_ia ia;
   bool alive;
   Socket sock;
-  char *message;
+  t_circular r;
+  t_circular w;
 };
 
 struct s_game
@@ -69,5 +71,8 @@ struct s_server
   t_game game;
   t_config config;
 };
+
+int find_ID(t_server *server, ID client, bool active);
+int find_Socket(t_server *server, Socket sock);
 
 #endif /* !SERVER_DATA_H_ */

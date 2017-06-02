@@ -6,6 +6,9 @@
 # define SERVER_H_
 
 # include "server/server_types.h"
-# include "server/server.h"
+# include "server/server_data.h"
+# include "server/socket.h"
+
+int launch_server(t_server *server);
 
 #endif /* !ZAPPY_SERVER_H_ */

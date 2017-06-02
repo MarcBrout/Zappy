@@ -1,12 +1,15 @@
 #include <stdlib.h>
-#include "arguments/arguments.h"
-#include "arguments/config.h"
+#include <string.h>
+#include "server.h"
+#include "argument_processor.h"
 
 int main(int ac, char **av)
 {
-  t_config config;
+  t_server server;
 
-  if (process_command_line(&config, ac, av))
-    return (EXIT_FAILURE);
+  memset(&server, 0, sizeof(server));
+  if (process_command_line(&server.config, ac, av) ||
+      launch_server(&server))
+    return (84);
   return (EXIT_SUCCESS);
 }

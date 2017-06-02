@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
-#include "argument_processor.h"
+#include "arguments/arguments.h"
+#include "arguments/config.h"
 
 static const t_arg commands[7] =
     {
@@ -18,7 +19,6 @@ int process_command_line(t_config *config, int ac, char **args)
   int argument;
   int i;
 
-  memset(config, 0, sizeof(*config));
   if (ac < 14)
     return (print_help(args[0]) || EXIT_FAILURE);
   argument = 1;
