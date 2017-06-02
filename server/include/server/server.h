@@ -5,6 +5,7 @@
 #ifndef SERVER_DATA_H_
 # define SERVER_DATA_H_
 
+#include <stdbool.h>
 # include "arguments/config.h"
 # include "server/server_types.h"
 
@@ -25,7 +26,7 @@ struct s_position
 
 struct s_cell
 {
-  Object objects[THYSTAME];
+  Object objects[OBJ_COUNT];
 };
 
 struct s_egg
@@ -41,12 +42,14 @@ struct s_ia
   Level level;
   Direction dir;
   t_position pos;
-  Object inventory[THYSTAME];
+  Object inventory[OBJ_COUNT];
 };
 
 struct s_client
 {
+  ID id;
   t_ia ia;
+  bool alive;
   Socket sock;
   char *message;
 };

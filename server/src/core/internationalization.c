@@ -4,7 +4,7 @@
 
 #include "server/server_types.h"
 
-static char const *names[THYSTAME] =
+static char const *names[OBJ_COUNT] =
     {
         "food",
         "linemate",
@@ -12,12 +12,11 @@ static char const *names[THYSTAME] =
         "sibur",
         "mendiane",
         "phiras",
-        "thystame"
+        "thystame",
+        "none"
     };
-
-static char const *none = "none";
 
 inline const char *nameof(enum e_object obj)
 {
-  return (obj > THYSTAME ? none : names[obj]);
+  return (obj > THYSTAME ? names[OBJ_COUNT] : names[obj]);
 }

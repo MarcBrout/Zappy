@@ -13,6 +13,7 @@ typedef enum e_object Object;
 typedef unsigned int Level;
 typedef enum e_direction Direction;
 typedef enum e_rdirection RDirection;
+typedef enum int ID;
 
 enum e_object
 {
@@ -22,7 +23,8 @@ enum e_object
   SIBUR,
   MENDIANE,
   PHIRAS,
-  THYSTAME
+  THYSTAME,
+  OBJ_COUNT
 };
 
 enum e_direction
