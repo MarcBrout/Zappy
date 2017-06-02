@@ -2,6 +2,7 @@
 # define PROCEED_H_
 
 # include <sys/socket.h>
+# include "server/server_data.h"
 
 typedef int		(*func_t)(t_server *server, Socket sock, char *cmd);
 

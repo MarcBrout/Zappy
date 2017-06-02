@@ -65,7 +65,7 @@ static int running(t_server *server)
 
 static int init_server(t_server *server)
 {
-  static const t_config *config = &server->config;
+  t_config *config = &server->config;
 
   server->game.width = config->width;
   server->game.height = config->height;

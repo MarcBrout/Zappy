@@ -12,8 +12,7 @@ static char const *names[OBJ_COUNT] =
         "sibur",
         "mendiane",
         "phiras",
-        "thystame",
-        "none"
+        "thystame"
     };
 
 inline const char *nameof(enum e_object obj)

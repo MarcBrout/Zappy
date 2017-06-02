@@ -4,6 +4,8 @@ SERVER_FOLDER=	src/
 
 ARGS= argument_processors/argument_
 
+CORE= core/
+
 SERVER_RAW_SRC=	server.c \
 				argument_parsing.c \
 				help.c \
@@ -12,7 +14,13 @@ SERVER_RAW_SRC=	server.c \
 				$(ARGS)nbclients.c \
 				$(ARGS)port.c \
 				$(ARGS)time.c \
-				$(ARGS)width.c
+				$(ARGS)width.c \
+				$(CORE)circular_buffer.c \
+				$(CORE)internationalization.c \
+				$(CORE)proceed.c \
+				$(CORE)proceed_writes.c \
+				$(CORE)server_launch.c \
+				$(CORE)socket.c
 
 SERVER_SRC=	$(addprefix $(SERVER_FOLDER), $(SERVER_RAW_SRC))
 

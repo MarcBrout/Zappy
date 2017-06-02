@@ -93,6 +93,6 @@ int			proceed(t_server *server,
 				fd_set *fds_read, fd_set *fds_write)
 {
   return (proceed_reads(server, fds_read) ||
-	  proceed_commands(server) ||
+	//  proceed_commands(server) ||
 	  proceed_writes(server, fds_write));
 }

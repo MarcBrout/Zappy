@@ -37,10 +37,10 @@ enum e_direction
 
 enum e_rdirection
 {
-  SOUTH = 1,
-  WEST,
-  NORTH,
-  EAST
+  RSOUTH = 1,
+  RWEST,
+  RNORTH,
+  REAST
 };
 
 const char *nameof(enum e_object obj);
