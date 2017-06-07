@@ -60,6 +60,7 @@ static int running(t_server *server)
       return (1);
   }
   //TODO free resources
+  //TODO verify player disconnection
   return (0);
 }
 

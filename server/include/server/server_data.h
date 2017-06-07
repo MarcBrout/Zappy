@@ -33,6 +33,7 @@ struct s_cell
 struct s_egg
 {
   t_egg *next;
+  Team team;
   int hatching;
   t_position pos;
 };

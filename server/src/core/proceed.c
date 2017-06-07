@@ -62,6 +62,7 @@ static int		read_client(t_client *client, Socket sock)
     {
       close(sock);
       memset(client, 0, sizeof(t_client));
+      //TODO client quitted -> death to check
       return (0);
     }
   if (strcmp(buff, "\n"))
@@ -93,6 +94,6 @@ int			proceed(t_server *server,
 				fd_set *fds_read, fd_set *fds_write)
 {
   return (proceed_reads(server, fds_read) ||
-	//  proceed_commands(server) ||
+	  //proceed_commands(server) ||
 	  proceed_writes(server, fds_write));
 }
