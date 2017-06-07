@@ -34,8 +34,9 @@ static int		write_out(t_client *client, Socket sock,
       return (1);
     }
   notwritten = (len + 1) - written;
-  if (notwritten)
+  if (notwritten > 0)
   {
+    client->w.remains = true;
     client->w.pos -= notwritten > client->w.pos ?
                      BUFFER_MAX_SIZE - (notwritten - client->w.pos) :
                      client->w.pos - notwritten;
@@ -51,7 +52,8 @@ static int		send_client(t_client *client, Socket sock)
 
   memset(out, 0, MESSAGE_MAX_SIZE);
   while (strfromcircular(&client->w, out) ||
-         (strlen(out) && !strncmp("322", out, 3))) // TODO CHECK THIS
+         (strlen(out) && !strncmp("322", out, 3)) ||
+        client->w.remains) // TODO CHECK THIS
     {
       len = strlen(out);
       if (write_out(client, sock, out, len && !strncmp("322", out, 3))) //TODO CHECK THIS

@@ -21,6 +21,7 @@ typedef struct		s_circular t_circular;
 
 struct			s_circular
 {
+  bool                  remains;
   int			pos;
   int			len;
   char			buffer[BUFFER_MAX_SIZE];

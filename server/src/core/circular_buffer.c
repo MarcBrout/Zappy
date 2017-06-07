@@ -36,23 +36,34 @@ void		strncircular(t_circular *c, char *str, int n)
 
 static bool	end(t_circular *c, int pos)
 {
-  return (c->buffer[pos] == '\r');
+  if (c->remains)
+  {
+    c->remains = false;
+    return (false);
+  }
+  return (c->buffer[pos] == '\n');
 }
 
 bool		find_command(t_circular *c)
 {
+  bool          state;
   int		pos;
   int		i;
 
   i = 0;
   pos = c->pos;
+  state = c->remains;
   while (i < c->len)
     {
       if (end(c, pos))
-	return (true);
+      {
+        c->remains = true;
+        return (true);
+      }
       ++i;
       INCR(pos);
     }
+  c->remains = state;
   return (false);
 }
 
