@@ -4,15 +4,15 @@
 #include <stdio.h>
 #include "server.h"
 
-static int		bind_and_listen(t_server *server, uint16_t port)
+static int		bind_and_listen(Socket sock, uint16_t port, int q)
 {
   struct sockaddr_in	addr;
 
   addr.sin_family = AF_INET;
   addr.sin_port = htons(port);
   addr.sin_addr.s_addr = INADDR_ANY;
-  if (bind(server->sock, (struct sockaddr const *)&addr,
-           sizeof(addr)) < 0 || listen(server->sock, 512) < 0)
+  if (bind(sock, (struct sockaddr const *)&addr,
+           sizeof(addr)) < 0 || listen(sock, q) < 0)
   {
     perror("Server bind error");
     return (1);
@@ -20,7 +20,7 @@ static int		bind_and_listen(t_server *server, uint16_t port)
   return (0);
 }
 
-int			create_server_socket(t_server *server, uint16_t port)
+int			create_socket(Socket *s, uint16_t port, int q)
 {
   Socket		sock;
   int			ok;
@@ -34,6 +34,6 @@ int			create_server_socket(t_server *server, uint16_t port)
     perror("Socket creation error");
     return (1);
   }
-  server->sock = sock;
-  return (bind_and_listen(server, port));
+  *s = sock;
+  return (bind_and_listen(sock, port, q));
 }

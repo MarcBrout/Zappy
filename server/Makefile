@@ -4,6 +4,10 @@ SERVER_FOLDER=	src/
 
 ARGS= argument_processors/argument_
 
+GUICMD= gui_commands/gui_
+
+IACMD= ia_commands/ia_
+
 CORE= core/
 
 SERVER_RAW_SRC=	server.c \
@@ -20,7 +24,13 @@ SERVER_RAW_SRC=	server.c \
 				$(CORE)proceed.c \
 				$(CORE)proceed_writes.c \
 				$(CORE)server_launch.c \
-				$(CORE)socket.c
+				$(CORE)socket.c \
+				$(CORE)accepts.c \
+				$(CORE)proceed_reads.c \
+				$(CORE)senders.c \
+				$(CORE)set_gui.c \
+				$(GUICMD)unknown.c \
+				$(IACMD)unknown.c
 
 SERVER_SRC=	$(addprefix $(SERVER_FOLDER), $(SERVER_RAW_SRC))
 

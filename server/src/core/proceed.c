@@ -1,99 +1,84 @@
-#include <unistd.h>
-#include <sys/socket.h>
+//
+// Created by brout_m on 09/06/17.
+//
+
 #include <string.h>
-#include <stdio.h>
-#include <arpa/inet.h>
+#include "server/gui_commands.h"
+#include "server/ia_commands.h"
 #include "server.h"
-#include "server/proceed.h"
 
-int                     find_ID(t_server *server, ID client, bool active)
-{
-  ID                    cli;
-
-  cli = 0;
-  while (cli < server->config.max_player * 2)
-  {
-    if (!active && !server->game.clients[cli].alive)
-      return (cli);
-    if (active && client == server->game.clients[cli].id)
-      return (cli);
-    ++cli;
-  }
-  return (-1);
-}
-
-static int		accept_new_client(t_server *server)
-{
-  static ID             id = 0;
-  struct sockaddr_in	addr;
-  socklen_t		len;
-  int			sock;
-  int                   cli;
-
-  len = sizeof(addr);
-  if ((sock = accept(server->sock, (struct sockaddr *)&addr, &len)) < 0 ||
-      getsockname(sock, (struct sockaddr *)&addr, &len) < 0)
-  {
-    perror("Client accept error");
-    return (1);
-  }
-  cli = find_ID(server, 0, false);
-  server->game.clients[cli].alive = true;
-  server->game.clients[cli].sock = sock;
-  server->game.clients[cli].id = id;
-  ++id;
-  return (0);
-}
-
-static int		read_client(t_client *client, Socket sock)
-{
-  static char const	ctrl_c[5] = {0xff, 0xf4, 0xff, 0xfd, 0x06};
-  char			buff[MESSAGE_MAX_SIZE];
-  ssize_t		len;
-
-  memset(buff, 0, MESSAGE_MAX_SIZE);
-  if ((len = read(sock, buff, MESSAGE_MAX_SIZE - 1)) < 0)
+static const t_command gui_commands[GUI_END + 1] =
     {
-      perror("Read from client error");
+        {"msz", 3, gui_unknown},
+        {"bct", 3, gui_unknown},
+        {"mct", 3, gui_unknown},
+        {"tna", 3, gui_unknown},
+        {"ppo", 3, gui_unknown},
+        {"plv", 3, gui_unknown},
+        {"pin", 3, gui_unknown},
+        {"sgt", 3, gui_unknown},
+        {"ssi", 3, gui_unknown},
+        {"unknown", 7, gui_unknown}
+    };
+
+static const t_command ia_commands[IA_END + 1] =
+    {
+        {"Advance", 7, ia_unknown},
+        {"Right", 7, ia_unknown},
+        {"Left", 7, ia_unknown},
+        {"See", 7, ia_unknown},
+        {"Inventory", 7, ia_unknown},
+        {"Broadcast", 7, ia_unknown},
+        {"Connect_nbr", 7, ia_unknown},
+        {"Fork", 7, ia_unknown},
+        {"Eject", 7, ia_unknown},
+        {"Take", 7, ia_unknown},
+        {"Set", 7, ia_unknown},
+        {"Incantation", 7, ia_unknown},
+        {"unknown", 7, ia_unknown}
+    };
+
+static int run(t_server *server, Socket sock, const t_command *commands, size_t size)
+{
+  char cmd[MESSAGE_MAX_SIZE];
+  size_t i;
+
+  i = 0;
+  strfromcircular(&server->game.clients[sock].r, cmd);
+  while (i < size)
+  {
+    if (!strncmp(commands[i].cmd, cmd, commands[i].len) &&
+        commands[i].exec(server, sock, cmd))
       return (1);
-    }
-  if (!len || strchr(buff, 4) ||
-      (len == sizeof(ctrl_c) && !memcmp(buff, ctrl_c, sizeof(ctrl_c))))
-    {
-      close(sock);
-      memset(client, 0, sizeof(t_client));
-      //TODO client quitted -> death to check
-      return (0);
-    }
-  if (strcmp(buff, "\n"))
-    strncircular(&client->r, buff, len);
+    ++i;
+  }
+  if (i == size)
+    return (commands[size].exec(server, sock, cmd));
   return (0);
 }
 
-static int		proceed_reads(t_server *server, fd_set *fds_read)
+int  proceed_commands(t_server *server)
 {
-  Socket		sock;
+  int i;
 
-  sock = 0;
-  while (sock < server->config.max_player * 2)
-    {
-      if (FD_ISSET(sock, fds_read))
-	{
-	  if ((sock == server->sock && accept_new_client(server)) ||
-	      (sock != server->sock &&
-	       read_client(&server->game.clients[find_Socket(server, sock)],
-                           sock)))
-	    return (1);
-	}
-      ++sock;
-    }
+  if (find_command(&server->gui.r) &&
+      run(server, server->gui.sock, gui_commands, GUI_END))
+    return (1);
+  i = 0;
+  while (i < server->config.max_player * 2)
+  {
+    if (find_command(&server->game.clients[i].r) &&
+        run(server, server->game.clients[i].sock, ia_commands, IA_END))
+      return (1);
+    ++i;
+  }
   return (0);
 }
 
-int			proceed(t_server *server,
-				fd_set *fds_read, fd_set *fds_write)
+int proceed(t_server *server,
+                fd_set *fds_read, fd_set *fds_write)
 {
   return (proceed_reads(server, fds_read) ||
-	  //proceed_commands(server) ||
-	  proceed_writes(server, fds_write));
+          proceed_commands(server) ||
+          proceed_writes(server, fds_write));
 }

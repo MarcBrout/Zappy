@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <server/proceed.h>
+#include "server/proceed.h"
 #include "server.h"
 
 static bool gl_stop = false;
@@ -23,10 +23,11 @@ static int		set_fds(t_server *server,
   int			max;
 
   ia = 0;
+  max = set_gui(server, fds_read, fds_write);
   FD_ZERO(fds_read);
   FD_ZERO(fds_write);
-  FD_SET(server->sock, fds_read);
-  max = server->sock;
+  FD_SET(server->ia_sock, fds_read);
+  max = server->ia_sock > max ? server->ia_sock : max;
   while (ia < server->config.max_player * 2)
   {
     client = &server->game.clients[ia];
@@ -35,7 +36,7 @@ static int		set_fds(t_server *server,
       FD_SET(client->sock, fds_read);
       if (find_command(&client->w))
         FD_SET(client->sock, fds_write);
-      max = client->sock;
+      max = client->sock > max ? client->sock : max;
     }
     ++ia;
   }
@@ -54,12 +55,16 @@ static int running(t_server *server)
     if (select(max, &reads, &writes, NULL, NULL) < 0)
     {
       perror("Select error");
+      free(server->game.clients);
       return (1);
     }
     else if (proceed(server, &reads, &writes))
+    {
+      free(server->game.clients);
       return (1);
+    }
   }
-  //TODO free resources
+  free(server->game.clients);
   //TODO verify player disconnection
   return (0);
 }
@@ -87,6 +92,8 @@ int launch_server(t_server *server)
   return (sigaction(SIGINT, &action, NULL) == -1 ||
           signal(SIGPIPE, SIG_IGN) == SIG_ERR ||
           init_server(server) ||
-          create_server_socket(server, server->config.port) ||
+          create_socket(&server->ia_sock, server->config.port,
+                        server->config.max_player * 2) ||
+          create_socket(&server->gui_sock, 8484, 1) ||
           running(server));
 }

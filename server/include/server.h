@@ -8,7 +8,6 @@
 # include "server/server_types.h"
 # include "server/server_data.h"
 # include "server/socket.h"
-
-int launch_server(t_server *server);
+# include "server/proceed.h"
 
 #endif /* !ZAPPY_SERVER_H_ */

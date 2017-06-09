@@ -68,7 +68,9 @@ struct s_game
 
 struct s_server
 {
-  Socket sock;
+  Socket ia_sock;
+  Socket gui_sock;
+  t_client gui;
   t_game game;
   t_config config;
 };
