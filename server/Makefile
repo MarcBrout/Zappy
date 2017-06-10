@@ -1,44 +1,48 @@
-SERVER=		zappy_server
+##
+## Makefile for Server Makefile in /home/pierre/rendu/TEK2/PSU_2016_zappy
+## 
+## Made by PierreBougon
+## Login   <pierre@epitech.net>
+## 
+## Started on  Sat Jun 10 21:33:53 2017 PierreBougon
+## Last update Sat Jun 10 22:02:01 2017 PierreBougon
+##
 
-SERVER_FOLDER=	src/
+include ../mk/colors.mk ../mk/commands.mk ../mk/definitions.mk
 
-ARGS= argument_processors/argument_
 
-SERVER_RAW_SRC=	server.c \
-				argument_parsing.c \
-				help.c \
-				$(ARGS)height.c \
-				$(ARGS)name.c \
-				$(ARGS)nbclients.c \
-				$(ARGS)port.c \
-				$(ARGS)time.c \
-				$(ARGS)width.c
+#############################
+##### Server variables  #####
+#############################
 
-SERVER_SRC=	$(addprefix $(SERVER_FOLDER), $(SERVER_RAW_SRC))
+PROJECT_NAME=		zappy_server
 
-SERVER_OBJ=	$(SERVER_SRC:.c=.o)
+NAME=			../$(PROJECT_NAME)
 
-INC=		-I./include
+ARGS= 			argument_processors/argument_
 
-CC=		gcc
+# Project sources
 
-CFLAGS=		-W -Wall -Werror -Ofast $(INC)
+SERVER_RAW_SRC=		server.c \
+			argument_parsing.c \
+			help.c \
+			$(ARGS)height.c \
+			$(ARGS)name.c \
+			$(ARGS)nbclients.c \
+			$(ARGS)port.c \
+			$(ARGS)time.c \
+			$(ARGS)width.c
 
-ifeq ($(DEBUG),yes)
-CFLAGS+=	-g3
-endif
+SERVER_SRC=		$(addprefix src/, $(SERVER_RAW_SRC))
 
-$(SERVER): $(SERVER_OBJ)
-	$(CC) -o $(SERVER) $(SERVER_OBJ) $(INC)
+OBJ=			$(SERVER_SRC:.c=.o)
 
-all: $(SERVER)
+INC=			-Iinclude
 
-clean:
-	rm -f $(SERVER_OBJ)
+LDFLAGS+=
 
-fclean: clean
-	rm -f $(SERVER)
+CFLAGS+=		-Ofast
 
-re: fclean all
+## Core rules
 
-.PHONY: all clean fclean re
+include ../mk/rules.mk
