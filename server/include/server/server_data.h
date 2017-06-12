@@ -27,7 +27,7 @@ struct s_position
 
 struct s_cell
 {
-  Object objects[OBJ_COUNT];
+  int objects[OBJ_COUNT];
 };
 
 struct s_egg
@@ -44,7 +44,7 @@ struct s_ia
   Level level;
   Direction dir;
   t_position pos;
-  Object inventory[OBJ_COUNT];
+  int inventory[OBJ_COUNT];
 };
 
 struct s_client

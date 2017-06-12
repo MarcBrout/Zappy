@@ -3,41 +3,54 @@
 #include "arguments/arguments.h"
 #include "arguments/config.h"
 
-static const t_arg commands[7] =
+static t_arg commands[7] =
     {
-        { "-p", argument_port },
-        { "-x", argument_width },
-        { "-y", argument_height },
-        { "-n", argument_name },
-        { "-c", argument_nbclients },
-        { "-t", argument_time },
-        { NULL, NULL }
+        { "-p", argument_port, false },
+        { "-x", argument_width, false },
+        { "-y", argument_height, false },
+        { "-n", argument_name, false },
+        { "-c", argument_nbclients, false },
+        { "-t", argument_time, false },
+        { NULL, NULL, false }
     };
+
+static int arguments_validation()
+{
+  t_arg *it;
+
+  it = commands;
+  while (it->exec != NULL)
+  {
+    if (!it->ok)
+      return (1);
+    ++it;
+  }
+  return (0);
+}
 
 int process_command_line(t_config *config, int ac, char **args)
 {
   int argument;
-  int i;
+  t_arg *it;
 
-  if (ac < 14)
-    return (print_help(args[0]) || EXIT_FAILURE);
   argument = 1;
-  while (argument < ac - 1)
+  while (argument < ac)
   {
-    i = 0;
-    while (commands[i].cmd != NULL)
+    it = commands;
+    while (it->exec != NULL)
     {
-      if (!strcmp(commands[i].cmd, args[argument]))
+      if (!strcmp(it->cmd, args[argument]))
       {
-        if (commands[i].exec(config, args, &argument))
+        if (it->exec(config, ac, args, &argument))
           return (print_help(args[0]) || EXIT_FAILURE);
+        it->ok = true;
         break;
       }
-      ++i;
+      ++it;
     }
-    if (commands[i].cmd == NULL)
+    if (it->exec == NULL)
       return (print_help(args[0]) || EXIT_FAILURE);
     ++argument;
   }
-  return (0);
+  return (arguments_validation());
 }

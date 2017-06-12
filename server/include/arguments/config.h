@@ -10,15 +10,18 @@
 
 # include <stdint.h>
 # include <stddef.h>
+# include <stdbool.h>
+
 
 typedef struct s_arg t_arg;
 typedef struct s_config t_config;
-typedef int (*arg_process_t)(t_config *config, char **args, int *pos);
+typedef int (*arg_process_t)(t_config *config, int ac, char **argv, int *pos);
 
 struct s_arg
 {
   const char *cmd;
   const arg_process_t exec;
+  bool ok;
 };
 
 struct s_config

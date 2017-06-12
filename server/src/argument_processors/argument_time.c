@@ -1,10 +1,12 @@
 #include <stdlib.h>
 #include "arguments/config.h"
 
-int argument_time(t_config *config, char **argv, int *pos)
+int argument_time(t_config *config, int ac, char **argv, int *pos)
 {
   int time;
 
+  if (*pos > ac - 2)
+    return (1);
   ++*pos;
   time = atoi(argv[*pos]);
   if (time < 2 || time >= MAX_HEIGHT)
