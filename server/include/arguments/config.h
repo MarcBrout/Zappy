@@ -12,7 +12,6 @@
 # include <stddef.h>
 # include <stdbool.h>
 
-
 typedef struct s_arg t_arg;
 typedef struct s_config t_config;
 typedef int (*arg_process_t)(t_config *config, int ac, char **argv, int *pos);
