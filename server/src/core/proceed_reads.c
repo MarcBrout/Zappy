@@ -10,7 +10,7 @@ int                     find_ID(t_server *server, ID client, bool active)
   ID                    cli;
 
   cli = 0;
-  while (cli < server->config.max_player * 2)
+  while (cli < server->config.max_player * server->config.team_count)
   {
     if (!active && !server->game.clients[cli].alive)
       return (cli);
@@ -76,7 +76,7 @@ int		proceed_reads(t_server *server, fd_set *fds_read)
   Socket		sock;
 
   sock = 0;
-  while (sock < server->config.max_player * 2)
+  while (sock < server->config.max_player * server->config.team_count)
     {
       if (FD_ISSET(sock, fds_read))
 	{

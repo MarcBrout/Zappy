@@ -9,7 +9,7 @@ int                  find_Socket(t_server *server, Socket sock)
   Socket                cli;
 
   cli = 0;
-  while (cli < server->config.max_player * 2)
+  while (cli < server->config.max_player * server->config.team_count)
   {
     if (server->game.clients[cli].sock == sock)
       return (cli);
@@ -88,7 +88,7 @@ int			proceed_writes(t_server *server, fd_set *fds_write)
   int pos;
 
   sock = 0;
-  while (sock < server->config.max_player * 2)
+  while (sock < server->config.max_player * server->config.team_count)
     {
       if (FD_ISSET(sock, fds_write))
       {

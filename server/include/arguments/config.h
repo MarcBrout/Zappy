@@ -28,8 +28,8 @@ struct s_config
   uint16_t port;
   uint8_t width;
   uint8_t height;
-  char *team1;
-  char *team2;
+  char **teams;
+  uint8_t team_count;
   uint8_t max_player;
   uint16_t time;
 };

@@ -28,7 +28,7 @@ static int		set_fds(t_server *server,
   FD_ZERO(fds_write);
   FD_SET(server->ia_sock, fds_read);
   max = server->ia_sock > max ? server->ia_sock : max;
-  while (ia < server->config.max_player * 2)
+  while (ia < server->config.max_player * server->config.team_count)
   {
     client = &server->game.clients[ia];
     if (client->alive)
@@ -78,7 +78,7 @@ static int init_server(t_server *server)
   return ((server->game.map = malloc(
       sizeof(*server->game.map) *
       config->height * config->width)) == NULL ||
-      (server->game.clients = calloc(config->max_player * 2,
+      (server->game.clients = calloc(config->max_player * config->team_count,
           sizeof(*server->game.clients))) == NULL);
 }
 
@@ -93,7 +93,7 @@ int launch_server(t_server *server)
           signal(SIGPIPE, SIG_IGN) == SIG_ERR ||
           init_server(server) ||
           create_socket(&server->ia_sock, server->config.port,
-                        server->config.max_player * 2) ||
-          create_socket(&server->gui_sock, 8484, 1) ||
+                        server->config.max_player * server->config.team_count)
+          || create_socket(&server->gui_sock, 8484, 1) ||
           running(server));
 }
