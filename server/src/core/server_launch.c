@@ -23,9 +23,9 @@ static int		set_fds(t_server *server,
   int			max;
 
   ia = 0;
-  max = set_gui(server, fds_read, fds_write);
   FD_ZERO(fds_read);
   FD_ZERO(fds_write);
+  max = set_gui(server, fds_read, fds_write);
   FD_SET(server->ia_sock, fds_read);
   max = server->ia_sock > max ? server->ia_sock : max;
   while (ia < server->config.max_player * 2)
@@ -52,6 +52,7 @@ static int running(t_server *server)
   while (!gl_stop)
   {
     max = set_fds(server, &reads, &writes);
+    printf("Waiting on Select...\n");
     if (select(max, &reads, &writes, NULL, NULL) < 0)
     {
       perror("Select error");

@@ -27,7 +27,7 @@ static int		write_out(t_client *client, Socket sock,
 
   len = strlen(out);
   if (cond)
-      out[len] = '\n';
+    out[len] = '\n';
   if ((written = write(sock, out, len + 1)) < 0)
     {
       perror("Write to client error");
@@ -56,6 +56,7 @@ static int		send_client(t_client *client, Socket sock)
   char			out[MESSAGE_MAX_SIZE];
 
   memset(out, 0, MESSAGE_MAX_SIZE);
+
   while (strfromcircular(&client->w, out) ||
          (strlen(out)) || client->w.remains)
     {
@@ -94,6 +95,7 @@ int			proceed_writes(t_server *server, fd_set *fds_write)
       {
         if (sock == server->gui.sock)
         {
+          printf("Gui is ready to write...\n");
           if (write_client(&server->gui, sock))
             return (1);
         }
