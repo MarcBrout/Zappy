@@ -29,6 +29,7 @@ SERVER_RAW_SRC=	server.c \
 				$(CORE)proceed_reads.c \
 				$(CORE)senders.c \
 				$(CORE)set_gui.c \
+				$(CORE)eggs.c \
 				$(GUICMD)unknown.c \
 				$(GUICMD)bct.c \
 				$(GUICMD)mct.c \
@@ -43,6 +44,7 @@ SERVER_RAW_SRC=	server.c \
 				$(IACMD)forward.c \
 				$(IACMD)left.c \
 				$(IACMD)right.c \
+				$(IACMD)fork.c
 
 SERVER_SRC=	$(addprefix $(SERVER_FOLDER), $(SERVER_RAW_SRC))
 

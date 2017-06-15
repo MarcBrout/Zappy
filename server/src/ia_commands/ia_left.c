@@ -7,6 +7,7 @@
 
 int	ia_left(t_server *server, Socket sock, char *cmd)
 {
+  //TODO add time management
   (void)cmd;
   server->game.clients[sock].ia.dir =
    server->game.clients[sock].ia.dir == NORTH ? WEST :
