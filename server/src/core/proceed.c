@@ -61,15 +61,19 @@ int  proceed_commands(t_server *server)
 {
   int i;
 
-  if (find_command(&server->gui.r) &&
-      run(server, server->gui.sock, gui_commands, GUI_END))
-    return (1);
+  while (find_command(&server->gui.r))
+    {
+      if (run(server, server->gui.sock, gui_commands, GUI_END))
+      	return (1);
+    }
   i = 0;
   while (i < server->config.max_player * server->config.team_count)
   {
-    if (find_command(&server->game.clients[i].r) &&
-        run(server, server->game.clients[i].sock, ia_commands, IA_END))
-      return (1);
+    while (find_command(&server->game.clients[i].r))
+      {
+	if (run(server, server->game.clients[i].sock, ia_commands, IA_END))
+	  return (1);
+      }
     ++i;
   }
   return (0);
