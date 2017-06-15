@@ -39,7 +39,10 @@ SERVER_RAW_SRC=	server.c \
 				$(GUICMD)sgt.c \
 				$(GUICMD)sst.c \
 				$(GUICMD)tna.c \
-				$(IACMD)unknown.c
+				$(IACMD)unknown.c \
+				$(IACMD)forward.c \
+				$(IACMD)left.c \
+				$(IACMD)right.c \
 
 SERVER_SRC=	$(addprefix $(SERVER_FOLDER), $(SERVER_RAW_SRC))
 
