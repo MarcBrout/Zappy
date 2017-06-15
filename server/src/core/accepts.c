@@ -13,8 +13,7 @@ int accept_new_gui(t_server *server)
   int			sock;
 
   len = sizeof(addr);
-  if ((sock = accept(server->gui_sock, (struct sockaddr *)&addr, &len)) < 0 ||
-      getsockname(sock, (struct sockaddr *)&addr, &len) < 0)
+  if ((sock = accept(server->gui_sock, (struct sockaddr *)&addr, &len)) < 0)
   {
     perror("GUI accept error");
     return (1);
@@ -33,8 +32,7 @@ int		accept_new_client(t_server *server)
   int                   cli;
 
   len = sizeof(addr);
-  if ((sock = accept(server->ia_sock, (struct sockaddr *)&addr, &len)) < 0 ||
-      getsockname(sock, (struct sockaddr *)&addr, &len) < 0)
+  if ((sock = accept(server->ia_sock, (struct sockaddr *)&addr, &len)) < 0)
   {
     perror("Client accept error");
     return (1);
