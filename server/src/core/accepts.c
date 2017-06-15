@@ -18,6 +18,7 @@ int accept_new_gui(t_server *server)
     perror("GUI accept error");
     return (1);
   }
+  printf("Accepted gui on sock : %d\n", sock);
   server->gui.sock = sock;
   server->gui.alive = true;
   return (0);
@@ -41,6 +42,7 @@ int		accept_new_client(t_server *server)
   server->game.clients[cli].alive = true;
   server->game.clients[cli].sock = sock;
   server->game.clients[cli].id = id;
+  printf("Accepted client ID: %d on sock : %d\n", id, sock);
   ++id;
   return (0);
 }

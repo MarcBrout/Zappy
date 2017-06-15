@@ -24,6 +24,7 @@ void		strncircular(t_circular *c, char *str, int n)
 
   i = 0;
   cpos = c->pos + c->len;
+  printf("Setting raw str :%s:\n", str);
   while (i < n && c->len < BUFFER_MAX_SIZE - 1)
     {
       c->buffer[cpos] = str[i];

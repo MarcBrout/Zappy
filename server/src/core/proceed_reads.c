@@ -27,6 +27,7 @@ static int		read_client(t_client *client, Socket sock)
   char			buff[MESSAGE_MAX_SIZE];
   ssize_t		len;
 
+  printf("Reading from client...\n");
   memset(buff, 0, MESSAGE_MAX_SIZE);
   if ((len = read(sock, buff, MESSAGE_MAX_SIZE - 1)) < 0)
     {
@@ -53,6 +54,7 @@ static int		read_gui(t_client *gui, Socket sock)
   ssize_t		len;
 
   memset(buff, 0, MESSAGE_MAX_SIZE);
+  printf("Reading from gui...\n");
   if ((len = read(sock, buff, MESSAGE_MAX_SIZE - 1)) < 0)
   {
     perror("Read from client error");
@@ -80,10 +82,12 @@ int		proceed_reads(t_server *server, fd_set *fds_read)
     {
       if (FD_ISSET(sock, fds_read))
 	{
-	  if ((sock == server->gui.sock && accept_new_gui(server)) ||
+          printf("Socket %d is set on reads\n", sock);
+	  if ((sock == server->gui_sock && accept_new_gui(server)) ||
               (sock == server->ia_sock && accept_new_client(server)) ||
               (sock == server->gui.sock && read_gui(&server->gui, sock)) ||
-	      (sock != server->ia_sock &&
+	      (sock != server->ia_sock && sock != server->gui_sock && sock !=
+                  server->gui.sock &&
 	       read_client(&server->game.clients[find_Socket(server, sock)],
                            sock)))
 	    return (1);

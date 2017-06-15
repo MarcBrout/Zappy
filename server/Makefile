@@ -30,6 +30,15 @@ SERVER_RAW_SRC=	server.c \
 				$(CORE)senders.c \
 				$(CORE)set_gui.c \
 				$(GUICMD)unknown.c \
+				$(GUICMD)bct.c \
+				$(GUICMD)mct.c \
+				$(GUICMD)msz.c \
+				$(GUICMD)pin.c \
+				$(GUICMD)plv.c \
+				$(GUICMD)ppo.c \
+				$(GUICMD)sgt.c \
+				$(GUICMD)sst.c \
+				$(GUICMD)tna.c \
 				$(IACMD)unknown.c
 
 SERVER_SRC=	$(addprefix $(SERVER_FOLDER), $(SERVER_RAW_SRC))
