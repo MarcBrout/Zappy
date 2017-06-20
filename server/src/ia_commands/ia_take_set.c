@@ -1,0 +1,85 @@
+//
+// Created by puilla_e on 09/06/17.
+//
+
+#include <string.h>
+#include "server.h"
+
+static const char *obj_tab[OBJ_COUNT] =
+ {
+  "food",
+  "linemate",
+  "deraumere",
+  "sibur",
+  "mendiane",
+  "phiras",
+  "thystame"
+ };
+
+static Object	object_to_enum(char *obj_str)
+{
+  Object	obj;
+
+  obj = FOOD;
+  while (obj < OBJ_COUNT)
+    {
+      if (strcmp(obj_tab[obj], obj_str) == 0)
+	return (obj);
+      ++obj;
+    }
+  return (OBJ_COUNT);
+}
+
+int		ia_take(t_server *server, Socket sock, char *cmd)
+{
+  Object	obj;
+  char 		*obj_str;
+
+  strtok(cmd, " ");
+  if ((obj_str = strtok(NULL, " ")) == NULL)
+    {
+      strncircular(&server->game.clients[sock].w, "ko\n", strlen("ko\n"));
+      return (0);
+    }
+  if ((obj = object_to_enum(obj_str)) == OBJ_COUNT)
+    {
+      strncircular(&server->game.clients[sock].w, "ko\n", strlen("ko\n"));
+      return (0);
+    }
+  if (server->game.map->objects[obj] > 0)
+    {
+      --server->game.map->objects[obj];
+      ++server->game.clients[sock].ia.inventory[obj];
+      strncircular(&server->game.clients[sock].w, "ok\n", strlen("ok\n"));
+    }
+  else
+    strncircular(&server->game.clients[sock].w, "ko\n", strlen("ko\n"));
+  return (0);
+}
+
+int		ia_set(t_server *server, Socket sock, char *cmd)
+{
+  Object	obj;
+  char 		*obj_str;
+
+  strtok(cmd, " ");
+  if ((obj_str = strtok(NULL, " ")) == NULL)
+    {
+      strncircular(&server->game.clients[sock].w, "ko\n", strlen("ko\n"));
+      return (0);
+    }
+  if ((obj = object_to_enum(obj_str)) == OBJ_COUNT)
+    {
+      strncircular(&server->game.clients[sock].w, "ko\n", strlen("ko\n"));
+      return (0);
+    }
+  if (server->game.clients[sock].ia.inventory[obj] > 0)
+    {
+      --server->game.clients[sock].ia.inventory[obj];
+      ++server->game.map->objects[obj];
+      strncircular(&server->game.clients[sock].w, "ok\n", strlen("ok\n"));
+    }
+  else
+    strncircular(&server->game.clients[sock].w, "ko\n", strlen("ko\n"));
+  return (0);
+}

@@ -25,17 +25,17 @@ static const t_command gui_commands[GUI_END + 1] =
 static const t_command ia_commands[IA_END + 1] =
     {
         {"Forward", 7, ia_forward},
-        {"Right", 7, ia_right},
-        {"Left", 7, ia_left},
-        {"Look", 7, ia_look},
-        {"Inventory", 7, ia_inventory},
-        {"Broadcast", 7, ia_broadcast},
-        {"Connect_nbr", 7, ia_connect_nbr},
-        {"Fork", 7, ia_fork},
-        {"Eject", 7, ia_eject},
-        {"Take", 7, ia_take},
-        {"Set", 7, ia_set},
-        {"Incantation", 7, ia_incantation},
+        {"Right", 5, ia_right},
+        {"Left", 4, ia_left},
+        {"Look", 4, ia_look},
+        {"Inventory", 9, ia_inventory},
+        {"Broadcast", 9, ia_broadcast},
+        {"Connect_nbr", 11, ia_connect_nbr},
+        {"Fork", 4, ia_fork},
+        {"Eject", 5, ia_eject},
+        {"Take", 4, ia_take},
+        {"Set", 3, ia_set},
+        {"Incantation", 11, ia_incantation},
         {"unknown", 7, ia_unknown}
     };
 
