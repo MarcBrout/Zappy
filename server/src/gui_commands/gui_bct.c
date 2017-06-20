@@ -25,14 +25,14 @@ int send_case_content(t_server *server, int x, int y)
   return (send_to_gui(server, "\n"));
 }
 
-int gui_bct(t_server *server, Socket sock, char *cmd)
+int gui_bct(t_server *server, ID id, char *cmd)
 {
   char *xstr;
   char *ystr;
   int x;
   int y;
 
-  (void)sock;
+  (void)id;
   strtok(cmd, " ");
   if ((xstr = strtok(NULL, " ")) == NULL || (ystr = strtok(NULL, " ")) == NULL)
     return (send_to_gui(server, "suc\n"));

@@ -22,11 +22,11 @@ int	count_empty_slot(t_server *server, Team team)
   return (nb_slot);
 }
 
-int	ia_connect_nbr(t_server *server, Socket sock, char *cmd)
+int	ia_connect_nbr(t_server *server, ID id, char *cmd)
 {
   int	nb_slot;
 
   (void)cmd;
-  nb_slot = count_empty_slot(server, server->game.clients[sock].ia.team);
-  return (send_to_ia(server, sock, "%d", nb_slot));
+  nb_slot = count_empty_slot(server, server->game.clients[id].ia.team);
+  return (send_to_ia(server, id, "%d\n", nb_slot));
 }

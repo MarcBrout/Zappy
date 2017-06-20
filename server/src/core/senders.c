@@ -21,7 +21,7 @@ int send_to_gui(t_server *server, char const *fmt, ...)
   return (0);
 }
 
-int send_to_ia(t_server *server, Socket sock, char const *fmt, ...)
+int send_to_ia(t_server *server, ID id, char const *fmt, ...)
 {
   char cmd[MESSAGE_MAX_SIZE];
   va_list va;
@@ -31,6 +31,6 @@ int send_to_ia(t_server *server, Socket sock, char const *fmt, ...)
   if (vsnprintf(cmd, MESSAGE_MAX_SIZE, fmt, va) < 0)
     return (1);
   va_end(va);
-  strncircular(&server->game.clients[sock].w, cmd, strlen(cmd));
+  strncircular(&server->game.clients[id].w, cmd, strlen(cmd));
   return (0);
 }

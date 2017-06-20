@@ -50,12 +50,12 @@ static int run(t_server *server, t_client *client, const t_command *commands, si
   while (i < size)
   {
     if (!strncmp(commands[i].cmd, cmd, commands[i].len) &&
-        commands[i].exec(server, client->sock, cmd))
+        commands[i].exec(server, client->id, cmd))
       return (1);
     ++i;
   }
   if (i == size)
-    return (commands[size].exec(server, client->sock, cmd));
+    return (commands[size].exec(server, client->id, cmd));
   return (0);
 }
 

@@ -5,9 +5,9 @@
 #include <string.h>
 #include "server.h"
 
-int gui_unknown(t_server *server, Socket sock, char *cmd)
+int gui_unknown(t_server *server, ID id, char *cmd)
 {
   (void)cmd;
-  strncircular(&server->game.clients[sock].w, "suc\n", strlen("suc\n"));
+  strncircular(&server->game.clients[id].w, "suc\n", strlen("suc\n"));
   return (0);
 }

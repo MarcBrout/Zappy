@@ -39,23 +39,21 @@ static int	count_player(t_server *server,
   return (nb_player);
 }
 
-int	ia_incantation_end(t_server *server, Socket sock, char *cmd)
+int	ia_incantation_end(t_server *server, ID id, char *cmd)
 {
   (void) cmd;
-  ++server->game.clients[sock].ia.level;
-  return (send_to_ia(server, sock, "Current level: %u",
-		     server->game.clients[sock].ia.level));
+  ++server->game.clients[id].ia.level;
+  return (send_to_ia(server, id, "Current level: %u\n",
+		     server->game.clients[id].ia.level));
 }
 
 static int	send_incantation_end(t_server *server,
-				     Socket sock,
 				     t_client *client,
 				     int max_player)
 {
   ID 		cli;
   int 		nb_player;
 
-  (void) sock;
   cli = 0;
   nb_player = 1;
   //TODO add first to the tick queue the msg of current lvl (end of incantation) to principal client
@@ -75,7 +73,7 @@ static int	send_incantation_end(t_server *server,
   return (0);
 }
 
-static int	check_incantation(t_server *server, Socket sock,
+static int	check_incantation(t_server *server, ID id,
 				  t_client *client, t_cell *cell)
 {
   Object	obj;
@@ -90,7 +88,7 @@ static int	check_incantation(t_server *server, Socket sock,
     {
       if (incant_tab[client->ia.level][obj] > cell->objects[obj])
 	{
-	  strncircular(&server->game.clients[sock].w, "ko\n", strlen("ko\n"));
+	  strncircular(&server->game.clients[id].w, "ko\n", strlen("ko\n"));
 	  return (1);
 	}
       ++obj;
@@ -98,17 +96,17 @@ static int	check_incantation(t_server *server, Socket sock,
   return (0);
 }
 
-int		ia_incantation(t_server *server, Socket sock, char *cmd)
+int		ia_incantation(t_server *server, ID id, char *cmd)
 {
   t_client	*client;
   t_cell	*cell;
   Object	obj;
 
   (void)cmd;
-  client = &server->game.clients[sock];
+  client = &server->game.clients[id];
   cell = &server->game.map[client->ia.pos.x +
 			   client->ia.pos.y * server->config.width];
-  if (check_incantation(server, sock, client, cell)== 1)
+  if (check_incantation(server, id, client, cell)== 1)
     return (0);
   obj = LINEMATE;
   while (obj < OBJ_COUNT)
@@ -116,7 +114,7 @@ int		ia_incantation(t_server *server, Socket sock, char *cmd)
       cell->objects[obj] -= incant_tab[client->ia.level][obj];
       ++obj;
     }
-  return (send_incantation_end(server, sock, client,
+  return (send_incantation_end(server, client,
 			       incant_tab[client->ia.level][0]));
   //TODO add end of the game if lvl Max pour l'équipe
 }

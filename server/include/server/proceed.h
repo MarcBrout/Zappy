@@ -4,7 +4,7 @@
 # include <sys/socket.h>
 # include "server/server_data.h"
 
-typedef int		(*func_t)(t_server *server, Socket sock, char *cmd);
+typedef int		(*func_t)(t_server *server, ID id, char *cmd);
 
 enum GUI_COMMANDS
 {

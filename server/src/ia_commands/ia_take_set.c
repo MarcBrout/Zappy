@@ -30,7 +30,7 @@ static Object	object_to_enum(char *obj_str)
   return (OBJ_COUNT);
 }
 
-int		ia_take(t_server *server, Socket sock, char *cmd)
+int		ia_take(t_server *server, ID id, char *cmd)
 {
   Object	obj;
   char 		*obj_str;
@@ -38,26 +38,26 @@ int		ia_take(t_server *server, Socket sock, char *cmd)
   strtok(cmd, " ");
   if ((obj_str = strtok(NULL, " ")) == NULL)
     {
-      strncircular(&server->game.clients[sock].w, "ko\n", strlen("ko\n"));
+      strncircular(&server->game.clients[id].w, "ko\n", strlen("ko\n"));
       return (0);
     }
   if ((obj = object_to_enum(obj_str)) == OBJ_COUNT)
     {
-      strncircular(&server->game.clients[sock].w, "ko\n", strlen("ko\n"));
+      strncircular(&server->game.clients[id].w, "ko\n", strlen("ko\n"));
       return (0);
     }
   if (server->game.map->objects[obj] > 0)
     {
       --server->game.map->objects[obj];
-      ++server->game.clients[sock].ia.inventory[obj];
-      strncircular(&server->game.clients[sock].w, "ok\n", strlen("ok\n"));
+      ++server->game.clients[id].ia.inventory[obj];
+      strncircular(&server->game.clients[id].w, "ok\n", strlen("ok\n"));
     }
   else
-    strncircular(&server->game.clients[sock].w, "ko\n", strlen("ko\n"));
+    strncircular(&server->game.clients[id].w, "ko\n", strlen("ko\n"));
   return (0);
 }
 
-int		ia_set(t_server *server, Socket sock, char *cmd)
+int		ia_set(t_server *server, ID id, char *cmd)
 {
   Object	obj;
   char 		*obj_str;
@@ -65,21 +65,21 @@ int		ia_set(t_server *server, Socket sock, char *cmd)
   strtok(cmd, " ");
   if ((obj_str = strtok(NULL, " ")) == NULL)
     {
-      strncircular(&server->game.clients[sock].w, "ko\n", strlen("ko\n"));
+      strncircular(&server->game.clients[id].w, "ko\n", strlen("ko\n"));
       return (0);
     }
   if ((obj = object_to_enum(obj_str)) == OBJ_COUNT)
     {
-      strncircular(&server->game.clients[sock].w, "ko\n", strlen("ko\n"));
+      strncircular(&server->game.clients[id].w, "ko\n", strlen("ko\n"));
       return (0);
     }
-  if (server->game.clients[sock].ia.inventory[obj] > 0)
+  if (server->game.clients[id].ia.inventory[obj] > 0)
     {
-      --server->game.clients[sock].ia.inventory[obj];
+      --server->game.clients[id].ia.inventory[obj];
       ++server->game.map->objects[obj];
-      strncircular(&server->game.clients[sock].w, "ok\n", strlen("ok\n"));
+      strncircular(&server->game.clients[id].w, "ok\n", strlen("ok\n"));
     }
   else
-    strncircular(&server->game.clients[sock].w, "ko\n", strlen("ko\n"));
+    strncircular(&server->game.clients[id].w, "ko\n", strlen("ko\n"));
   return (0);
 }

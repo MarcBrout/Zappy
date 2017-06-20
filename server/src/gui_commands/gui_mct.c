@@ -4,7 +4,7 @@
 
 #include "server/gui_commands.h"
 
-int gui_mct(t_server *server, Socket sock, char *cmd)
+int gui_mct(t_server *server, ID id, char *cmd)
 {
   int i;
   int size;
@@ -14,7 +14,7 @@ int gui_mct(t_server *server, Socket sock, char *cmd)
   width = server->config.width;
   size = width * server->config.height;
   (void)cmd;
-  (void)sock;
+  (void)id;
   while (i < size)
   {
     if (send_case_content(server, i % width, i / width))

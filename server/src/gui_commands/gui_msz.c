@@ -4,10 +4,10 @@
 
 #include "server/send.h"
 
-int gui_msz(t_server *server, Socket sock, char *cmd)
+int gui_msz(t_server *server, ID id, char *cmd)
 {
   (void)cmd;
-  (void)sock;
+  (void)id;
   return (send_to_gui(server, "msz %d %d\n",
                       server->config.width,
                       server->config.height));

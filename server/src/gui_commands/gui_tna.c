@@ -4,13 +4,13 @@
 
 #include "server/send.h"
 
-int	gui_tna(t_server *server, Socket sock, char *cmd)
+int	gui_tna(t_server *server, ID id, char *cmd)
 {
   int	i;
   int	ret;
 
   (void)cmd;
-  (void)sock;
+  (void)id;
   i = 0;
   while (i < server->config.team_count)
     {

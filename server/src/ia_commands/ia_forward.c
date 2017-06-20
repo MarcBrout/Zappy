@@ -21,11 +21,11 @@ void	move_to_dir(t_server *server, t_client *client, Direction dir)
 		       0 : client->ia.pos.x + 1;
 }
 
-int	ia_forward(t_server *server, Socket sock, char *cmd)
+int	ia_forward(t_server *server, ID id, char *cmd)
 {
   //TODO add time management
   (void)cmd;
-  move_to_dir(server, &server->game.clients[sock], server->game.clients->ia.dir);
-  strncircular(&server->game.clients[sock].w, "ok\n", strlen("ok\n"));
+  move_to_dir(server, &server->game.clients[id], server->game.clients->ia.dir);
+  strncircular(&server->game.clients[id].w, "ok\n", strlen("ok\n"));
   return (0);
 }
