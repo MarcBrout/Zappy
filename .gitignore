@@ -165,3 +165,6 @@ sysinfo.txt
 *.apk
 *.unitypackage
 
+.idea
+main.c
+cmake-build-debug
