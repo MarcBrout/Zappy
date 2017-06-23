@@ -1,5 +1,5 @@
 # Unix useful commands
 RM=		rm -f
-ECHO=		echo -e
+ECHO=		echo
 RANLIB=		ar rcs
 CP=		cp
