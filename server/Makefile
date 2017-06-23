@@ -22,6 +22,8 @@ ARGS= 		argument_processors/argument_
 
 GUICMD= 	gui_commands/gui_
 
+GUIEVE=		gui_events/event_
+
 IACMD= 		ia_commands/ia_
 
 CORE= 		core/
@@ -57,6 +59,21 @@ SERVER_RAW_SRC=	server.c \
 		$(GUICMD)sgt.c \
 		$(GUICMD)sst.c \
 		$(GUICMD)tna.c \
+		$(GUIEVE)ebo.c \
+		$(GUIEVE)edi.c \
+		$(GUIEVE)eht.c \
+		$(GUIEVE)enw.c \
+		$(GUIEVE)pbc.c \
+		$(GUIEVE)pdi.c \
+		$(GUIEVE)pdr.c \
+		$(GUIEVE)pex.c \
+		$(GUIEVE)pfk.c \
+		$(GUIEVE)pgt.c \
+		$(GUIEVE)pic.c \
+		$(GUIEVE)pie.c \
+		$(GUIEVE)pnw.c \
+		$(GUIEVE)seg.c \
+		$(GUIEVE)smg.c \
 		$(IACMD)unknown.c
 
 SERVER_SRC=	$(addprefix src/, $(SERVER_RAW_SRC))
