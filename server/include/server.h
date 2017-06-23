@@ -5,6 +5,7 @@
 #ifndef SERVER_H_
 # define SERVER_H_
 
+# include "server/send.h"
 # include "server/server_types.h"
 # include "server/server_data.h"
 # include "server/socket.h"

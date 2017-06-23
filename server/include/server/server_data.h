@@ -34,6 +34,7 @@ struct s_egg
 {
   t_egg *next;
   Team team;
+  ID id;
   int hatching;
   t_position pos;
 };

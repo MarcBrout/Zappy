@@ -3,12 +3,11 @@
 //
 
 #include "server.h"
-#include "server/send.h"
 
-int gui_pnw(t_server *server, Socket sock, t_client *newClient)
+int event_pnw(t_server *server, t_client const *newClient)
 {
   return (send_to_gui(server, "pnw %d %d %d %d %d %s\n", newClient->id,
                       newClient->ia.pos.x, newClient->ia.pos.y,
                       newClient->ia.dir, newClient->ia.level,
-                      newClient->ia.team));
+                      server->config.teams[newClient->ia.team]));
 }
