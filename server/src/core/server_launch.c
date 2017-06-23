@@ -40,6 +40,7 @@ static int		set_fds(t_server *server,
     }
     ++ia;
   }
+  log_this("File descriptors set, max fd : %d\n", max + 1);
   return (max + 1);
 }
 
@@ -52,7 +53,7 @@ static int running(t_server *server)
   while (!gl_stop)
   {
     max = set_fds(server, &reads, &writes);
-    printf("Waiting on Select...\n");
+    log_this("Server waiting on select ...\n");
     if (select(max, &reads, &writes, NULL, NULL) < 0)
     {
       perror("Select error");
@@ -76,6 +77,7 @@ static int init_server(t_server *server)
 
   server->game.width = config->width;
   server->game.height = config->height;
+  log_this("Setting servers with configuration line...\n");
   return ((server->game.map = malloc(
       sizeof(*server->game.map) *
       config->height * config->width)) == NULL ||
@@ -90,6 +92,7 @@ int launch_server(t_server *server)
   memset(&action, 0, sizeof(action));
   action.sa_flags = SA_SIGINFO;
   action.sa_handler = &set_quit;
+  log_this("Launching Server...\n");
   return (sigaction(SIGINT, &action, NULL) == -1 ||
           signal(SIGPIPE, SIG_IGN) == SIG_ERR ||
           init_server(server) ||

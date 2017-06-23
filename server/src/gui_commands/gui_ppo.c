@@ -4,13 +4,16 @@
 
 #include <string.h>
 #include <stdlib.h>
-#include "server/send.h"
+#include "server.h"
 
 static int send_player_position(t_server *server, ID id)
 {
   t_ia *ia;
 
   ia = &server->game.clients[id].ia;
+  log_this("[PPO] GUI asked for Client '%d' position on:"
+               "\n\tx: %d\n\ty: %d\n\tdir: %d\n ", id,
+           ia->pos.x, ia->pos.y, ia->dir);
   return (send_to_gui(server, "ppo #%d %d %d %d\n",
                       id, ia->pos.x, ia->pos.y, ia->dir));
 }

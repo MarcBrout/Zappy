@@ -4,7 +4,7 @@
 
 #include <string.h>
 #include <stdlib.h>
-#include "server/send.h"
+#include "server.h"
 
 static int send_player_inventory(t_server *server, ID id)
 {
@@ -38,5 +38,6 @@ int gui_pin(t_server *server, Socket sock, char *cmd)
   id = atoi(idstr);
   if (find_ID(server, id, true) < 0)
     return (send_to_gui(server, "sbp\n"));
+  log_this("[PIN] GUI asked for Client '%d' inventory\n", id);
   return (send_player_inventory(server, id));
 }

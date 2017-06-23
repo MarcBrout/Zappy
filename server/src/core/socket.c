@@ -17,7 +17,8 @@ static int		bind_and_listen(Socket sock, uint16_t port, int q)
     perror("Server bind error");
     return (1);
   }
-  printf("Socket %d binded and listened on port : %d\n", sock, port);
+
+  log_this("Socket %d binded and listened on port : %d\n", sock, port);
   return (0);
 }
 
@@ -36,6 +37,6 @@ int			create_socket(Socket *s, uint16_t port, int q)
     return (1);
   }
   *s = sock;
-  printf("Created socket : %d\n", sock);
+  log_this("Created socket : %d\n", sock);
   return (bind_and_listen(sock, port, q));
 }

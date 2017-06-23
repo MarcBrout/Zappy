@@ -95,12 +95,13 @@ int			proceed_writes(t_server *server, fd_set *fds_write)
       {
         if (sock == server->gui.sock)
         {
-          printf("Gui is ready to write...\n");
+          log_this("Sending commands to GUI\n");
           if (write_client(&server->gui, sock))
             return (1);
         }
         else
         {
+          log_this("Sending commands to CLIENT : %d\n", sock);
           pos = find_Socket(server, sock);
           if (write_client(&server->game.clients[pos], sock))
             return (1);

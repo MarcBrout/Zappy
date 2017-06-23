@@ -3,7 +3,6 @@
 //
 
 #include <string.h>
-#include <stdio.h>
 #include "server/gui_commands.h"
 #include "server/ia_commands.h"
 #include "server.h"
@@ -46,7 +45,7 @@ static int run(t_server *server, t_client *client, const t_command *commands, si
 
   i = 0;
   strfromcircular(&client->r, cmd);
-  printf("raw cmd :%s:\n", cmd);
+  log_this("raw command extracted: %s\n", cmd);
   while (i < size)
   {
     if (!strncmp(commands[i].cmd, cmd, commands[i].len) &&
@@ -63,12 +62,14 @@ int  proceed_commands(t_server *server)
 {
   int i;
 
+  log_this("\t====\nProcessing GUI commands\n\t====\n");
   while (find_command(&server->gui.r))
     {
       if (run(server, &server->gui, gui_commands, GUI_END))
       	return (1);
     }
   i = 0;
+  log_this("\t====\nProcessing CLIENTS commands\n\t====\n");
   while (i < server->config.max_player * server->config.team_count)
   {
     while (find_command(&server->game.clients[i].r))

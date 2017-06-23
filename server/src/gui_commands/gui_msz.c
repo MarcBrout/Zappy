@@ -2,12 +2,14 @@
 // Created by brout_m on 12/06/17.
 //
 
-#include "server/send.h"
+#include "server.h"
 
 int gui_msz(t_server *server, Socket sock, char *cmd)
 {
   (void)cmd;
   (void)sock;
+  log_this("[MSZ] GUI asked map size:\n\tx: %d\n\ty: %d\n",
+           server->config.width, server->config.height);
   return (send_to_gui(server, "msz %d %d\n",
                       server->config.width,
                       server->config.height));

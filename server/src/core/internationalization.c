@@ -17,5 +17,5 @@ static char const *names[OBJ_COUNT] =
 
 inline const char *nameof(enum e_object obj)
 {
-  return (obj > THYSTAME ? names[OBJ_COUNT] : names[obj]);
+  return (obj > THYSTAME ? "unknown object" : names[obj]);
 }

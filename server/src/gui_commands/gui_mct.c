@@ -2,6 +2,7 @@
 // Created by brout_m on 12/06/17.
 //
 
+#include "server.h"
 #include "server/gui_commands.h"
 
 int gui_mct(t_server *server, Socket sock, char *cmd)
@@ -15,6 +16,7 @@ int gui_mct(t_server *server, Socket sock, char *cmd)
   size = width * server->config.height;
   (void)cmd;
   (void)sock;
+  log_this("[MCT] GUI asked map content\n");
   while (i < size)
   {
     if (send_case_content(server, i % width, i / width))

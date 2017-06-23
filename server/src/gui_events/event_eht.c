@@ -6,5 +6,6 @@
 
 int event_eht(t_server *server, ID id)
 {
+  log_this("[EHT] Egg '%d' Hatched\n", id);
   return (send_to_gui(server, "eht %d\n", id));
 }

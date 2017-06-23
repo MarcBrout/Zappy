@@ -4,7 +4,8 @@
 
 #include "server.h"
 
-int event_ebo(t_server *server, ID id)
+int event_ebo(t_server *server, ID eggId)
 {
-  return (send_to_gui(server, "ebo %d\n", id));
+  log_this("[EBO] Client connected on egg '%d'\n", eggId);
+  return (send_to_gui(server, "ebo %d\n", eggId));
 }

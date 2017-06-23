@@ -20,22 +20,22 @@ PROJECT_NAME	=
 
 CFLAGS		=	-W -Wall -Wextra
 
-ifeq ($(RELEASE), YES)
+ifeq ($(RELEASE),yes)
 CFLAGS		+=	-Werror
 else
-ifeq ($(DEBUG), YES)
+ifeq ($(DEBUG),yes)
 CFLAGS		+=	-D DEBUG -g
 endif
 endif
 
-ifeq ($(DLL), YES)
+ifeq ($(DLL),yes)
 CFLAGS	+=	-fPIC -ldl
 endif
-ifeq ($(STATIC), YES)
+ifeq ($(STATIC),yes)
 CFLAGS	+=	-fPIC
 endif
 
-ifeq ($(SANITIZE), YES)
+ifeq ($(SANITIZE),yes)
 CFLAGS	+=	-fsanitize=memory -fsanitize-memory-track-origins=2 -fomit-frame-pointer
 endif
 
@@ -43,10 +43,10 @@ CC	=	gcc
 
 LDFLAGS	=
 
-ifeq ($(DLL), YES)
+ifeq ($(DLL),yes)
 CC	+= -shared
 endif
 
-ifeq ($(STATIC), YES)
+ifeq ($(STATIC),yes)
 LINKER = ar -rcs
 endif

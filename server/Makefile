@@ -5,7 +5,7 @@
 ## Login   <pierre@epitech.net>
 ##
 ## Started on  Sat Jun 10 21:33:53 2017 PierreBougon
-## Last update Fri Jun 23 10:45:57 2017 brout_m
+## Last update Fri Jun 23 17:34:42 2017 brout_m
 ##
 
 include ../mk/colors.mk ../mk/commands.mk ../mk/definitions.mk
@@ -33,6 +33,7 @@ CORE= 		core/
 SERVER_RAW_SRC=	server.c \
 		argument_parsing.c \
 		help.c \
+		logger/logger.c \
 		$(ARGS)height.c \
 		$(ARGS)name.c \
 		$(ARGS)nbclients.c \
@@ -80,7 +81,7 @@ SERVER_SRC=	$(addprefix src/, $(SERVER_RAW_SRC))
 
 OBJ=		$(SERVER_SRC:.c=.o)
 
-INC=		-Iinclude
+INC=		-Iinclude -Iinclude/logger
 
 LDFLAGS+=
 

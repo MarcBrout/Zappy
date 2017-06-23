@@ -3,7 +3,7 @@
 //
 #include <string.h>
 #include <stdlib.h>
-#include "server/send.h"
+#include "server.h"
 
 static int send_player_lvl(t_server *server, ID id)
 {
@@ -27,5 +27,6 @@ int gui_plv(t_server *server, Socket sock, char *cmd)
   id = atoi(idstr);
   if (find_ID(server, id, true) < 0)
     return (send_to_gui(server, "sbp\n"));
+  log_this("[PLV] GUI asked for Client '%d' level\n", id);
   return (send_player_lvl(server, id));
 }

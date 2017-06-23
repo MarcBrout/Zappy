@@ -10,5 +10,6 @@
 # include "server/server_data.h"
 # include "server/socket.h"
 # include "server/proceed.h"
+# include "logger/logger.h"
 
 #endif /* !ZAPPY_SERVER_H_ */

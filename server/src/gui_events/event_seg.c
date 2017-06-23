@@ -6,5 +6,6 @@
 
 int event_seg(t_server *server, char const *winner)
 {
+  log_this("[SEG] GAME OVER! WINNER %s\n", winner);
   return (send_to_gui(server, "seg %s\n", winner));
 }

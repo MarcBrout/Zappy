@@ -12,5 +12,5 @@ static const char *usage =
 
 int print_help(char *server_name)
 {
-  return (printf(usage, server_name) < 0);
+  return (printf(usage, server_name) || 1);
 }
