@@ -27,9 +27,9 @@ static const t_command ia_commands[IA_END + 1] =
         {"Forward", 7, ia_forward},
         {"Right", 5, ia_right},
         {"Left", 4, ia_left},
-        {"Look", 4, ia_look},
-        {"Inventory", 9, ia_inventory},
-        {"Broadcast", 9, ia_broadcast},
+        {"Look", 4, ia_unknown}, // TODO set function
+        {"Inventory", 9, ia_unknown}, // TODO set function
+        {"Broadcast", 9, ia_unknown}, // TODO set function
         {"Connect_nbr", 11, ia_connect_nbr},
         {"Fork", 4, ia_fork},
         {"Eject", 5, ia_eject},

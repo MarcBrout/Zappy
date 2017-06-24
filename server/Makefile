@@ -54,6 +54,7 @@ SERVER_RAW_SRC=		server.c 						\
 					$(CORE)senders.c 				\
 					$(CORE)set_gui.c 				\
 					$(CORE)store_commands.c			\
+					$(CORE)eggs.c					\
 					$(GUICMD)unknown.c 				\
 					$(GUICMD)bct.c 					\
 					$(GUICMD)mct.c 					\
@@ -80,11 +81,16 @@ SERVER_RAW_SRC=		server.c 						\
 					$(GUIEVE)seg.c 					\
 					$(GUIEVE)smg.c 					\
 					$(IALOG)unknown.c				\
-					$(IACMD)unknown.c 				\
+					$(IACMD)connect_nbr.c			\
+					$(IACMD)death.c					\
+                    $(IACMD)eject.c					\
+                    $(IACMD)fork.c					\
                     $(IACMD)forward.c 				\
+                    $(IACMD)incantation.c			\
                     $(IACMD)left.c 					\
                     $(IACMD)right.c 				\
-                    $(IACMD)fork.c
+                    $(IACMD)take_set.c 				\
+					$(IACMD)unknown.c
 
 SERVER_SRC=			$(addprefix src/, $(SERVER_RAW_SRC))
 
