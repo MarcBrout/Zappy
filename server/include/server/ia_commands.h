@@ -7,6 +7,6 @@
 
 #include "server_data.h"
 
-int ia_unknown(t_server *server, t_client *client, char *cmd);
+int ia_unknown(t_server *server, ID id, char *cmd);
 
 #endif //IA_COMMANDS_H_

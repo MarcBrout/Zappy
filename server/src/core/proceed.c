@@ -66,12 +66,12 @@ static int run(t_server *server, t_client *client,
   while (commands[i].cmd)
   {
     if (!strncmp(commands[i].cmd, cmd, commands[i].len) &&
-        commands[i].exec(server, client, cmd))
+        commands[i].exec(server, client->id, cmd))
       return (1);
     ++i;
   }
   if (!commands[i].cmd)
-    return (commands[i].exec(server, client, cmd));
+    return (commands[i].exec(server, client->id, cmd));
   return (0);
 }
 

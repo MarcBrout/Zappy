@@ -13,12 +13,12 @@ static int send_player_lvl(t_server *server, ID id)
   return (send_to_gui(server, "plv #%d %d\n", id, ia->level));
 }
 
-int gui_plv(t_server *server, t_client *client, char *cmd)
+int gui_plv(t_server *server, ID ids, char *cmd)
 {
   char *idstr;
   int id;
 
-  (void)client;
+  (void)ids;
   strtok(cmd, " ");
   if ((idstr = strtok(NULL, " ")) == NULL)
     return (send_to_gui(server, "suc\n"));
