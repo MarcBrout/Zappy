@@ -5,8 +5,9 @@
 ## Login   <pierre@epitech.net>
 ## 
 ## Started on  Sat Jun 10 21:33:53 2017 PierreBougon
-## Last update Sat Jun 10 22:02:01 2017 PierreBougon
+## Last update Wed Jun 21 03:02:06 2017 PierreBougon
 ##
+
 
 include ../mk/colors.mk ../mk/commands.mk ../mk/definitions.mk
 
@@ -20,6 +21,8 @@ PROJECT_NAME=		zappy_server
 NAME=			../$(PROJECT_NAME)
 
 ARGS= 			argument_processors/argument_
+
+MODE=			C
 
 # Project sources
 
