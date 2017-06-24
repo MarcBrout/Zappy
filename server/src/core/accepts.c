@@ -26,7 +26,6 @@ int accept_new_gui(t_server *server)
 
 int		accept_new_client(t_server *server)
 {
-  static ID             id = 0;
   struct sockaddr_in	addr;
   socklen_t		len;
   int			sock;
@@ -41,8 +40,7 @@ int		accept_new_client(t_server *server)
   cli = find_ID(server, 0, false);
   server->game.clients[cli].alive = true;
   server->game.clients[cli].sock = sock;
-  server->game.clients[cli].id = id;
-  log_this("Accepted client ID: %d on sock : %d\n", id, sock);
-  ++id;
+  server->game.clients[cli].id = cli;
+  log_this("Accepted client ID: %d on sock : %d\n", cli, sock);
   return (0);
 }
