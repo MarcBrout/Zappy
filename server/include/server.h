@@ -6,10 +6,12 @@
 # define SERVER_H_
 
 # include "server/send.h"
+# include "server/store_commands.h"
 # include "server/server_types.h"
 # include "server/server_data.h"
 # include "server/socket.h"
 # include "server/proceed.h"
 # include "logger/logger.h"
+# include "timer/timer.h"
 
 #endif /* !ZAPPY_SERVER_H_ */

@@ -9,6 +9,7 @@
 # include "arguments/config.h"
 # include "server_types.h"
 # include "circular_tools.h"
+# include "store_commands.h"
 
 typedef struct s_server t_server;
 typedef struct s_client t_client;
@@ -18,6 +19,7 @@ typedef struct s_inventory t_inventory;
 typedef struct s_cell t_cell;
 typedef struct s_position t_position;
 typedef struct s_game t_game;
+typedef struct s_store t_store;
 
 struct s_position
 {
@@ -56,6 +58,7 @@ struct s_client
   Socket sock;
   t_circular r;
   t_circular w;
+  t_store store;
 };
 
 struct s_game

@@ -5,6 +5,7 @@
 #include <string.h>
 #include "server/gui_commands.h"
 #include "server/ia_commands.h"
+#include "server/logic_commands.h"
 #include "server.h"
 
 static const t_command gui_commands[GUI_END + 1] =
@@ -18,66 +19,106 @@ static const t_command gui_commands[GUI_END + 1] =
         {"pin", 3, gui_pin},
         {"sgt", 3, gui_sgt},
         {"sst", 3, gui_sst},
-        {"unknown", 7, gui_unknown}
+        {NULL, 0, gui_unknown}
     };
 
 static const t_command ia_commands[IA_END + 1] =
     {
         {"Advance", 7, ia_unknown},
-        {"Right", 7, ia_unknown},
-        {"Left", 7, ia_unknown},
-        {"See", 7, ia_unknown},
-        {"Inventory", 7, ia_unknown},
-        {"Broadcast", 7, ia_unknown},
-        {"Connect_nbr", 7, ia_unknown},
-        {"Fork", 7, ia_unknown},
-        {"Eject", 7, ia_unknown},
-        {"Take", 7, ia_unknown},
-        {"Set", 7, ia_unknown},
-        {"Incantation", 7, ia_unknown},
-        {"unknown", 7, ia_unknown}
+        {"Right", 5, ia_unknown},
+        {"Left", 4, ia_unknown},
+        {"See", 3, ia_unknown},
+        {"Inventory", 9, ia_unknown},
+        {"Broadcast", 9, ia_unknown},
+        {"Connect_nbr", 11, ia_unknown},
+        {"Fork", 4, ia_unknown},
+        {"Eject", 5, ia_unknown},
+        {"Take", 4, ia_unknown},
+        {"Set", 3, ia_unknown},
+        {"Incantation", 11, ia_unknown},
+        {NULL, 0, ia_unknown}
     };
 
-static int run(t_server *server, t_client *client, const t_command *commands, size_t size)
-{
-  char cmd[MESSAGE_MAX_SIZE];
-  size_t i;
+static const t_command ia_logic[IA_END + 1] =
+    {
+        {"Advance", 7, ia_unknown},
+        {"Right", 5, ia_unknown},
+        {"Left", 4, ia_unknown},
+        {"See", 3, ia_unknown},
+        {"Inventory", 9, ia_unknown},
+        {"Broadcast", 9, ia_unknown},
+        {"Connect_nbr", 11, ia_unknown},
+        {"Fork", 4, ia_unknown},
+        {"Eject", 5, ia_unknown},
+        {"Take", 4, ia_unknown},
+        {"Set", 3, ia_unknown},
+        {"Incantation", 11, ia_unknown},
+        {NULL, 0, logic_unknown}
+    };
 
+static int run(t_server *server, t_client *client, 
+               const t_command *commands, char *cmd)
+{
+  size_t i;
+  
   i = 0;
-  strfromcircular(&client->r, cmd);
   log_this("raw command extracted: %s\n", cmd);
-  while (i < size)
+  while (commands[i].cmd)
   {
     if (!strncmp(commands[i].cmd, cmd, commands[i].len) &&
         commands[i].exec(server, client->sock, cmd))
       return (1);
     ++i;
   }
-  if (i == size)
-    return (commands[size].exec(server, client->sock, cmd));
+  if (!commands[i].cmd)
+    return (commands[i].exec(server, client->sock, cmd));
   return (0);
 }
 
-int  proceed_commands(t_server *server)
+static int  proceed_commands(t_server *server)
 {
+  char cmd[MESSAGE_MAX_SIZE];
   int i;
 
-  log_this("\t====\nProcessing GUI commands\n\t====\n");
+  log_this("\t====\nReading GUI commands\n\t====\n");
   while (find_command(&server->gui.r))
     {
-      if (run(server, &server->gui, gui_commands, GUI_END))
+      strfromcircular(&server->gui.r, cmd);
+      if (run(server, &server->gui, gui_commands, cmd))
       	return (1);
     }
   i = 0;
-  log_this("\t====\nProcessing CLIENTS commands\n\t====\n");
+  log_this("\t====\nReading CLIENTS commands\n\t====\n");
   while (i < server->config.max_player * server->config.team_count)
   {
     while (find_command(&server->game.clients[i].r))
       {
-	if (run(server, &server->game.clients[i], ia_commands, IA_END))
+        strfromcircular(&server->game.clients[i].r, cmd);
+	if (run(server, &server->game.clients[i], ia_commands, cmd))
 	  return (1);
       }
     ++i;
+  }
+  return (0);
+}
+
+static int proceed_logic(t_server *server)
+{
+  int i = 0;
+  char *cmd = NULL;
+  
+  if (isTick()) 
+  {
+    while (i < server->config.max_player * server->config.team_count) 
+    {
+      if ((cmd = get_command_from_store(&server->game.clients[i].store)))
+      {
+        if (run(server, &server->game.clients[i], ia_logic, cmd))
+          return (1);
+        pop_command(&server->game.clients[i].store);
+      }
+      ++i;
+    }
   }
   return (0);
 }
@@ -87,5 +128,6 @@ int proceed(t_server *server,
 {
   return (proceed_reads(server, fds_read) ||
           proceed_commands(server) ||
+          proceed_logic(server) ||
           proceed_writes(server, fds_write));
 }

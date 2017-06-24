@@ -7,7 +7,6 @@
 
 #include "server_data.h"
 
-
 int ia_unknown(t_server *server, Socket sock, char *cmd);
 
 #endif //IA_COMMANDS_H_

@@ -78,11 +78,18 @@ static int init_server(t_server *server)
   server->game.width = config->width;
   server->game.height = config->height;
   log_this("Setting servers with configuration line...\n");
-  return ((server->game.map = malloc(
-      sizeof(*server->game.map) *
-      config->height * config->width)) == NULL ||
-      (server->game.clients = calloc(config->max_player * config->team_count,
-          sizeof(*server->game.clients))) == NULL);
+  if ((server->game.map = malloc(sizeof(*server->game.map) *
+      config->height * config->width)) == NULL)
+    return (1);
+  log_this("Allocated map of:\n\tx: %d\n\ty: %d\n",
+           config->width, config->height);
+  if ((server->game.clients = calloc(config->max_player * config->team_count,
+          sizeof(*server->game.clients))) == NULL)
+    return (1);
+  log_this("Allocated clients:\n\tcount: %d\n\tsize: %d\n",
+           config->max_player * config->team_count,
+           sizeof(*server->game.clients));
+  return (0);
 }
 
 int launch_server(t_server *server)
@@ -93,11 +100,11 @@ int launch_server(t_server *server)
   action.sa_flags = SA_SIGINFO;
   action.sa_handler = &set_quit;
   log_this("Launching Server...\n");
+  init_timer(server->config.time);
   return (sigaction(SIGINT, &action, NULL) == -1 ||
           signal(SIGPIPE, SIG_IGN) == SIG_ERR ||
           init_server(server) ||
           create_socket(&server->ia_sock, server->config.port,
                         server->config.max_player * server->config.team_count)
-          || create_socket(&server->gui_sock, 8484, 1) ||
-          running(server));
+          || create_socket(&server->gui_sock, 8484, 1) || running(server));
 }
