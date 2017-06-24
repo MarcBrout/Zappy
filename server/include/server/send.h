@@ -8,6 +8,6 @@
 #include "server_data.h"
 
 int send_to_gui(t_server *server, char const *fmt, ...);
-int send_to_ia(t_server *server, Socket sock, char const *fmt, ...);
+int send_to_ia(t_server *server, ID id, char const *fmt, ...);
 
 #endif //SEND_H_

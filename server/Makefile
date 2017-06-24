@@ -79,8 +79,12 @@ SERVER_RAW_SRC=		server.c 						\
 					$(GUIEVE)pnw.c 					\
 					$(GUIEVE)seg.c 					\
 					$(GUIEVE)smg.c 					\
-					$(IACMD)unknown.c				\
-					$(IALOG)unknown.c
+					$(IALOG)unknown.c				\
+					$(IACMD)unknown.c 				\
+                    $(IACMD)forward.c 				\
+                    $(IACMD)left.c 					\
+                    $(IACMD)right.c 				\
+                    $(IACMD)fork.c
 
 SERVER_SRC=			$(addprefix src/, $(SERVER_RAW_SRC))
 
