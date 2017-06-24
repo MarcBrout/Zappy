@@ -21,7 +21,7 @@ int init_timer(uint16_t freq)
     return (1);
   }
   timer.freq = (uint64_t)((unit / (double)freq) * 1000000.0);
-  log_this("Timer correctly set at : \n\tstart: %s\n\tfreq: %u\n",
+  log_this("Timer correctly set at : \n\tstart: %s\tfreq: %u\n",
            ctime(&timer.start.tv_sec), timer.freq);
   return (0);
 }

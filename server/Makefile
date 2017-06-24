@@ -26,6 +26,8 @@ GUIEVE=				gui_events/event_
 
 IACMD= 				ia_commands/ia_
 
+IALOG=				ia_logic/logic_
+
 CORE= 				core/
 
 # Project sources
@@ -51,6 +53,7 @@ SERVER_RAW_SRC=		server.c 						\
 					$(CORE)proceed_reads.c 			\
 					$(CORE)senders.c 				\
 					$(CORE)set_gui.c 				\
+					$(CORE)store_commands.c			\
 					$(GUICMD)unknown.c 				\
 					$(GUICMD)bct.c 					\
 					$(GUICMD)mct.c 					\
@@ -76,7 +79,8 @@ SERVER_RAW_SRC=		server.c 						\
 					$(GUIEVE)pnw.c 					\
 					$(GUIEVE)seg.c 					\
 					$(GUIEVE)smg.c 					\
-					$(IACMD)unknown.c
+					$(IACMD)unknown.c				\
+					$(IALOG)unknown.c
 
 SERVER_SRC=			$(addprefix src/, $(SERVER_RAW_SRC))
 

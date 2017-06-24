@@ -26,8 +26,10 @@ static int		set_fds(t_server *server,
   FD_ZERO(fds_read);
   FD_ZERO(fds_write);
   max = set_gui(server, fds_read, fds_write);
+  log_this("Setting Server fd : %d\n", server->ia_sock);
   FD_SET(server->ia_sock, fds_read);
   max = server->ia_sock > max ? server->ia_sock : max;
+  log_this("Setting Clients fds\n");
   while (ia < server->config.max_player * server->config.team_count)
   {
     client = &server->game.clients[ia];
@@ -50,6 +52,7 @@ static int running(t_server *server)
   fd_set writes;
   Socket max;
 
+  log_this("Running server now\n");
   while (!gl_stop)
   {
     max = set_fds(server, &reads, &writes);
@@ -77,11 +80,11 @@ static int init_server(t_server *server)
 
   server->game.width = config->width;
   server->game.height = config->height;
-  log_this("Setting servers with configuration line...\n");
+  log_this("Setting up Server...\n");
   if ((server->game.map = malloc(sizeof(*server->game.map) *
       config->height * config->width)) == NULL)
     return (1);
-  log_this("Allocated map of:\n\tx: %d\n\ty: %d\n",
+  log_this("Allocated map:\n\tx: %d\n\ty: %d\n",
            config->width, config->height);
   if ((server->game.clients = calloc(config->max_player * config->team_count,
           sizeof(*server->game.clients))) == NULL)
