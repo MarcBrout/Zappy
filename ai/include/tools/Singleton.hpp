@@ -6,6 +6,7 @@
 #define CPP_PLAZZA_SINGLETON_HPP_
 
 #include <iostream>
+#include <vector>
 
 template <typename T>
 class Singleton
@@ -51,6 +52,5 @@ public:
         return instance;
     }
 };
-
 
 #endif // !CPP_PLAZZA_SINGLETON_HPP_
