@@ -1,11 +1,16 @@
-//
-// Created by brout_m on 23/06/17.
-//
+/*
+** gui_events.h for zappy in /home/brout_m/rendu/system/PSU_2016_zappy/server/include
+**
+** Made by brout_m
+** Login   <marc.brout@epitech.eu>
+**
+** Started on  Sat Jun 24 16:42:54 2017 brout_m
+** Last update Sat Jun 24 16:43:37 2017 brout_m
+*/
+#ifndef GUI_EVENTS_H_
+# define GUI_EVENTS_H_
 
-#ifndef ZAPPY_GUI_EVENTS_H
-#define ZAPPY_GUI_EVENTS_H
-
-#include "server.h"
+# include "server.h"
 
 int event_ebo(t_server *server, ID eggId);
 int event_edi(t_server *server, ID eggId);
@@ -23,4 +28,4 @@ int event_pnw(t_server *server, t_client const *newClient);
 int event_seg(t_server *server, char const *winnerTeamName);
 int event_smg(t_server *server, char const *serverMessage);
 
-#endif //ZAPPY_GUI_EVENTS_H
+#endif /* !GUI_EVENTS_H_ */

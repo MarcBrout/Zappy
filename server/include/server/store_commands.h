@@ -1,7 +1,12 @@
-//
-// Created by brout_m on 24/06/17.
-//
-
+/*
+** store_commands.h for zappy in server/include/server
+**
+** Made by brout_m
+** Login   <marc.brout@epitech.eu>
+**
+** Started on  Sat Jun 24 16:51:27 2017 brout_m
+** Last update Sat Jun 24 16:53:14 2017 brout_m
+*/
 #ifndef STORE_COMMANDS_H_
 # define STORE_COMMANDS_H_
 # define MAX_CMD 10
@@ -9,26 +14,27 @@
 
 # include <stdint.h>
 
-typedef struct s_cmd t_cmd;
-typedef struct s_store t_store;
+typedef struct s_cmd	t_cmd;
+typedef struct s_store	t_store;
 
-struct s_cmd
+struct			s_cmd
 {
-  char command[CMD_LENGTH];
-  uint64_t cooldown;
-  struct s_cmd *next;
+  char			command[CMD_LENGTH];
+  uint64_t		cooldown;
+  struct s_cmd		*next;
 };
 
-struct s_store
+struct			s_store
 {
-  t_cmd *commands;
-  uint16_t command_count;
+  t_cmd			*commands;
+  uint16_t		command_count;
 };
 
 /*
-** Returns 1 if an allocation error occurred, return 0 otherwise and
+** Returns 1 if an allocation error occurred, return 0 otherwise
 ** whether the command is added or not. The command is not added if
-** the queue is full. Queue size if defined byt the macro MAX_CMD
+** the queue is full. Queue size is defined by the macro MAX_CMD
+** and updated automatically
 */
 int store_command(t_store *store, const char *cmd, uint64_t cooldown);
 
@@ -42,5 +48,4 @@ char *get_command_from_store(t_store *store);
 */
 void pop_command(t_store *store);
 
-
-#endif /* !ZAPPY_STORE_COMMANDS_H_ */
+#endif /* !STORE_COMMANDS_H_ */

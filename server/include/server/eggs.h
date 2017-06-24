@@ -1,7 +1,12 @@
-//
-// Created by puilla_e on 09/06/17.
-//
-
+/*
+** eggs.h for zappy in server/include/server
+**
+** Made by brout_m
+** Login   <marc.brout@epitech.eu>
+**
+** Started on  Sat Jun 24 16:41:47 2017 brout_m
+** Last update Sat Jun 24 16:42:17 2017 brout_m
+*/
 #ifndef EGGS_H_
 # define EGGS_H_
 

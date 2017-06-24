@@ -1,7 +1,12 @@
-//
-// Created by brout_m on 09/06/17.
-//
-
+/*
+** ia_commands.h for zappy in server/include/server
+**
+** Made by brout_m
+** Login   <marc.brout@epitech.eu>
+**
+** Started on  Sat Jun 24 16:43:42 2017 brout_m
+** Last update Sat Jun 24 16:44:04 2017 brout_m
+*/
 #ifndef IA_COMMANDS_H_
 # define IA_COMMANDS_H_
 

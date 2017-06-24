@@ -1,7 +1,12 @@
-//
-// Created by brout_m on 02/06/17.
-//
-
+/*
+** server.h for zappy in server/include
+**
+** Made by brout_m
+** Login   <marc.brout@epitech.eu>
+**
+** Started on  Sat Jun 24 16:36:50 2017 brout_m
+** Last update Sat Jun 24 16:37:06 2017 brout_m
+*/
 #ifndef SERVER_H_
 # define SERVER_H_
 
@@ -14,4 +19,4 @@
 # include "logger/logger.h"
 # include "timer/timer.h"
 
-#endif /* !ZAPPY_SERVER_H_ */
+#endif /* !SERVER_H_ */

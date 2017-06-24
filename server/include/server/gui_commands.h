@@ -1,11 +1,16 @@
-//
-// Created by brout_m on 09/06/17.
-//
-
+/*
+** gui_commands.h for zappy in server/include/server
+**
+** Made by brout_m
+** Login   <marc.brout@epitech.eu>
+**
+** Started on  Sat Jun 24 16:42:26 2017 brout_m
+** Last update Sat Jun 24 16:42:48 2017 brout_m
+*/
 #ifndef GUI_COMMANDS_H_
-#define GUI_COMMANDS_H_
+# define GUI_COMMANDS_H_
 
-#include "server_data.h"
+# include "server_data.h"
 
 int send_case_content(t_server *server, int x, int y);
 int gui_unknown(t_server *server, ID id, char *cmd);

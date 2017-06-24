@@ -1,3 +1,12 @@
+/*
+** arguments.h for zappy in server/include/arguments
+**
+** Made by brout_m
+** Login   <marc.brout@epitech.eu>
+**
+** Started on  Sat Jun 24 16:37:22 2017 brout_m
+** Last update Sat Jun 24 16:37:57 2017 brout_m
+*/
 #ifndef ARGUMENTS_H_
 # define ARGUMENTS_H_
 

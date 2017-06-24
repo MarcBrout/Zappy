@@ -1,47 +1,52 @@
-//
-// Created by brout_m on 02/06/17.
-//
-
+/*
+** server_types.h for zappy in server/include/server
+**
+** Made by brout_m
+** Login   <marc.brout@epitech.eu>
+**
+** Started on  Sat Jun 24 16:49:08 2017 brout_m
+** Last update Sat Jun 24 16:50:19 2017 brout_m
+*/
 #ifndef SERVER_TYPES_H_
 # define SERVER_TYPES_H_
 
 # include <stddef.h>
 
-typedef int Socket;
-typedef int Team;
-typedef enum e_object Object;
-typedef unsigned int Level;
-typedef enum e_direction Direction;
-typedef enum e_rdirection RDirection;
-typedef int ID;
+typedef int			Socket;
+typedef int			Team;
+typedef enum e_object		Object;
+typedef unsigned int		Level;
+typedef enum e_direction	Direction;
+typedef enum e_rdirection	RDirection;
+typedef int			ID;
 
-enum e_object
-{
-  FOOD = 0,
-  LINEMATE,
-  DERAUMERE,
-  SIBUR,
-  MENDIANE,
-  PHIRAS,
-  THYSTAME,
-  OBJ_COUNT
-};
+enum				e_object
+  {
+    FOOD = 0,
+    LINEMATE,
+    DERAUMERE,
+    SIBUR,
+    MENDIANE,
+    PHIRAS,
+    THYSTAME,
+    OBJ_COUNT
+  };
 
-enum e_direction
-{
-  NORTH = 1,
-  EAST,
-  SOUTH,
-  WEST
-};
+enum				e_direction
+  {
+    NORTH = 1,
+    EAST,
+    SOUTH,
+    WEST
+  };
 
-enum e_rdirection
-{
-  RSOUTH = 1,
-  RWEST,
-  RNORTH,
-  REAST
-};
+enum				e_rdirection
+  {
+    RSOUTH = 1,
+    RWEST,
+    RNORTH,
+    REAST
+  };
 
 const char *nameof(enum e_object obj);
 
