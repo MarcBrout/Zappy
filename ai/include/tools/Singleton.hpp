@@ -2,8 +2,8 @@
 // Created by Pierre Bougon on 25/04/17.
 //
 
-#ifndef CPP_PLAZZA_SINGLETON_HPP_
-#define CPP_PLAZZA_SINGLETON_HPP_
+#ifndef CPP_ZAPPY_SINGLETON_HPP_
+#define CPP_ZAPPY_SINGLETON_HPP_
 
 #include <iostream>
 #include <vector>
@@ -21,4 +21,4 @@ public:
     }
 };
 
-#endif // !CPP_PLAZZA_SINGLETON_HPP_
+#endif // !CPP_ZAPPY_SINGLETON_HPP_

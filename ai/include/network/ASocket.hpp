@@ -2,8 +2,8 @@
 // Created by Pierre Bougon on 20/04/17.
 //
 
-#ifndef CPP_INDIE_ASOCKET_HPP_
-#define CPP_INDIE_ASOCKET_HPP_
+#ifndef CPP_ZAPPY_ASOCKET_HPP_
+#define CPP_ZAPPY_ASOCKET_HPP_
 
 
 #include <netinet/in.h>
@@ -55,4 +55,4 @@ namespace zappy
 }
 
 
-#endif // !CPP_INDIE_ASOCKET_HPP_
+#endif // !CPP_ZAPPY_ASOCKET_HPP_

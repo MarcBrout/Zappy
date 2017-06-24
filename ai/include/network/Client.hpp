@@ -2,8 +2,8 @@
 // Created by Pierre Bougon on 20/04/17.
 //
 
-#ifndef CPP_INDIE_CLIENT_HPP_
-#define CPP_INDIE_CLIENT_HPP_
+#ifndef CPP_ZAPPY_CLIENT_HPP_
+#define CPP_ZAPPY_CLIENT_HPP_
 
 
 #include <thread>
@@ -39,4 +39,4 @@ namespace zappy
     }
 }
 
-#endif // !CPP_INDIE_CLIENT_HPP_
+#endif // !CPP_ZAPPY_CLIENT_HPP_

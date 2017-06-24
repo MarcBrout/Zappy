@@ -2,8 +2,8 @@
 // Created by Pierre Bougon on 24/04/17.
 //
 
-#ifndef CPP_PLAZZA_SERIALIZABLE_HPP_
-#define CPP_PLAZZA_SERIALIZABLE_HPP_
+#ifndef CPP_ZAPPY_SERIALIZABLE_HPP_
+#define CPP_ZAPPY_SERIALIZABLE_HPP_
 
 #include <string>
 
@@ -16,4 +16,4 @@ public:
     virtual bool deserialize(std::string const &serialized) = 0;
 };
 
-#endif // !CPP_PLAZZA_SERIALIZABLE_HPP_
+#endif // !CPP_ZAPPY_SERIALIZABLE_HPP_

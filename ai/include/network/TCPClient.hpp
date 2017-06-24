@@ -2,8 +2,8 @@
 // Created by Pierre Bougon on 20/04/17.
 //
 
-#ifndef CPP_INDIE_TCPCLIENT_HPP_
-#define CPP_INDIE_TCPCLIENT_HPP_
+#ifndef CPP_ZAPPY_TCPCLIENT_HPP_
+#define CPP_ZAPPY_TCPCLIENT_HPP_
 
 
 #include <mutex>
@@ -42,4 +42,4 @@ namespace zappy
 }
 
 
-#endif // !CPP_INDIE_TCPCLIENT_HPP_
+#endif // !CPP_ZAPPY_TCPCLIENT_HPP_

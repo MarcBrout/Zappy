@@ -2,8 +2,8 @@
 // Created by Pierre Bougon on 03/02/17.
 //
 
-#ifndef PLAZZA_LOGGER_HPP_
-#define PLAZZA_LOGGER_HPP_
+#ifndef ZAPPY_LOGGER_HPP_
+#define ZAPPY_LOGGER_HPP_
 
 #include <fstream>
 #include <string>
@@ -47,4 +47,4 @@ private:
 };
 
 
-#endif // !PLAZZA_LOGGER_HPP_
+#endif // !ZAPPY_LOGGER_HPP_
