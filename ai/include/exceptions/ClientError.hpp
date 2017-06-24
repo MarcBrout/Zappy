@@ -14,6 +14,7 @@ namespace zappy
     {
         class ClientError : public std::runtime_error
         {
+        public:
             ClientError(const std::string &msg);
             ClientError(const char *msg);
 

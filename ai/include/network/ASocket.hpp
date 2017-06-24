@@ -38,8 +38,6 @@ namespace zappy
 
             virtual void                        send(const std::string &data, sock_t socket) = 0;
             virtual std::vector<std::string>    receive(sock_t socket) = 0;
-            virtual void                        send(const std::string &data);
-            virtual std::vector<std::string>    receive();
 
         protected:
             sock_t          _socket;

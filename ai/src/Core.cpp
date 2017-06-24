@@ -23,6 +23,7 @@ void zappy::Core::run()
     {
         _ai.nextAction();
         //check server send
+        usleep(100000);
         servMessages = network::Client::getInstance().getServerMessages();
         for (std::vector<std::string>::iterator it = servMessages.begin(); it < servMessages.end(); ++it)
             manageResponse(*it);
@@ -42,11 +43,16 @@ void zappy::Core::run()
 
 void zappy::Core::manageResponse(std::string servMessage)
 {
-    Logger::log(Logger::DEBUG, "command received : " + servMessage);
+    Logger::log(Logger::_DEBUG_, "command received : " + servMessage);
     if (servMessage == "dead")
         _running = false;
-    if (servMessage.substr(0, servMessage.find(" ") - 1) == "message")
+    else if (servMessage.substr(0, servMessage.find(" ") - 1) == "message")
         _ai.setMessage(servMessage);
+    else if (servMessage == "WELCOME")
+    {
+        // TODO change to team name
+        network::Client::getInstance().send("1");
+    }
     else
     {
         _waitingForResponse = false;

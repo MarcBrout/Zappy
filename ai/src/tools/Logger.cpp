@@ -7,7 +7,7 @@
 #include <fstream>
 #include "tools/Logger.hpp"
 
-#ifdef _DEBUG
+#ifdef DEBUG
 bool Debug::DEBUG_MODE = true;
 #else
 bool Debug::DEBUG_MODE = false;
@@ -25,7 +25,7 @@ void Logger::log(Logger::Level lvl, std::string msg, bool abort)
 {
     switch (lvl)
     {
-        case Logger::DEBUG:
+        case Logger::_DEBUG_:
             if (Debug::DEBUG_MODE)
                 std::cout << "<Debug> : " << msg << std::endl;
             break;
@@ -61,7 +61,7 @@ void Logger::logFile(std::string msg, Logger::Level lvl)
 
 std::string Logger::toString(Logger::Level lvl)
 {
-    static const char* const buffer[] = {  "DEBUG", "INFO", "WARNING", "ERROR", "" };
+    static const char* const buffer[] = {  "_DEBUG_", "INFO", "WARNING", "ERROR", "" };
     return buffer[lvl];
 }
 

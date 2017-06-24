@@ -7,6 +7,7 @@
 #include <tools/Logger.hpp>
 #include <unistd.h>
 #include <csignal>
+#include <exceptions/ClientError.hpp>
 #include "network/TCPClient.hpp"
 
 zappy::network::TCPClient::TCPClient(uint16_t port, const std::string &hostname)
@@ -15,13 +16,18 @@ zappy::network::TCPClient::TCPClient(uint16_t port, const std::string &hostname)
 
 std::vector<std::string> zappy::network::TCPClient::receive(sock_t socket)
 {
+    bool                            first = true;
     std::vector<std::string>        commands;
     ssize_t                         ret;
-    char                            buffer[BUFFER_SIZE];
+    char                            buffer[BUFFER_SIZE] = {0};
 
+    if (!isConnected())
+        throw ClientError("Trying to receive when client is not connected");
     commands.clear();
-    while (head != tail)
+    Logger::log(Logger::_DEBUG_, "trying to receive");
+    while (first || head != tail)
     {
+        first = false;
         ret = ::recv(socket, buffer, BUFFER_SIZE, 0);
         if (ret == -1 && errno == EINTR)
         {
@@ -36,11 +42,15 @@ std::vector<std::string> zappy::network::TCPClient::receive(sock_t socket)
         }
         else if (ret == 0)
         {
-            //todo
+            Logger::log(Logger::_DEBUG_, "nothing to receive");
+            //todo?
             return commands;
         }
         else
         {
+            Logger::log(Logger::_DEBUG_, "== server receiving ==");
+            Logger::log(Logger::_DEBUG_, buffer);
+            Logger::log(Logger::_DEBUG_, "== end of server receiving ==");
             manageBuffer(buffer);
             commands = splitReceived();
         }
@@ -52,15 +62,26 @@ void zappy::network::TCPClient::send(const std::string &data, zappy::network::so
 {
     std::string tosend;
 
+    if (!isConnected())
+        throw ClientError("Trying to send when client is not connected");
     tosend = data + END_OF_COMMAND;
-    Logger::log(Logger::DEBUG, "Client Sending: " + data);
+    Logger::log(Logger::_DEBUG_, "Client Sending: " + data);
     if (::send(socket, tosend.c_str(), tosend.size(), 0) == -1)
         throw network::SocketError("Cannot send to the socket");
 }
 
+void zappy::network::TCPClient::send(const std::string &data)
+{
+    send(data, _socket);
+}
+
+std::vector<std::string> zappy::network::TCPClient::receive()
+{
+    return receive(_socket);
+}
+
 void zappy::network::TCPClient::connect()
 {
-	Logger::log(Logger::DEBUG, "Connect");
     _server = ::gethostbyname(_hostname.c_str());
     if (!_server)
         throw network::SocketError("No such host");
@@ -68,6 +89,7 @@ void zappy::network::TCPClient::connect()
     ::bcopy((char *)_server->h_addr_list[0], (char *)&_servAddr.sin_addr.s_addr, static_cast<size_t >(_server->h_length));
     if (::connect(_socket, (sockaddr *)(&_servAddr), sizeof(_servAddr)) == -1)
         throw network::SocketError("Cannot connect to server");
+    Logger::log(Logger::_DEBUG_, "Connected");
 }
 
 void zappy::network::TCPClient::disconnect()
@@ -92,7 +114,7 @@ zappy::network::TCPClient::~TCPClient()
 
 void zappy::network::TCPClient::manageBuffer(char const *buffer)
 {
-    for (size_t i = 0; i < BUFFER_SIZE; ++i)
+    for (size_t i = 0; i < BUFFER_SIZE && buffer[i]; ++i)
     {
         buf[tail % BUFFER_SIZE] = buffer[i];
         ++tail;
@@ -105,10 +127,8 @@ std::vector<std::string> zappy::network::TCPClient::splitReceived()
     std::vector<std::string> listCommands;
     size_t tmpHead = head;
 
-    for (size_t i = 0; i < BUFFER_SIZE; ++i)
+    for (size_t i = 0; i < BUFFER_SIZE && tmpHead != tail; ++i)
     {
-        if (tmpHead == tail)
-            break;
         if (buf[tmpHead % BUFFER_SIZE] == END_OF_COMMAND)
         {
             listCommands.push_back(command);
@@ -116,10 +136,9 @@ std::vector<std::string> zappy::network::TCPClient::splitReceived()
             head = (tmpHead + 1) % BUFFER_SIZE;
         }
         else
-            command += buf[head % BUFFER_SIZE];
+            command += buf[tmpHead % BUFFER_SIZE];
         ++tmpHead;
     }
     return std::move(listCommands);
 }
-
 

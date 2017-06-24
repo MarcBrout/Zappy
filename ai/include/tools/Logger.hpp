@@ -27,7 +27,7 @@ private:
 public:
     enum Level
     {
-        DEBUG = 0,
+        _DEBUG_ = 0,
         INFO,
         WARNING,
         ERROR,

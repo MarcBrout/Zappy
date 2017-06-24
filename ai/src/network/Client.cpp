@@ -32,7 +32,7 @@ std::vector<std::string> zappy::network::Client::getServerMessages()
     _fdManager.select(_socket);
     if (_fdManager.isFdSet(_socket, _fdManager.READ))
     {
-        messages = ASocket::receive();
+        messages = receive();
     }
     return messages;
 }

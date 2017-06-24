@@ -25,8 +25,10 @@ namespace zappy
             void            disconnect();
             bool            isConnected();
 
-            void                        send(const std::string &data, sock_t socket) override;
-            std::vector<std::string>    receive(sock_t socket) override;
+            virtual void                        send(const std::string &data, sock_t socket) override;
+            virtual std::vector<std::string>    receive(sock_t socket) override;
+            virtual void                        send(const std::string &data);
+            virtual std::vector<std::string>    receive();
 
         private:
             std::vector<std::string>    splitReceived();

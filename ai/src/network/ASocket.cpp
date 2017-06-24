@@ -46,14 +46,3 @@ zappy::network::ASocket::~ASocket()
     if (_socket >= 0)
         close(_socket);
 }
-
-void zappy::network::ASocket::send(const std::string &data)
-{
-    send(data, _socket);
-}
-
-std::vector<std::string> zappy::network::ASocket::receive()
-{
-    return receive(_socket);
-}
-

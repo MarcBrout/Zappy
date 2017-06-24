@@ -5,7 +5,7 @@
 ## Login   <pierre@epitech.net>
 ## 
 ## Started on  Sat Jun 10 21:41:56 2017 PierreBougon
-## Last update Sat Jun 24 18:12:51 2017 PierreBougon
+## Last update Sat Jun 24 19:28:54 2017 PierreBougon
 ##
 
 MODE=	CPP
@@ -38,10 +38,13 @@ NETWORK_SRC=		ASocket.cpp	\
 			Client.cpp	\
 			SendCommand.cpp
 
+COREAI_SRC=		CoreAI.cpp
+
 SRC=			$(addprefix src/, $(MAIN_SRC))
 SRC+=			$(addprefix src/tools/, $(TOOLS_SRC))
 SRC+=			$(addprefix src/exceptions/, $(EXCEPTIONS_SRC))
 SRC+=			$(addprefix src/network/, $(NETWORK_SRC))
+SRC+=			$(addprefix src/core_ai/, $(COREAI_SRC))
 
 OBJ=			$(SRC:.cpp=.o)
 
