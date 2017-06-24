@@ -26,10 +26,17 @@ namespace zappy
             bool            isConnected();
 
             void            send(const std::string &data, sock_t socket = _socket) override;
-            std::string     receive(sock_t socket = _socket) override;
+            std::vector<std::string>     receive(sock_t socket = _socket) override;
 
         private:
+            std::vector<std::string> splitReceived();
 
+        private:
+            char            buf[BUFFER_SIZE];
+            size_t          head;
+            size_t          tail;
+
+            void manageBuffer(char const *buffer);
         };
     }
 }

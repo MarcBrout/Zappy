@@ -5,41 +5,47 @@
 #include <exceptions/SocketError.hpp>
 #include <cstring>
 #include <tools/Logger.hpp>
+#include <unistd.h>
 #include <iostream>
 #include <bits/sigthread.h>
 #include <bits/signum.h>
 #include <signal.h>
 #include <csignal>
-#include <zconf.h>
 #include "network/TCPClient.hpp"
 
-zappy::network::TCPClient::TCPClient(uint16_t port, const std::string &hostname) : ASocket(port, hostname)
+zappy::network::TCPClient::TCPClient(uint16_t port, const std::string &hostname)
+        : ASocket(port, hostname), buf(""), head(0), tail(0)
 {}
 
-std::string zappy::network::TCPClient::receive(sock_t socket)
+std::vector<std::string> zappy::network::TCPClient::receive(sock_t socket)
 {
-    std::string     data;
-    char            buf[BUFFER_SIZE];
-    ssize_t         ret;
+    std::vector<std::string>        commands;
+    ssize_t                         ret;
+    char                            buffer[BUFFER_SIZE];
 
-    ret = ::recv(socket, buf, BUFFER_SIZE, 0);
+    ret = ::recv(socket, buffer, BUFFER_SIZE, 0);
     if (ret == -1 && errno == EINTR)
     {
         // Stopping Client
+        disconnect();
         return nullptr;
     }
     else if (ret == -1)
     {
+        disconnect();
         return nullptr;
     }
     else if (ret == 0)
+    {
+        disconnect();
         return nullptr;
+    }
     else
-        data += buf;
-
-    inputPacket.deserialize(data);
-    Logger::log(Logger::DEBUG, "Client Receiving: " + inputPacket.serialize());
-    return std::move(inputData);
+    {
+        manageBuffer(buffer);
+        commands = splitReceived();
+    }
+    return std::move(commands);
 }
 
 void zappy::network::TCPClient::send(const std::string &data, zappy::network::sock_t socket)
@@ -82,6 +88,38 @@ bool zappy::network::TCPClient::isConnected()
 
 zappy::network::TCPClient::~TCPClient()
 {
+}
+
+void zappy::network::TCPClient::manageBuffer(char const *buffer)
+{
+    for (size_t i = 0; i < BUFFER_SIZE; ++i)
+    {
+        buf[tail % BUFFER_SIZE] = buffer[i];
+        ++tail;
+    }
+}
+
+std::vector<std::string> zappy::network::TCPClient::splitReceived()
+{
+    std::string command;
+    std::vector<std::string> listCommands;
+    size_t tmpHead = head;
+
+    for (size_t i = 0; i < BUFFER_SIZE; ++i)
+    {
+        if (tmpHead == tail)
+            break;
+        if (buf[tmpHead % BUFFER_SIZE] == END_OF_COMMAND)
+        {
+            listCommands.push_back(command);
+            command.clear();
+            head = (tmpHead + 1) % BUFFER_SIZE;
+        }
+        else
+            command += buf[head % BUFFER_SIZE];
+        ++tmpHead;
+    }
+    return std::move(listCommands);
 }
 
 
