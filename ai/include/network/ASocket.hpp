@@ -12,8 +12,6 @@
 
 namespace zappy
 {
-#define END_OF_COMMAND "\n"
-
     namespace network
     {
         typedef int sock_t;
@@ -34,10 +32,11 @@ namespace zappy
             const std::string   &getHostname() const;
 
             virtual void        send(const std::string &data, sock_t socket) = 0;
-            virtual std::string receive(sock_t socket) = 0;
+            virtual std::vector<std::string> receive(sock_t socket) = 0;
 
         public:
             static constexpr size_t BUFFER_SIZE = 4096;
+            static constexpr char END_OF_COMMAND = '\n';
 
         protected:
             sock_t          _socket;
