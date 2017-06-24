@@ -10,6 +10,7 @@
 #include <mutex>
 #include "network/TCPClient.hpp"
 #include "tools/Singleton.hpp"
+#include "FDManager.hpp"
 
 namespace zappy
 {
@@ -17,8 +18,8 @@ namespace zappy
     {
         class Client : public TCPClient, public Singleton<Client>
         {
-            friend class Singleton<Client>;
         private:
+            friend class Singleton<Client>;
             Client(uint16_t port, const std::string &hostname);
             Client(Client const &other) = delete;
             Client &operator=(Client const &other) = delete;
@@ -27,7 +28,13 @@ namespace zappy
         public:
             // Use this method as the constructor
             void Init(uint16_t port, std::string const &host);
+            std::vector<std::string> getServerMessages();
             virtual ~Client();
+
+        private:
+
+        private:
+            FDManager   _fdManager;
         };
     }
 }
