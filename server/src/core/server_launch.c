@@ -70,7 +70,6 @@ static int running(t_server *server)
     }
   }
   free(server->game.clients);
-  //TODO verify player disconnection
   return (0);
 }
 
