@@ -1,15 +1,24 @@
+/*
+** help.c for zappy in server/src
+**
+** Made by brout_m
+** Login   <marc.brout@epitech.eu>
+**
+** Started on  Sat Jun 24 17:02:06 2017 brout_m
+** Last update Sat Jun 24 17:03:29 2017 brout_m
+*/
 #include <stdio.h>
 
-static const char *usage =
-"USAGE: %s -p port -x width -y height -n name1 name2 -c nbClients -t time\n"
-    "\tport\t\tis the port number\n"
-    "\twidth\t\tis the width of the world\n"
-    "\theight\t\tis the height of the world\n"
-    "\tnameX\t\tis the name of the team X\n"
-    "\tclients Nb\tis the number of authorized clients per team\n"
-    "\tfreq\t\tis the time limit for execution of actions\n";
+static const char	*usage =
+  "USAGE: %s -p port -x width -y height -n name1 name2 -c nbClients -t time\n"
+  "\tport\t\tis the port number\n"
+  "\twidth\t\tis the width of the world\n"
+  "\theight\t\tis the height of the world\n"
+  "\tnameX\t\tis the name of the team X\n"
+  "\tclients Nb\tis the number of authorized clients per team\n"
+  "\tfreq\t\tis the time limit for execution of actions\n";
 
-int print_help(char *server_name)
+int			print_help(char *server_name)
 {
   return (printf(usage, server_name) || 1);
 }
