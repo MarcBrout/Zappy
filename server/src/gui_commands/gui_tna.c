@@ -4,13 +4,13 @@
 
 #include "server.h"
 
-int	gui_tna(t_server *server, Socket sock, char *cmd)
+int	gui_tna(t_server *server, t_client *client, char *cmd)
 {
   int	i;
   int	ret;
 
   (void)cmd;
-  (void)sock;
+  (void)client;
   i = 0;
   log_this("[TNA] GUI asked team names :");
   while (i < server->config.team_count)

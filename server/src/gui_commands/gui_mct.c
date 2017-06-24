@@ -5,7 +5,7 @@
 #include "server.h"
 #include "server/gui_commands.h"
 
-int gui_mct(t_server *server, Socket sock, char *cmd)
+int gui_mct(t_server *server, t_client *client, char *cmd)
 {
   int i;
   int size;
@@ -15,7 +15,7 @@ int gui_mct(t_server *server, Socket sock, char *cmd)
   width = server->config.width;
   size = width * server->config.height;
   (void)cmd;
-  (void)sock;
+  (void)client;
   log_this("[MCT] GUI asked map content\n");
   while (i < size)
   {

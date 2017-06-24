@@ -25,7 +25,7 @@ int send_case_content(t_server *server, int x, int y)
   return (send_to_gui(server, "\n"));
 }
 
-int gui_bct(t_server *server, Socket sock, char *cmd)
+int gui_bct(t_server *server, t_client *client, char *cmd)
 {
   char *xstr;
   char *ystr;
@@ -33,7 +33,7 @@ int gui_bct(t_server *server, Socket sock, char *cmd)
   int y;
 
   strtok(cmd, " ");
-  (void)sock;
+  (void)client;
   if ((xstr = strtok(NULL, " ")) == NULL || (ystr = strtok(NULL, " ")) == NULL)
     return (send_to_gui(server, "suc\n"));
   x = atoi(xstr);

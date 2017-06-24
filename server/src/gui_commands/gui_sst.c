@@ -6,12 +6,12 @@
 #include <stdlib.h>
 #include "server.h"
 
-int gui_sst(t_server *server, Socket sock, char *cmd)
+int gui_sst(t_server *server, t_client *client, char *cmd)
 {
   char *timestr;
   int   time;
 
-  (void)sock;
+  (void)client;
   strtok(cmd, " ");
   if ((timestr = strtok(NULL, " ")) == NULL)
     return (send_to_gui(server, "sbp\n"));

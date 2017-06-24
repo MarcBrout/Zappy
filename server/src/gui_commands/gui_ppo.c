@@ -18,12 +18,12 @@ static int send_player_position(t_server *server, ID id)
                       id, ia->pos.x, ia->pos.y, ia->dir));
 }
 
-int gui_ppo(t_server *server, Socket sock, char *cmd)
+int gui_ppo(t_server *server, t_client *client, char *cmd)
 {
   char *idstr;
   int id;
 
-  (void)sock;
+  (void)client;
   strtok(cmd, " ");
   if ((idstr = strtok(NULL, " ")) == NULL)
     return (send_to_gui(server, "suc\n"));

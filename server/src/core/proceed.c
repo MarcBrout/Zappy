@@ -41,37 +41,37 @@ static const t_command ia_commands[IA_END + 1] =
 
 static const t_command ia_logic[IA_END + 1] =
     {
-        {"Advance", 7, ia_unknown},
-        {"Right", 5, ia_unknown},
-        {"Left", 4, ia_unknown},
-        {"See", 3, ia_unknown},
-        {"Inventory", 9, ia_unknown},
-        {"Broadcast", 9, ia_unknown},
-        {"Connect_nbr", 11, ia_unknown},
-        {"Fork", 4, ia_unknown},
-        {"Eject", 5, ia_unknown},
-        {"Take", 4, ia_unknown},
-        {"Set", 3, ia_unknown},
-        {"Incantation", 11, ia_unknown},
+        {"Advance", 7, logic_unknown},
+        {"Right", 5, logic_unknown},
+        {"Left", 4, logic_unknown},
+        {"See", 3, logic_unknown},
+        {"Inventory", 9, logic_unknown},
+        {"Broadcast", 9, logic_unknown},
+        {"Connect_nbr", 11, logic_unknown},
+        {"Fork", 4, logic_unknown},
+        {"Eject", 5, logic_unknown},
+        {"Take", 4, logic_unknown},
+        {"Set", 3, logic_unknown},
+        {"Incantation", 11, logic_unknown},
         {NULL, 0, logic_unknown}
     };
 
-static int run(t_server *server, t_client *client, 
+static int run(t_server *server, t_client *client,
                const t_command *commands, char *cmd)
 {
   size_t i;
-  
+
   i = 0;
   log_this("raw command extracted: %s\n", cmd);
   while (commands[i].cmd)
   {
     if (!strncmp(commands[i].cmd, cmd, commands[i].len) &&
-        commands[i].exec(server, client->sock, cmd))
+        commands[i].exec(server, client, cmd))
       return (1);
     ++i;
   }
   if (!commands[i].cmd)
-    return (commands[i].exec(server, client->sock, cmd));
+    return (commands[i].exec(server, client, cmd));
   return (0);
 }
 
@@ -106,10 +106,10 @@ static int proceed_logic(t_server *server)
 {
   int i = 0;
   char *cmd = NULL;
-  
-  if (isTick()) 
+
+  if (isTick())
   {
-    while (i < server->config.max_player * server->config.team_count) 
+    while (i < server->config.max_player * server->config.team_count)
     {
       if ((cmd = get_command_from_store(&server->game.clients[i].store)))
       {

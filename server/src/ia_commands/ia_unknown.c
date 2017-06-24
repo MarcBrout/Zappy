@@ -2,12 +2,11 @@
 // Created by brout_m on 09/06/17.
 //
 
-#include <string.h>
-#include "server/server_data.h"
+#include "server.h"
 
-int ia_unknown(t_server *server, Socket sock, char *cmd)
+int ia_unknown(t_server *server, t_client *client, char *cmd)
 {
   (void)cmd;
-  strncircular(&server->game.clients[sock].w, "ko\n", strlen("ko\n"));
+  send_to_ia(server, client->sock, "ko\n");
   return (0);
 }
