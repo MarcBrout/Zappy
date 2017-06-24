@@ -2,7 +2,7 @@
 // Created by Pierre Bougon on 23/06/17.
 //
 
-#include "network/FDManager.hpp"
+#include "tools/FDManager.hpp"
 
 zappy::FDManager::FDManager()
 {
@@ -34,7 +34,7 @@ int zappy::FDManager::select(int fd)
 {
     if (fd == -1)
         return (0);
-    return (select(fd + 1, &_rfds, &_wfds, NULL, &_tv));
+    return (::select(fd + 1, &_rfds, &_wfds, NULL, &_tv));
 }
 
 const timeval &zappy::FDManager::get_tv() const

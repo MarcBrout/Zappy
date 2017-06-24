@@ -6,10 +6,6 @@
 #include <cstring>
 #include <tools/Logger.hpp>
 #include <unistd.h>
-#include <iostream>
-#include <bits/sigthread.h>
-#include <bits/signum.h>
-#include <signal.h>
 #include <csignal>
 #include "network/TCPClient.hpp"
 
@@ -23,27 +19,31 @@ std::vector<std::string> zappy::network::TCPClient::receive(sock_t socket)
     ssize_t                         ret;
     char                            buffer[BUFFER_SIZE];
 
-    ret = ::recv(socket, buffer, BUFFER_SIZE, 0);
-    if (ret == -1 && errno == EINTR)
+    commands.clear();
+    while (head != tail)
     {
-        // Stopping Client
-        disconnect();
-        return nullptr;
-    }
-    else if (ret == -1)
-    {
-        disconnect();
-        return nullptr;
-    }
-    else if (ret == 0)
-    {
-        disconnect();
-        return nullptr;
-    }
-    else
-    {
-        manageBuffer(buffer);
-        commands = splitReceived();
+        ret = ::recv(socket, buffer, BUFFER_SIZE, 0);
+        if (ret == -1 && errno == EINTR)
+        {
+            // Stopping Client
+            disconnect();
+            return commands;
+        }
+        else if (ret == -1)
+        {
+            disconnect();
+            return commands;
+        }
+        else if (ret == 0)
+        {
+            //todo
+            return commands;
+        }
+        else
+        {
+            manageBuffer(buffer);
+            commands = splitReceived();
+        }
     }
     return std::move(commands);
 }
@@ -77,7 +77,7 @@ void zappy::network::TCPClient::disconnect()
         close(_socket);
         _socket = -1;
         _server = nullptr;
-        std::memset(_servAddr, 0, sizeof(_servAddr));
+        std::memset(&_servAddr, 0, sizeof(_servAddr));
     }
 }
 

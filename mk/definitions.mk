@@ -21,7 +21,7 @@ PROJECT_NAME	=
 # Compilation definitions
 
 CFLAGS		=	-W -Wall -Wextra
-CXXFLAGS	=	-W -Wall -Wextra
+CXXFLAGS	=	-W -Wall -Wextra -std=c++14
 
 ifeq ($(RELEASE), YES)
 CFLAGS		+=	-Werror

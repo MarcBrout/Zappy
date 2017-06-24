@@ -5,8 +5,10 @@
 ## Login   <pierre@epitech.net>
 ## 
 ## Started on  Sat Jun 10 21:41:56 2017 PierreBougon
-## Last update Sat Jun 10 22:02:58 2017 PierreBougon
+## Last update Sat Jun 24 18:12:51 2017 PierreBougon
 ##
+
+MODE=	CPP
 
 include ../mk/colors.mk ../mk/commands.mk ../mk/definitions.mk
 
@@ -22,17 +24,32 @@ NAME=			../$(PROJECT_NAME)
 
 # Project sources
 
-MAIN_SRC=		main.c
+MAIN_SRC=		main.cpp	\
+			Core.cpp
+
+TOOLS_SRC=		Logger.cpp	\
+			FDManager.cpp
+
+EXCEPTIONS_SRC=		ClientError.cpp	\
+			SocketError.cpp
+
+NETWORK_SRC=		ASocket.cpp	\
+			TCPClient.cpp	\
+			Client.cpp	\
+			SendCommand.cpp
 
 SRC=			$(addprefix src/, $(MAIN_SRC))
+SRC+=			$(addprefix src/tools/, $(TOOLS_SRC))
+SRC+=			$(addprefix src/exceptions/, $(EXCEPTIONS_SRC))
+SRC+=			$(addprefix src/network/, $(NETWORK_SRC))
 
-OBJ=			$(SRC:.c=.o)
+OBJ=			$(SRC:.cpp=.o)
 
 INC=			-Iinclude
 
 LDFLAGS+=
 
-CFLAGS+=
+CXXFLAGS+=
 
 ## Core rules
 

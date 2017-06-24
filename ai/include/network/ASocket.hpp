@@ -9,6 +9,7 @@
 #include <netinet/in.h>
 #include <string>
 #include <netdb.h>
+#include <vector>
 
 namespace zappy
 {
@@ -18,6 +19,10 @@ namespace zappy
 
         class ASocket
         {
+        public:
+            static constexpr size_t BUFFER_SIZE = 4096;
+            static constexpr char END_OF_COMMAND = '\n';
+
         public:
             ASocket(uint16_t _port, const std::string &_hostname);
             ASocket(const ASocket &other) = delete;
@@ -31,12 +36,10 @@ namespace zappy
             uint16_t            getPort() const;
             const std::string   &getHostname() const;
 
-            virtual void        send(const std::string &data, sock_t socket) = 0;
-            virtual std::vector<std::string> receive(sock_t socket) = 0;
-
-        public:
-            static constexpr size_t BUFFER_SIZE = 4096;
-            static constexpr char END_OF_COMMAND = '\n';
+            virtual void                        send(const std::string &data, sock_t socket) = 0;
+            virtual std::vector<std::string>    receive(sock_t socket) = 0;
+            virtual void                        send(const std::string &data);
+            virtual std::vector<std::string>    receive();
 
         protected:
             sock_t          _socket;
