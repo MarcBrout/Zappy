@@ -5,10 +5,9 @@ static const char *usage =
     "\tport\t\tis the port number\n"
     "\twidth\t\tis the width of the world\n"
     "\theight\t\tis the height of the world\n"
-    "\tname1\t\tis the name of the team 1\n"
-    "\tname2\t\tis the name of the team 2\n"
-    "\tnbClients\tis the number of authorized clients per team\n"
-    "\ttime\t\tis the time limit for execution of actions\n";
+    "\tnameX\t\tis the name of the team X\n"
+    "\tclients Nb\tis the number of authorized clients per team\n"
+    "\tfreq\t\tis the time limit for execution of actions\n";
 
 int print_help(char *server_name)
 {
