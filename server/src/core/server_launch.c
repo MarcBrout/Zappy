@@ -48,6 +48,7 @@ static int		set_fds(t_server *server,
 
 static int running(t_server *server)
 {
+  struct timeval time;
   fd_set reads;
   fd_set writes;
   Socket max;
@@ -55,9 +56,11 @@ static int running(t_server *server)
   log_this("Running server now\n");
   while (!gl_stop)
   {
+    time.tv_sec = 0;
+    time.tv_usec = 100;
     max = set_fds(server, &reads, &writes);
     log_this("Server waiting on select ...\n");
-    if (select(max, &reads, &writes, NULL, NULL) < 0)
+    if (select(max, &reads, &writes, NULL, &time) < 0)
     {
       perror("Select error");
       free(server->game.clients);
