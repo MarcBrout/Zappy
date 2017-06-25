@@ -23,5 +23,4 @@ namespace zappy
     }
 }
 
-
 #endif // !CPP_ZAPPY_SOCKETERROR_HPP_

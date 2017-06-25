@@ -24,5 +24,4 @@ namespace zappy
     }
 }
 
-
 #endif // !CPP_ZAPPY_CLIENTERROR_HPP_
