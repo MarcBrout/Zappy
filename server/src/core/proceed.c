@@ -116,6 +116,7 @@ static int		proceed_logic(t_server *server)
 
   if (isTick())
     {
+      log_this("TICK\n");
       while (i < server->config.max_player * server->config.team_count)
 	{
 	  if ((cmd = get_command_from_store(&server->game.clients[i].store)))

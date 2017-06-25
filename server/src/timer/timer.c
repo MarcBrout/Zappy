@@ -37,7 +37,7 @@ bool		isTick()
 
   gettimeofday(&timer.now, NULL);
   diff = timer.now.tv_usec - timer.start.tv_usec;
-  if (!(diff % timer.freq))
+  if ((diff % timer.freq) <= 10)
     {
       log_this("\t======= TICK REACHED =======\n");
       return (true);
