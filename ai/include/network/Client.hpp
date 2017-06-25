@@ -30,7 +30,6 @@ namespace zappy
             void Init(uint16_t port, std::string const &host);
             std::vector<std::string> getServerMessages();
             virtual ~Client();
-            void auth(std::string teamName);
 
         private:
 

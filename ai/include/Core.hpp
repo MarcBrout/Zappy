@@ -20,6 +20,7 @@ namespace zappy
         Core &operator=(Core const &other) = delete;
 
         void run();
+        void auth(std::string teamName);
 
     private:
         void manageResponse(std::string servMessage);

@@ -21,8 +21,8 @@ int	main(int ac, char **av)
     {
         zappy::network::Client::getInstance().Init(static_cast<uint16_t>(std::atoi(av[1])), av[2]);
         zappy::network::Client::getInstance().connect();
-        zappy::network::Client::getInstance().auth("azeazeae");
         zappy::Core core;
+        core.auth("teamName");
         core.run();
     }
     catch (std::exception const &exception)
