@@ -47,9 +47,6 @@ std::vector<std::string> zappy::network::TCPClient::receive(sock_t socket)
         }
         else
         {
-            Logger::log(Logger::_DEBUG_, "== server receiving ==");
-            Logger::log(Logger::_DEBUG_, buffer);
-            Logger::log(Logger::_DEBUG_, "== end of server receiving ==");
             manageBuffer(buffer);
             commands = splitReceived();
         }
