@@ -2,8 +2,8 @@
 // Created by Pierre Bougon on 22/04/17.
 //
 
-#ifndef CPP_INDIE_SOCKETERROR_HPP_
-#define CPP_INDIE_SOCKETERROR_HPP_
+#ifndef CPP_ZAPPY_SOCKETERROR_HPP_
+#define CPP_ZAPPY_SOCKETERROR_HPP_
 
 
 #include <stdexcept>
@@ -24,4 +24,4 @@ namespace zappy
 }
 
 
-#endif // !CPP_INDIE_SOCKETERROR_HPP_
+#endif // !CPP_ZAPPY_SOCKETERROR_HPP_

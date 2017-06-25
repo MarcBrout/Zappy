@@ -2,8 +2,8 @@
 // Created by Pierre Bougon on 25/04/17.
 //
 
-#ifndef CPP_INDIE_CLIENTERROR_HPP_
-#define CPP_INDIE_CLIENTERROR_HPP_
+#ifndef CPP_ZAPPY_CLIENTERROR_HPP_
+#define CPP_ZAPPY_CLIENTERROR_HPP_
 
 
 #include <stdexcept>
@@ -25,4 +25,4 @@ namespace zappy
 }
 
 
-#endif // !CPP_INDIE_CLIENTERROR_HPP_
+#endif // !CPP_ZAPPY_CLIENTERROR_HPP_
