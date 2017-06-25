@@ -42,8 +42,7 @@ std::vector<std::string> zappy::network::TCPClient::receive(sock_t socket)
         }
         else if (ret == 0)
         {
-            Logger::log(Logger::_DEBUG_, "nothing to receive");
-            //todo?
+            disconnect();
             return commands;
         }
         else
