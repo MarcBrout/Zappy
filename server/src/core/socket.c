@@ -1,3 +1,12 @@
+/*
+** socket.c for zappy in server/src/core
+**
+** Made by brout_m
+** Login   <marc.brout@epitech.eu>
+**
+** Started on  Sun Jun 25 02:53:36 2017 brout_m
+** Last update Sun Jun 25 02:53:46 2017 brout_m
+*/
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <netdb.h>
@@ -12,12 +21,11 @@ static int		bind_and_listen(Socket sock, uint16_t port, int q)
   addr.sin_port = htons(port);
   addr.sin_addr.s_addr = INADDR_ANY;
   if (bind(sock, (struct sockaddr const *)&addr,
-           sizeof(addr)) < 0 || listen(sock, q) < 0)
-  {
-    perror("Server bind error");
-    return (1);
-  }
-
+	   sizeof(addr)) < 0 || listen(sock, q) < 0)
+    {
+      perror("Server bind error");
+      return (1);
+    }
   log_this("Socket %d binded and listened on port : %d\n", sock, port);
   return (0);
 }
@@ -32,10 +40,10 @@ int			create_socket(Socket *s, uint16_t port, int q)
   if (!(pe = getprotobyname("TCP")) ||
       (sock = socket(PF_INET, SOCK_STREAM, pe->p_proto)) < 0 ||
       setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &ok, sizeof(int)) < 0)
-  {
-    perror("Socket creation error");
-    return (1);
-  }
+    {
+      perror("Socket creation error");
+      return (1);
+    }
   *s = sock;
   log_this("Created socket : %d\n", sock);
   return (bind_and_listen(sock, port, q));

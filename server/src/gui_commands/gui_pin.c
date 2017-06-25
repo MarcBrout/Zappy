@@ -1,33 +1,38 @@
-//
-// Created by brout_m on 13/06/17.
-//
-
+/*
+** gui_pin.c for zappy in server/src/id_commands
+**
+** Made by brout_m
+** Login   <marc.brout@epitech.eu>
+**
+** Started on  Sun Jun 25 02:18:24 2017 brout_m
+** Last update Sun Jun 25 02:18:52 2017 brout_m
+*/
 #include <string.h>
 #include <stdlib.h>
 #include "server.h"
 
-static int send_player_inventory(t_server *server, ID id)
+static int	send_player_inventory(t_server *server, ID id)
 {
-  int i;
-  t_ia *ia;
+  int		i;
+  t_ia		*ia;
 
   i = 0;
   ia = &server->game.clients[id].ia;
   send_to_gui(server, "pin #%d %d %d ", id, ia->pos.x, ia->pos.y);
   while (i < OBJ_COUNT)
-  {
-    send_to_gui(server, "%d", ia->inventory[i]);
-    if (i < OBJ_COUNT - 1)
-      send_to_gui(server, " ");
-    ++i;
-  }
+    {
+      send_to_gui(server, "%d", ia->inventory[i]);
+      if (i < OBJ_COUNT - 1)
+	send_to_gui(server, " ");
+      ++i;
+    }
   return (send_to_gui(server, "plv #%d %d\n", id, ia->level));
 }
 
-int gui_pin(t_server *server, ID ids, char *cmd)
+int		gui_pin(t_server *server, ID ids, char *cmd)
 {
-  char *idstr;
-  int id;
+  char		*idstr;
+  int		id;
 
   (void)ids;
   strtok(cmd, " ");

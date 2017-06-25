@@ -1,7 +1,12 @@
-//
-// Created by brout_m on 12/06/17.
-//
-
+/*
+** gui_tna.c for zappy in server/src/id_commands
+**
+** Made by brout_m
+** Login   <marc.brout@epitech.eu>
+**
+** Started on  Sun Jun 25 02:21:51 2017 brout_m
+** Last update Sun Jun 25 02:21:59 2017 brout_m
+*/
 #include "server.h"
 
 int	gui_tna(t_server *server, ID id, char *cmd)

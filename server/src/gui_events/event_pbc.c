@@ -1,7 +1,12 @@
-//
-// Created by brout_m on 23/06/17.
-//
-
+/*
+** event_pbc.c for zappy in server/src/gui_events
+**
+** Made by brout_m
+** Login   <marc.brout@epitech.eu>
+**
+** Started on  Sun Jun 25 02:28:01 2017 brout_m
+** Last update Sun Jun 25 02:28:10 2017 brout_m
+*/
 #include "server.h"
 
 int event_pbc(t_server *server, ID id, char const *broadcast)

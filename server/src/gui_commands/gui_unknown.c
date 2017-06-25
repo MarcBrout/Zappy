@@ -1,10 +1,15 @@
-//
-// Created by brout_m on 09/06/17.
-//
-
+/*
+** gui_unknown.c for zappy in server/src/ia_commands
+**
+** Made by brout_m
+** Login   <marc.brout@epitech.eu>
+**
+** Started on  Sun Jun 25 02:23:00 2017 brout_m
+** Last update Sun Jun 25 02:23:59 2017 brout_m
+*/
 #include "server.h"
 
-int gui_unknown(t_server *server, ID id, char *cmd)
+int	gui_unknown(t_server *server, ID id, char *cmd)
 {
   (void)id;
   (void)cmd;

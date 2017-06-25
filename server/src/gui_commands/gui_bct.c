@@ -1,36 +1,41 @@
-//
-// Created by brout_m on 12/06/17.
-//
-
+/*
+** gui_bct.c for zappy in server/src/ia_commands
+**
+** Made by brout_m
+** Login   <marc.brout@epitech.eu>
+**
+** Started on  Sun Jun 25 02:15:36 2017 brout_m
+** Last update Sun Jun 25 02:16:20 2017 brout_m
+*/
 #include <string.h>
 #include <stdlib.h>
 #include "server.h"
 
-int send_case_content(t_server *server, int x, int y)
+int		send_case_content(t_server *server, int x, int y)
 {
-  int i;
-  int pos;
+  int		i;
+  int		pos;
 
   if (send_to_gui(server, "bct %d %d ", x, y))
     return (1);
   i = 0;
   pos = x + y * server->config.width;
   while (i < OBJ_COUNT)
-  {
-    send_to_gui(server, "%d", server->game.map[pos].objects[i]);
-    if (i < OBJ_COUNT - 1)
-      send_to_gui(server, " ");
-    ++i;
-  }
+    {
+      send_to_gui(server, "%d", server->game.map[pos].objects[i]);
+      if (i < OBJ_COUNT - 1)
+	send_to_gui(server, " ");
+      ++i;
+    }
   return (send_to_gui(server, "\n"));
 }
 
-int gui_bct(t_server *server, ID id, char *cmd)
+int		gui_bct(t_server *server, ID id, char *cmd)
 {
-  char *xstr;
-  char *ystr;
-  int x;
-  int y;
+  char		*xstr;
+  char		*ystr;
+  int		x;
+  int		y;
 
   strtok(cmd, " ");
   (void)id;

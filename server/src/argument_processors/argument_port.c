@@ -5,7 +5,7 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sat Jun 24 17:06:29 2017 brout_m
-** Last update Sat Jun 24 17:07:08 2017 brout_m
+** Last update Sun Jun 25 03:07:51 2017 brout_m
 */
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,7 +21,8 @@ int	argument_port(t_config *config, int ac, char **argv, int *pos)
   port = atoi(argv[*pos]);
   if (port <= 1024 || port > 65536)
     {
-      printf("Port '%d' incorrect, value must be between 1024 && 65536\n", port);
+      printf("Port '%d' incorrect, value must be between 1024 && 65536\n",
+	     port);
       return (1);
     }
   config->port = (uint16_t)port;

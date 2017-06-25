@@ -5,7 +5,7 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sat Jun 24 17:04:37 2017 brout_m
-** Last update Sat Jun 24 17:05:25 2017 brout_m
+** Last update Sun Jun 25 03:09:30 2017 brout_m
 */
 #include <stdio.h>
 #include <string.h>
@@ -59,7 +59,7 @@ int		argument_name(t_config *config, int ac, char **argv, int *pos)
   if (*pos > ac - 3)
     return (1);
   ++*pos;
-  if(adding_names(config, ac, argv, pos))
+  if (adding_names(config, ac, argv, pos))
     return (1);
   if (config->team_count < 2)
     {

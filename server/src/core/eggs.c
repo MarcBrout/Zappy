@@ -1,15 +1,20 @@
-//
-// Created by puilla_e on 09/06/17.
-//
-
+/*
+** eggs.c for zappy in server/src/core
+**
+** Made by brout_m
+** Login   <marc.brout@epitech.eu>
+**
+** Started on  Sun Jun 25 02:36:40 2017 brout_m
+** Last update Sun Jun 25 02:38:22 2017 brout_m
+*/
 #include <server.h>
 #include <stdlib.h>
 #include "server/eggs.h"
 
-int	add_egg(t_server *server, t_position *pos, Team id)
+int		add_egg(t_server *server, t_position *pos, Team id)
 {
-  t_egg *egg;
-  t_egg *tmp;
+  t_egg		*egg;
+  t_egg		*tmp;
 
   if ((egg = malloc(sizeof(egg))) == NULL)
     return (1);
@@ -20,7 +25,7 @@ int	add_egg(t_server *server, t_position *pos, Team id)
   egg->next = NULL;
   tmp = server->game.eggs;
   if (tmp == NULL)
-      server->game.eggs = egg;
+    server->game.eggs = egg;
   else
     {
       while (tmp->next)
@@ -30,10 +35,10 @@ int	add_egg(t_server *server, t_position *pos, Team id)
   return (0);
 }
 
-bool	remove_first_egg(t_server *server, Team id)
+bool		remove_first_egg(t_server *server, Team id)
 {
-  t_egg *tmp;
-  t_egg *prev;
+  t_egg		*tmp;
+  t_egg		*prev;
 
   tmp = server->game.eggs;
   prev = NULL;
@@ -54,10 +59,10 @@ bool	remove_first_egg(t_server *server, Team id)
   return (false);
 }
 
-void	free_eggs(t_server *server)
+void		free_eggs(t_server *server)
 {
-  t_egg *tmp;
-  t_egg *prev;
+  t_egg		*tmp;
+  t_egg		*prev;
 
   tmp = server->game.eggs;
   while (tmp)
@@ -68,10 +73,10 @@ void	free_eggs(t_server *server)
     }
 }
 
-void	check_eggs(t_server *server)
+void		check_eggs(t_server *server)
 {
-  t_egg *tmp;
-  t_egg *prev;
+  t_egg		*tmp;
+  t_egg		*prev;
 
   tmp = server->game.eggs;
   prev = NULL;

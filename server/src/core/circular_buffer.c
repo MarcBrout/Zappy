@@ -1,18 +1,18 @@
 /*
-** circular_buffer.c for myirc in /home/brout_m/rendu/system/PSU_2016_myirc
+** circular_buffer.c for zappy in /home/brout_m/rendu/system/PSU_2016_myirc
 **
 ** Made by brout_m
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Wed May 31 11:22:18 2017 brout_m
-** Last update Wed May 31 11:23:04 2017 brout_m
+** Last update Sun Jun 25 02:36:33 2017 brout_m
 */
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
 #include "server.h"
 
-bool            is_full(t_circular *c)
+bool		is_full(t_circular *c)
 {
   return (c->len == BUFFER_MAX_SIZE - 1);
 }
@@ -37,16 +37,16 @@ void		strncircular(t_circular *c, char *str, int n)
 static bool	end(t_circular *c, int pos)
 {
   if (c->remains)
-  {
-    c->remains = false;
-    return (false);
-  }
+    {
+      c->remains = false;
+      return (false);
+    }
   return (c->buffer[pos] == '\n');
 }
 
 bool		find_command(t_circular *c)
 {
-  bool          state;
+  bool		state;
   int		pos;
   int		i;
 
@@ -56,10 +56,10 @@ bool		find_command(t_circular *c)
   while (i < c->len)
     {
       if (end(c, pos))
-      {
-        c->remains = true;
-        return (true);
-      }
+	{
+	  c->remains = true;
+	  return (true);
+	}
       ++i;
       INCR(pos);
     }

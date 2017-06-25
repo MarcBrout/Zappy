@@ -1,17 +1,22 @@
-//
-// Created by brout_m on 23/06/17.
-//
-
+/*
+** event_pic.c for zappy in server/src/gui_events
+**
+** Made by brout_m
+** Login   <marc.brout@epitech.eu>
+**
+** Started on  Sun Jun 25 02:33:24 2017 brout_m
+** Last update Sun Jun 25 02:33:32 2017 brout_m
+*/
 #include "server.h"
 
-int event_pic(t_server *server, t_client const *incantor)
+int		event_pic(t_server *server, t_client const *incantor)
 {
-  t_position pos = incantor->ia.pos;
-  t_client * client;
-  int        i = 0;
+  t_position	pos = incantor->ia.pos;
+  t_client *	client;
+  int		i = 0;
 
   log_this("[PIC] Incantation level '%d' started on:\n\tx: %d\n\ty: %d\n "
-               "with :\n\t%d",
+	   "with :\n\t%d",
            incantor->ia.level, pos.x, pos.y, incantor->id);
   if (send_to_gui(server, "pic %d %d %d %d", pos.x, pos.y, incantor->ia.level,
                   incantor->id))

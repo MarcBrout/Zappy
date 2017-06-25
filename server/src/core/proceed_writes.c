@@ -1,20 +1,29 @@
+/*
+** proceed_writes.c for zappy in server/src/core
+**
+** Made by brout_m
+** Login   <marc.brout@epitech.eu>
+**
+** Started on  Sun Jun 25 02:55:25 2017 brout_m
+** Last update Sun Jun 25 02:55:39 2017 brout_m
+*/
 #include <sys/socket.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
 #include "server.h"
 
-int                  find_Socket(t_server *server, Socket sock)
+int			find_Socket(t_server *server, Socket sock)
 {
-  Socket                cli;
+  Socket		cli;
 
   cli = 0;
   while (cli < server->config.max_player * server->config.team_count)
-  {
-    if (server->game.clients[cli].sock == sock)
-      return (cli);
-    ++cli;
-  }
+    {
+      if (server->game.clients[cli].sock == sock)
+	return (cli);
+      ++cli;
+    }
   return (-1);
 }
 
@@ -22,8 +31,8 @@ static int		write_out(t_client *client, Socket sock,
 				  char out[MESSAGE_MAX_SIZE], bool cond)
 {
   size_t		len;
-  ssize_t written;
-  ssize_t notwritten;
+  ssize_t		written;
+  ssize_t		notwritten;
 
   len = strlen(out);
   if (cond)
@@ -35,13 +44,13 @@ static int		write_out(t_client *client, Socket sock,
     }
   notwritten = (len + 1) - written;
   if (notwritten > 0)
-  {
-    client->w.remains = true;
-    client->w.pos -= notwritten > client->w.pos ?
-                     BUFFER_MAX_SIZE - (notwritten - client->w.pos) :
-                     client->w.pos - notwritten;
-    client->w.len += notwritten;
-  }
+    {
+      client->w.remains = true;
+      client->w.pos -= notwritten > client->w.pos ?
+	BUFFER_MAX_SIZE - (notwritten - client->w.pos) :
+	client->w.pos - notwritten;
+      client->w.len += notwritten;
+    }
   return (0);
 }
 
@@ -56,12 +65,11 @@ static int		send_client(t_client *client, Socket sock)
   char			out[MESSAGE_MAX_SIZE];
 
   memset(out, 0, MESSAGE_MAX_SIZE);
-
   while (strfromcircular(&client->w, out) ||
-         (strlen(out)) || client->w.remains)
+	 (strlen(out)) || client->w.remains)
     {
       len = strlen(out);
-      if (write_out(client, sock, out, len && !strncmp("322", out, 3))) //TODO CHECK THIS
+      if (write_out(client, sock, out, len && !strncmp("322", out, 3)))
 	return (1);
       memset(out, 0, MESSAGE_MAX_SIZE);
     }
@@ -86,26 +94,26 @@ static int		write_client(t_client *client, Socket sock)
 int			proceed_writes(t_server *server, fd_set *fds_write)
 {
   Socket		sock;
-  int pos;
+  int			pos;
 
   sock = 0;
   while (sock < server->config.max_player * server->config.team_count)
     {
       if (FD_ISSET(sock, fds_write))
       {
-        if (sock == server->gui.sock)
-        {
-          log_this("Sending commands to GUI\n");
-          if (write_client(&server->gui, sock))
-            return (1);
-        }
-        else
-        {
-          log_this("Sending commands to CLIENT : %d\n", sock);
-          pos = find_Socket(server, sock);
-          if (write_client(&server->game.clients[pos], sock))
-            return (1);
-        }
+	if (sock == server->gui.sock)
+	  {
+	    log_this("Sending commands to GUI\n");
+	    if (write_client(&server->gui, sock))
+	      return (1);
+	  }
+	else
+	  {
+	    log_this("Sending commands to CLIENT : %d\n", sock);
+	    pos = find_Socket(server, sock);
+	    if (write_client(&server->game.clients[pos], sock))
+	      return (1);
+	  }
       }
       ++sock;
     }
