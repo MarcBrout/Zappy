@@ -5,7 +5,7 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sat Jun 24 17:00:47 2017 brout_m
-** Last update Sat Jun 24 17:02:00 2017 brout_m
+** Last update Sun Jun 25 22:02:59 2017 brout_m
 */
 #include <stdlib.h>
 #include <string.h>
@@ -14,15 +14,15 @@
 #include "arguments/config.h"
 
 static t_arg		commands[7] =
-    {
-  {"-p", "port", argument_port, true},
-  {"-x", "width", argument_width, true},
-  {"-y", "height", argument_height, true},
-  {"-n", "name", argument_name, false},
-  {"-c", "client count", argument_nbclients, true},
-  {"-t", "time", argument_time, true},
-  {NULL, NULL, NULL, false}
-};
+  {
+    {"-p", "port", argument_port, true},
+    {"-x", "width", argument_width, true},
+    {"-y", "height", argument_height, true},
+    {"-n", "name", argument_name, false},
+    {"-c", "client count", argument_nbclients, true},
+    {"-t", "time", argument_time, true},
+    {NULL, NULL, NULL, false}
+  };
 
 static void		print_missing_arguments()
 {
@@ -40,7 +40,7 @@ static void		print_missing_arguments()
     }
 }
 
-static void default_initialization(t_config *config)
+static void		default_initialization(t_config *config)
 {
   config->port = 4242;
   config->height = 30;
