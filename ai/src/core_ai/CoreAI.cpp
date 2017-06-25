@@ -25,3 +25,13 @@ void zappy::CoreAI::setResponse(std::string const &response)
 {
     _response = response;
 }
+
+void zappy::CoreAI::setX(size_t x)
+{
+    _pos.x = x;
+}
+
+void zappy::CoreAI::setY(size_t y)
+{
+    _pos.y = y;
+}

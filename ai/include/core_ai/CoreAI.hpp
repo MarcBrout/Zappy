@@ -6,6 +6,7 @@
 #define CLIENTAI_COREAI_HPP_
 
 #include <vector>
+#include <tools/Vector2.hpp>
 
 namespace zappy
 {
@@ -17,9 +18,13 @@ namespace zappy
         void setMessage(const std::string &string);
         void setResponse(std::string const &basic_string);
 
+        void setX(size_t x);
+        void setY(size_t y);
+
     private:
         std::vector<std::string>    _message;
         std::string                 _response;
+        Vector2s                    _pos;
     };
 }
 
