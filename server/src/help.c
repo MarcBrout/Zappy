@@ -11,12 +11,12 @@
 
 static const char	*usage =
   "USAGE: %s -p port -x width -y height -n name1 name2 -c nbClients -t time\n"
-  "\tport\t\tis the port number\n"
-  "\twidth\t\tis the width of the world\n"
-  "\theight\t\tis the height of the world\n"
-  "\tnameX\t\tis the name of the team X\n"
-  "\tclients Nb\tis the number of authorized clients per team\n"
-  "\tfreq\t\tis the time limit for execution of actions\n";
+  "\tport\t\tis the port number\t\t\t\tdefault : 4242\n"
+  "\twidth\t\tis the width of the world\t\t\tdefault : 30\n"
+  "\theight\t\tis the height of the world\t\t\tdefault : 30\n"
+  "\tnameX\t\tis the name of the team X\t\t\tmandatory\n"
+  "\tclients Nb\tis the number of authorized clients per team\tdefault : 10\n"
+  "\tfreq\t\tis the time limit for execution of actions\tdefault : 100\n";
 
 int			print_help(char *server_name)
 {

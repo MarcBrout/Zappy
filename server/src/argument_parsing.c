@@ -13,17 +13,18 @@
 #include "arguments/arguments.h"
 #include "arguments/config.h"
 
-static t_arg		commands[7] = {
-  {"-p", "port", argument_port, false},
-  {"-x", "width", argument_width, false},
-  {"-y", "height", argument_height, false},
+static t_arg		commands[7] =
+    {
+  {"-p", "port", argument_port, true},
+  {"-x", "width", argument_width, true},
+  {"-y", "height", argument_height, true},
   {"-n", "name", argument_name, false},
-  {"-c", "client count", argument_nbclients, false},
-  {"-t", "time", argument_time, false},
+  {"-c", "client count", argument_nbclients, true},
+  {"-t", "time", argument_time, true},
   {NULL, NULL, NULL, false}
 };
 
-void			print_missing_arguments()
+static void		print_missing_arguments()
 {
   t_arg			*it;
 
@@ -37,6 +38,15 @@ void			print_missing_arguments()
 	}
       ++it;
     }
+}
+
+static void default_initialization(t_config *config)
+{
+  config->port = 4242;
+  config->height = 30;
+  config->width = 30;
+  config->max_player = 10;
+  config->time = 100;
 }
 
 static int		arguments_validation(char **args)
@@ -62,6 +72,7 @@ int			process_command_line(t_config *config, int ac, char **args)
   t_arg			*it;
 
   argument = 1;
+  default_initialization(config);
   while (argument < ac)
     {
       it = commands;
