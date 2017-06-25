@@ -4,14 +4,7 @@
 
 #include <string.h>
 #include "server/send.h"
-
-static Direction	opposite_dir(Direction dir)
-{
-  Direction		new_dir;
-
-  new_dir = dir + 2 % WEST;
-  return (new_dir == 0 ? new_dir + 1 : new_dir);
-}
+#include "server/direction_manager.h"
 
 static int	send_eject_to_player(t_server *server, t_client *client)
 {
@@ -26,7 +19,11 @@ static int	send_eject_to_player(t_server *server, t_client *client)
 	  &server->game.clients[cli] != client)
 	{
 	  send_to_ia(server, server->game.clients[cli].sock,
-		     "eject: %d\n", opposite_dir(client->ia.dir));
+		     "eject: %d\n",
+		     find_direction(server,
+				    &client->ia.pos,
+				    &server->game.clients[cli].ia.pos,
+				    server->game.clients[cli].ia.dir));
 	}
       ++cli;
     }
