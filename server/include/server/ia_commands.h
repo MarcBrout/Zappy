@@ -26,6 +26,6 @@ int	ia_incantation(t_server *server, ID id, char *cmd);
 int	count_empty_slot(t_server *server, Team team);
 int 	ia_death(t_server *server, ID id, char *cmd);
 int	ia_incantation_end(t_server *server, ID id, char *cmd);
-void	move_to_dir(t_server *server, t_client *client, Direction dir);
+void	forward_pos(t_server *server, t_position *pos, Direction dir, int nb);
 
 #endif //IA_COMMANDS_H_

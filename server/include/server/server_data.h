@@ -19,6 +19,8 @@ typedef struct s_cell t_cell;
 typedef struct s_position t_position;
 typedef struct s_game t_game;
 
+#define FIND_POS(x, y, width) ((x) + (y) * (width))
+
 struct s_position
 {
   int x;

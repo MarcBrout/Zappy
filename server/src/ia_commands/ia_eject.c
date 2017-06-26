@@ -5,6 +5,7 @@
 #include <string.h>
 #include "server/send.h"
 #include "server/direction_manager.h"
+#include "server/ia_commands.h"
 
 static int	send_eject_to_player(t_server *server, t_client *client)
 {
@@ -18,6 +19,10 @@ static int	send_eject_to_player(t_server *server, t_client *client)
 	  server->game.clients[cli].ia.pos.y == client->ia.pos.y &&
 	  &server->game.clients[cli] != client)
 	{
+	  forward_pos(server,
+		      &server->game.clients[cli].ia.pos,
+		      client->ia.dir,
+		      1);
 	  send_to_ia(server, server->game.clients[cli].sock,
 		     "eject: %d\n",
 		     find_direction(server,
