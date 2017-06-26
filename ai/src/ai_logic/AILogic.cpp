@@ -14,18 +14,4 @@ namespace zappy
   {
   }
 
-  void AILogic::forward()
-  {
-
-  }
-
-  void AILogic::turnLeft()
-  {
-
-  }
-
-  void AILogic::turnRight()
-  {
-
-  }
 }

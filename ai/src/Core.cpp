@@ -27,7 +27,10 @@ void zappy::Core::run()
         for (std::vector<std::string>::iterator it = servMessages.begin(); it < servMessages.end(); ++it)
             manageResponse(*it);
         servMessages.clear();
-        _ai.sendAction();
+
+        // TODO PROCESS IA
+        _ai.sendAction(CoreAI::FORWARD);
+
         _waitingForResponse = true;
         while (_waitingForResponse)
         {

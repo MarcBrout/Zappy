@@ -9,25 +9,26 @@
 
 namespace zappy
 {
-    namespace network
+  namespace network
+  {
+    class SendCommand
     {
-        class SendCommand
-        {
-        public:
-            static void forward();
-            static void turnLeft();
-            static void turnRight();
-            static void look();
-            static void inventory();
-            static void broadcast();
-            static void nbrUnusedTeamSlot();
-            static void fork();
-            static void eject();
-            static void takeObj();
-            static void setObj();
-            static void incantation();
-        };
-    }
+    public:
+      static void forward(const std::string &);
+      static void turnLeft(const std::string &);
+      static void turnRight(const std::string &);
+      static void look(const std::string &);
+      static void inventory(const std::string &);
+      static void broadcast(const std::string &);
+      static void nbrUnusedTeamSlot(const std::string &);
+      static void fork(const std::string &);
+      static void eject(const std::string &);
+      static void takeObj(const std::string &);
+      static void setObj(const std::string &);
+      static void incantation(const std::string &);
+      static void rawcommand(const std::string &);
+    };
+  }
 }
 
 #endif // !CLIENTAI_COMMAND_HPP_

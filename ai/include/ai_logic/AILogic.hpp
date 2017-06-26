@@ -26,9 +26,6 @@ namespace zappy
   private:
     STATE m_state;
 
-    void forward();
-    void turnLeft();
-    void turnRight();
 
   };
 }
