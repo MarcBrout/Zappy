@@ -5,7 +5,7 @@
 ## Login   <pierre@epitech.net>
 ##
 ## Started on  Sat Jun 10 21:41:56 2017 PierreBougon
-## Last update Mon Jun 26 15:07:34 2017 brout_m
+## Last update Mon Jun 26 17:48:59 2017 PierreBougon
 ##
 
 MODE=	CPP
@@ -28,7 +28,8 @@ MAIN_SRC=		main.cpp	\
 			Core.cpp
 
 TOOLS_SRC=		Logger.cpp	\
-			FDManager.cpp
+			FDManager.cpp	\
+			ParseOptions.cpp
 
 EXCEPTIONS_SRC=		ClientError.cpp	\
 			SocketError.cpp
