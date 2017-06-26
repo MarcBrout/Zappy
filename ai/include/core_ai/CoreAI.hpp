@@ -13,6 +13,7 @@ namespace zappy
     class CoreAI
     {
     public:
+      virtual ~CoreAI(){};
         void nextAction();
         void sendAction();
         void setMessage(const std::string &string);
@@ -21,7 +22,7 @@ namespace zappy
         void setX(size_t x);
         void setY(size_t y);
 
-    private:
+    protected:
         std::vector<std::string>    _message;
         std::string                 _response;
         Vector2s                    _pos;

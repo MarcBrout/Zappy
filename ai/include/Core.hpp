@@ -6,7 +6,7 @@
 #define CLIENTAI_CORE_HPP_
 
 
-#include <core_ai/CoreAI.hpp>
+#include <ai_logic/AILogic.hpp>
 
 namespace zappy
 {
@@ -28,7 +28,7 @@ namespace zappy
     private:
         bool    _running;
         bool    _waitingForResponse;
-        CoreAI  _ai;
+        AILogic _ai;
     };
 }
 
