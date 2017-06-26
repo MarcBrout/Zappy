@@ -1,8 +1,8 @@
-#######################################################
-### Some basic C++ definitions for arcade Makefiles ###
-#######################################################
+########################################################
+###    Some basic C/C++ definitions for Makefiles    ###
+########################################################
 
-# MODE
+##### MODE #####
 
 DEBUG	=	NO
 
@@ -14,11 +14,11 @@ SANITIZE =	NO
 
 MODE	=	CPP
 
-# NAME
+##### NAME #####
 
 PROJECT_NAME	=
 
-# Compilation definitions
+##### Compilation definitions #####
 
 CFLAGS		=	-W -Wall -Wextra
 CXXFLAGS	=	-W -Wall -Wextra -Weffc++ -std=c++14 -Wcomment          \
