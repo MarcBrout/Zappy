@@ -38,8 +38,6 @@ void zappy::ParseOptions::parse(int ac, char **av)
             }
             default:
             {
-                //TODO err
-                std::cerr << "NOPE" << std::endl;
                 exit(EXIT_FAILURE);
             }
         }
