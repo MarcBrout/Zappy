@@ -21,7 +21,13 @@ PROJECT_NAME	=
 # Compilation definitions
 
 CFLAGS		=	-W -Wall -Wextra
-CXXFLAGS	=	-W -Wall -Wextra -Weffc++ -std=c++14
+CXXFLAGS	=	-W -Wall -Wextra -Weffc++ -std=c++14 -Wcomment          \
+                -Wmain -Wpointer-arith -Wreturn-type -Wstrict-aliasing  \
+                -Wtrigraphs -Wuninitialized -Wunknown-pragmas           \
+                -Wcomment -Wconversion -Wcast-align                     \
+                -pedantic -pipe -fstack-protector -Wformat-nonliteral   \
+                -Wnon-virtual-dtor -Wreorder -Wenum-compare             \
+                -Winvalid-pch -Woverloaded-virtual -Wabi                \
 
 ifeq ($(RELEASE), YES)
 CFLAGS		+=	-Werror
