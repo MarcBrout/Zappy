@@ -78,7 +78,7 @@ static int	check_incantation(t_server *server, ID id,
 {
   Object	obj;
 
-  if (incant_tab[client->ia.level][0] > count_player(server, client))
+  if (incant_tab[client->ia.level][0] != count_player(server, client))
     {
       strncircular(&client->w, "ko\n", strlen("ko\n"));
       return (1);
@@ -86,7 +86,7 @@ static int	check_incantation(t_server *server, ID id,
   obj = LINEMATE;
   while (obj < OBJ_COUNT)
     {
-      if (incant_tab[client->ia.level][obj] > cell->objects[obj])
+      if (incant_tab[client->ia.level][obj] != cell->objects[obj])
 	{
 	  strncircular(&server->game.clients[id].w, "ko\n", strlen("ko\n"));
 	  return (1);
@@ -104,8 +104,9 @@ int		ia_incantation(t_server *server, ID id, char *cmd)
 
   (void)cmd;
   client = &server->game.clients[id];
-  cell = &server->game.map[client->ia.pos.x +
-			   client->ia.pos.y * server->config.width];
+  cell = &server->game.map[FIND_POS(client->ia.pos.x,
+				    client->ia.pos.y,
+				    server->config.width)];
   if (check_incantation(server, id, client, cell)== 1)
     return (0);
   obj = LINEMATE;

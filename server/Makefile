@@ -32,65 +32,68 @@ CORE= 				core/
 
 # Project sources
 
-SERVER_RAW_SRC=		server.c 						\
-					argument_parsing.c 				\
-					help.c 							\
-					logger/logger.c 				\
-					timer/timer.c 					\
-					$(ARGS)height.c 				\
-					$(ARGS)name.c 					\
-					$(ARGS)nbclients.c 				\
-					$(ARGS)port.c 					\
-					$(ARGS)time.c 					\
-					$(ARGS)width.c 					\
-					$(CORE)circular_buffer.c 		\
-					$(CORE)internationalization.c 	\
-					$(CORE)proceed.c 				\
-					$(CORE)proceed_writes.c 		\
-					$(CORE)server_launch.c 			\
-					$(CORE)socket.c 				\
-					$(CORE)accepts.c 				\
-					$(CORE)proceed_reads.c 			\
-					$(CORE)senders.c 				\
-					$(CORE)set_gui.c 				\
-					$(CORE)store_commands.c			\
-					$(CORE)eggs.c					\
-					$(GUICMD)unknown.c 				\
-					$(GUICMD)bct.c 					\
-					$(GUICMD)mct.c 					\
-					$(GUICMD)msz.c 					\
-					$(GUICMD)pin.c 					\
-					$(GUICMD)plv.c 					\
-					$(GUICMD)ppo.c 					\
-					$(GUICMD)sgt.c 					\
-					$(GUICMD)sst.c 					\
-					$(GUICMD)tna.c 					\
-					$(GUIEVE)ebo.c 					\
-					$(GUIEVE)edi.c 					\
-					$(GUIEVE)eht.c 					\
-					$(GUIEVE)enw.c 					\
-					$(GUIEVE)pbc.c 					\
-					$(GUIEVE)pdi.c 					\
-					$(GUIEVE)pdr.c 					\
-					$(GUIEVE)pex.c 					\
-					$(GUIEVE)pfk.c 					\
-					$(GUIEVE)pgt.c 					\
-					$(GUIEVE)pic.c 					\
-					$(GUIEVE)pie.c 					\
-					$(GUIEVE)pnw.c 					\
-					$(GUIEVE)seg.c 					\
-					$(GUIEVE)smg.c 					\
-					$(IALOG)unknown.c				\
-					$(IACMD)connect_nbr.c			\
-					$(IACMD)death.c					\
-                    $(IACMD)eject.c					\
-                    $(IACMD)fork.c					\
-                    $(IACMD)forward.c 				\
-                    $(IACMD)incantation.c			\
-                    $(IACMD)left.c 					\
-                    $(IACMD)right.c 				\
-                    $(IACMD)take_set.c 				\
-					$(IACMD)unknown.c
+SERVER_RAW_SRC=		server.c 			\
+			argument_parsing.c 		\
+			help.c 				\
+			logger/logger.c 		\
+			timer/timer.c 			\
+			$(ARGS)height.c 		\
+			$(ARGS)name.c 			\
+			$(ARGS)nbclients.c 		\
+			$(ARGS)port.c 			\
+			$(ARGS)time.c 			\
+			$(ARGS)width.c 			\
+			$(CORE)circular_buffer.c 	\
+			$(CORE)direction_manager.c	\
+			$(CORE)eggs.c			\
+			$(CORE)internationalization.c 	\
+			$(CORE)proceed.c 		\
+			$(CORE)proceed_writes.c 	\
+			$(CORE)server_launch.c 		\
+			$(CORE)socket.c 		\
+			$(CORE)accepts.c 		\
+			$(CORE)proceed_reads.c 		\
+			$(CORE)senders.c 		\
+			$(CORE)set_gui.c 		\
+			$(CORE)store_commands.c		\
+			$(GUICMD)unknown.c 		\
+			$(GUICMD)bct.c 			\
+			$(GUICMD)mct.c 			\
+			$(GUICMD)msz.c 			\
+			$(GUICMD)pin.c 			\
+			$(GUICMD)plv.c 			\
+			$(GUICMD)ppo.c 			\
+			$(GUICMD)sgt.c 			\
+			$(GUICMD)sst.c 			\
+			$(GUICMD)tna.c 			\
+			$(GUIEVE)ebo.c 			\
+			$(GUIEVE)edi.c 			\
+			$(GUIEVE)eht.c 			\
+			$(GUIEVE)enw.c 			\
+			$(GUIEVE)pbc.c 			\
+			$(GUIEVE)pdi.c 			\
+			$(GUIEVE)pdr.c 			\
+			$(GUIEVE)pex.c 			\
+			$(GUIEVE)pfk.c 			\
+			$(GUIEVE)pgt.c 			\
+			$(GUIEVE)pic.c 			\
+			$(GUIEVE)pie.c 			\
+			$(GUIEVE)pnw.c 			\
+			$(GUIEVE)seg.c 			\
+			$(GUIEVE)smg.c 			\
+			$(IALOG)unknown.c		\
+			$(IACMD)broadcast.c		\
+			$(IACMD)connect_nbr.c		\
+			$(IACMD)death.c			\
+                    	$(IACMD)eject.c			\
+                    	$(IACMD)fork.c			\
+                    	$(IACMD)forward.c 		\
+                    	$(IACMD)incantation.c		\
+                    	$(IACMD)inventory_look.c	\
+                    	$(IACMD)left.c 			\
+                    	$(IACMD)right.c 		\
+                    	$(IACMD)take_set.c 		\
+			$(IACMD)unknown.c
 
 SERVER_SRC=			$(addprefix src/, $(SERVER_RAW_SRC))
 
@@ -100,7 +103,7 @@ INC=				-Iinclude \
 					-Iinclude/logger \
 					-Iinclude/timer
 
-LDFLAGS+=
+LDFLAGS+=			-lm
 
 CFLAGS+=			-Ofast
 
