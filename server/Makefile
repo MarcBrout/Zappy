@@ -56,6 +56,7 @@ SERVER_RAW_SRC=		server.c 			\
 			$(CORE)senders.c 		\
 			$(CORE)set_gui.c 		\
 			$(CORE)store_commands.c		\
+			$(CORE)proceed_player_connection.c \
 			$(GUICMD)unknown.c 		\
 			$(GUICMD)bct.c 			\
 			$(GUICMD)mct.c 			\
@@ -66,6 +67,8 @@ SERVER_RAW_SRC=		server.c 			\
 			$(GUICMD)sgt.c 			\
 			$(GUICMD)sst.c 			\
 			$(GUICMD)tna.c 			\
+			$(GUICMD)welcome.c 			\
+			$(GUICMD)starter.c 			\
 			$(GUIEVE)ebo.c 			\
 			$(GUIEVE)edi.c 			\
 			$(GUIEVE)eht.c 			\

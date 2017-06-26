@@ -8,6 +8,7 @@
 ** Last update Sun Jun 25 02:47:59 2017 brout_m
 */
 #include <string.h>
+#include "server/eggs.h"
 #include "server/gui_commands.h"
 #include "server/ia_commands.h"
 #include "server/logic_commands.h"
@@ -24,6 +25,7 @@ static const t_command	gui_commands[GUI_END + 1] =
     {"pin", 3, gui_pin},
     {"sgt", 3, gui_sgt},
     {"sst", 3, gui_sst},
+    {"GRAPHIC", 7, gui_welcome},
     {NULL, 0, gui_unknown}
   };
 
@@ -82,26 +84,37 @@ static int		run(t_server *server,
   return (0);
 }
 
+static int proceed_gui(t_server *server)
+{
+  char			cmd[MESSAGE_MAX_SIZE];
+
+  log_this("\t====\nReading GUI commands\n\t====\n");
+  if (set_gui_connected(true, false) && send_informations(server))
+    return (1);
+  while (find_command(&server->gui.r))
+  {
+    strfromcircular(&server->gui.r, cmd);
+    if (run(server, &server->gui, gui_commands, cmd))
+      return (1);
+  }
+  return (0);
+}
+
 static int		proceed_commands(t_server *server)
 {
   char			cmd[MESSAGE_MAX_SIZE];
-  int			i;
+  int			i = 0;
 
-  log_this("\t====\nReading GUI commands\n\t====\n");
-  while (find_command(&server->gui.r))
-    {
-      strfromcircular(&server->gui.r, cmd);
-      if (run(server, &server->gui, gui_commands, cmd))
-	return (1);
-    }
-  i = 0;
+  check_eggs(server);
   log_this("\t====\nReading CLIENTS commands\n\t====\n");
   while (i < server->config.max_player * server->config.team_count)
   {
     while (find_command(&server->game.clients[i].r))
       {
 	strfromcircular(&server->game.clients[i].r, cmd);
-	if (run(server, &server->game.clients[i], ia_commands, cmd))
+        if (player_connecting(server, i, cmd) == 1)
+          return (0);
+        if (run(server, &server->game.clients[i], ia_commands, cmd))
 	  return (1);
       }
     ++i;
@@ -135,6 +148,7 @@ int			proceed(t_server *server,
 				fd_set *fds_read, fd_set *fds_write)
 {
   return (proceed_reads(server, fds_read) ||
+          proceed_gui(server) ||
 	  proceed_commands(server) ||
 	  proceed_logic(server) ||
 	  proceed_writes(server, fds_write));

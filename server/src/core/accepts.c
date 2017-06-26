@@ -9,6 +9,7 @@
 */
 #include <netinet/in.h>
 #include <stdio.h>
+#include "server/gui_commands.h"
 #include "server.h"
 
 int			accept_new_gui(t_server *server)
@@ -26,7 +27,7 @@ int			accept_new_gui(t_server *server)
   log_this("Accepted gui on sock : %d\n", sock);
   server->gui.sock = sock;
   server->gui.alive = true;
-  return (0);
+  return (send_to_gui(server, "WELCOME\n"));
 }
 
 int			accept_new_client(t_server *server)
@@ -47,5 +48,5 @@ int			accept_new_client(t_server *server)
   server->game.clients[cli].sock = sock;
   server->game.clients[cli].id = cli;
   log_this("Accepted client ID: %d on sock : %d\n", cli, sock);
-  return (0);
+  return (send_to_gui(server, "WELCOME\n"));
 }

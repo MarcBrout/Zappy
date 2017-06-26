@@ -18,6 +18,8 @@
 # include <stddef.h>
 # include <stdbool.h>
 
+typedef int ID;
+typedef struct s_team t_team;
 typedef struct s_arg		t_arg;
 typedef struct s_config	t_config;
 typedef int			(*arg_process_t)(t_config *config,
@@ -33,12 +35,20 @@ struct				s_arg
   bool				ok;
 };
 
+struct s_team
+{
+  char *name;
+  ID id;
+  uint32_t memberCount;
+  uint32_t maxCount;
+};
+
 struct s_config
 {
   uint16_t			port;
   uint8_t			width;
   uint8_t			height;
-  char				**teams;
+  t_team			*teams;
   uint8_t			team_count;
   uint8_t			max_player;
   uint16_t			time;

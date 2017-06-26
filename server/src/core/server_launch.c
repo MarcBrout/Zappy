@@ -12,6 +12,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "argument_processor.h"
 #include "server/proceed.h"
 #include "server.h"
 
@@ -99,6 +100,7 @@ static int		init_server(t_server *server)
   log_this("Allocated clients:\n\tcount: %d\n\tsize: %d\n",
 	   config->max_player * config->team_count,
 	   sizeof(*server->game.clients));
+  set_teams(&server->config);
   return (0);
 }
 

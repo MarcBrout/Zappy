@@ -26,6 +26,7 @@ enum			GUI_COMMANDS
     PIN,
     SGT,
     SST,
+    GRQPHIC,
     GUI_END
   };
 
@@ -60,5 +61,6 @@ int launch_server(t_server *server);
 int set_gui(t_server *server, fd_set *fds_read, fd_set *fds_write);
 int accept_new_gui(t_server *server);
 int accept_new_client(t_server *server);
+int player_connecting(t_server *server, ID playerId, char *cmd);
 
 #endif /* !PROCEED_H_ */

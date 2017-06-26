@@ -1,24 +1,36 @@
+/*
+** direction_manager.c for zappy in server/src/core
+**
+** Made by brout_m
+** Login   <marc.brout@epitech.eu>
+**
+** Started on  Tue Jun 27 01:47:19 2017 brout_m
+** Last update Tue Jun 27 01:50:50 2017 brout_m
+*/
 #include <math.h>
 #include <stdlib.h>
 #include "server.h"
 #include "server/direction_manager.h"
 
-static const t_direction direction_tab[NB_DIRECTIONS] =
- {
-  {0, 0, 0},
-  {1, 0, 1},
-  {1, -1, 2},
-  {0, -1, 3},
-  {-1, -1, 4},
-  {-1, 0, 5},
-  {-1, 1, 6},
-  {0, 1, 7},
-  {1, 1, 8}
- };
+static const t_direction	direction_tab[NB_DIRECTIONS] =
+  {
+    {0, 0, 0},
+    {1, 0, 1},
+    {1, -1, 2},
+    {0, -1, 3},
+    {-1, -1, 4},
+    {-1, 0, 5},
+    {-1, 1, 6},
+    {0, 1, 7},
+    {1, 1, 8}
+  };
 
-static size_t	calc_len(int src, int dest, size_t width, bool direct)
+static size_t			calc_len(int src,
+					 int dest,
+					 size_t width,
+					 bool direct)
 {
-  size_t 	len;
+  size_t			len;
 
   if (direct == true)
     {
@@ -32,9 +44,9 @@ static size_t	calc_len(int src, int dest, size_t width, bool direct)
   return (len);
 }
 
-static int	find_value_prev_y(int len_x, int len_y)
+static int			find_value_prev_y(int len_x, int len_y)
 {
-  double 	val;
+  double			val;
 
   if (len_x == 0)
     return (1);
@@ -44,9 +56,9 @@ static int	find_value_prev_y(int len_x, int len_y)
   return (0);
 }
 
-static int	find_value_prev_x(size_t len_x, size_t len_y)
+static int			find_value_prev_x(size_t len_x, size_t len_y)
 {
-  double 	val;
+  double			val;
 
   if (len_x == 0)
     return (0);
@@ -56,9 +68,9 @@ static int	find_value_prev_x(size_t len_x, size_t len_y)
   return (1);
 }
 
-static void 	change_dir(Direction dir, int *pos_x, int *pos_y)
+static void			change_dir(Direction dir, int *pos_x, int *pos_y)
 {
-  int 		tmp;
+  int				tmp;
 
   if (dir == WEST)
     {
@@ -73,17 +85,17 @@ static void 	change_dir(Direction dir, int *pos_x, int *pos_y)
     }
 }
 
-int		find_direction(t_server *server,
-			       t_position *src,
-			       t_position *dest,
-			       Direction dir_dest)
+int				find_direction(t_server *server,
+					       t_position *src,
+					       t_position *dest,
+					       Direction dir_dest)
 {
-  size_t 	len_x;
-  size_t 	len_y;
-  size_t	tmp;
-  int 		x_prev;
-  int 		y_prev;
-  int 		i;
+  size_t			len_x;
+  size_t			len_y;
+  size_t			tmp;
+  int				x_prev;
+  int				y_prev;
+  int				i = 0;
 
   tmp = calc_len(src->x, dest->x, server->config.width, true);
   len_x = calc_len(src->x, dest->x, server->config.width, false);
@@ -96,7 +108,6 @@ int		find_direction(t_server *server,
   x_prev = x_prev * find_value_prev_x(len_x, len_y);
   y_prev = y_prev * find_value_prev_y(len_x, len_y);
   change_dir(dir_dest, &x_prev, &y_prev);
-  i = 0;
   while (i < NB_DIRECTIONS)
     {
       if (direction_tab[i].x_r == x_prev && direction_tab[i].y_r == y_prev)

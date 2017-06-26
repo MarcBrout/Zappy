@@ -11,7 +11,7 @@
 #include <stdlib.h>
 #include "server.h"
 
-static int	send_player_inventory(t_server *server, ID id)
+int	send_player_inventory(t_server *server, ID id)
 {
   int		i;
   t_ia		*ia;

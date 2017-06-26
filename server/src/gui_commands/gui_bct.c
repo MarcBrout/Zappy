@@ -11,10 +11,10 @@
 #include <stdlib.h>
 #include "server.h"
 
-int		send_case_content(t_server *server, int x, int y)
+int		send_case_content(t_server *server, uint32_t x, uint32_t y)
 {
   int		i;
-  int		pos;
+  uint32_t	pos;
 
   if (send_to_gui(server, "bct %d %d ", x, y))
     return (1);
@@ -23,8 +23,8 @@ int		send_case_content(t_server *server, int x, int y)
   while (i < OBJ_COUNT)
     {
       send_to_gui(server, "%d", server->game.map[pos].objects[i]);
-      if (i < OBJ_COUNT - 1)
-	send_to_gui(server, " ");
+      if (i < OBJ_COUNT - 1 && send_to_gui(server, " "))
+        return (1);
       ++i;
     }
   return (send_to_gui(server, "\n"));

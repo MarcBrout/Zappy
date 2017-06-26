@@ -44,6 +44,7 @@ struct				s_egg
   t_egg				*next;
   Team				team;
   ID				id;
+  ID layer;
   int				hatching;
   t_position			pos;
 };
