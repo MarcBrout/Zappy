@@ -24,6 +24,9 @@ namespace zappy
       UNUSED_SLOTS,
       FORK,
       EJECT,
+      TAKE,
+      SET,
+      INCANTATION,
       RAW
     };
 

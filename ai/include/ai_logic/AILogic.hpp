@@ -14,7 +14,7 @@ namespace zappy
   public:
     enum STATE
     {
-      NONE,
+      INITIAL,
       SEARCHING,
       JOINING,
       PASSIVE_WAITING,
@@ -25,8 +25,6 @@ namespace zappy
 
   private:
     STATE m_state;
-
-
   };
 }
 #endif // ZAPPY_AILOGIC_HPP

@@ -2,9 +2,9 @@
 // Created by Pierre Bougon on 21/06/17.
 //
 
-#include <network/Client.hpp>
 #include <vector>
-#include <tools/Logger.hpp>
+#include "network/Client.hpp"
+#include "tools/Logger.hpp"
 #include "Core.hpp"
 
 zappy::Core::Core() : _running(false), _waitingForResponse(false), _ai()
