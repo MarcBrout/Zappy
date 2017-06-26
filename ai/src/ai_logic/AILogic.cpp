@@ -10,8 +10,7 @@ namespace zappy
   {
   }
 
-  AILogic::AILogic() : CoreAI(), m_state(AILogic::STATE::INITIAL)
+  AILogic::AILogic() : CoreAI(), m_state(AILogic::STATE::INITIAL), m_logic()
   {
   }
-
 }
