@@ -104,25 +104,25 @@ int		ia_look(t_server *server, ID id, char *cmd)
 {
   t_client	*client;
   t_position	pos;
-  int 		i;
+  int		i;
   int 		j;
 
+  (void) cmd;
   client = &server->game.clients[id];
-  strncircular(&client->w, "[", strlen("]"));
+  strncircular(&client->w, "[", strlen("["));
   pos = client->ia.pos;
-  while (i <= client->ia.level)
+  i = -1;
+  while (++i <= (int) client->ia.level)
     {
-      j = 0;
-      while (j < 2 * i + 1)
+      j = -1;
+      while (++j < 2 * i + 1)
 	{
 	  if (i != 0)
 	    strncircular(&client->w, ",", strlen(","));
 	  look_tile(server, client, &pos);
 	  if (j != 2 * i)
 	    forward_pos(server, &pos, change_dir(client->ia.dir, false), 1);
-	  ++j;
 	}
-      ++i;
       forward_pos(server, &pos, client->ia.dir, 1);
       forward_pos(server, &pos, change_dir(client->ia.dir, true), i + i - 1);
     }

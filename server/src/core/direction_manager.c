@@ -16,11 +16,11 @@ static const t_direction direction_tab[NB_DIRECTIONS] =
   {1, 1, 8}
  };
 
-static size_t	calc_len(int src, int dest, size_t width, int direct)
+static size_t	calc_len(int src, int dest, size_t width, bool direct)
 {
   size_t 	len;
 
-  if (direct == 1)
+  if (direct == true)
     {
       len = src >= dest ? src - dest : dest - src;
       return (len);
@@ -85,13 +85,13 @@ int		find_direction(t_server *server,
   int 		y_prev;
   int 		i;
 
-  tmp = calc_len(src->x, dest->x, server->config.width, 1);
-  len_x = calc_len(src->x, dest->x, server->config.width, -1);
-  x_prev = len_x < tmp ? -1 : 1;
+  tmp = calc_len(src->x, dest->x, server->config.width, true);
+  len_x = calc_len(src->x, dest->x, server->config.width, false);
+  x_prev = (len_x < tmp ? -1 : 1) * (src->x < dest->x ? -1 : 1);
   len_x = len_x < tmp ? len_x : tmp;
-  tmp = calc_len(src->y, dest->y, server->config.height, 1);
-  len_y = calc_len(src->y, dest->y, server->config.height, 1);
-  y_prev = len_y < tmp ? -1 : 1;
+  tmp = calc_len(src->y, dest->y, server->config.height, true);
+  len_y = calc_len(src->y, dest->y, server->config.height, false);
+  y_prev = (len_y < tmp ? -1 : 1) *  (src->y < dest->y ? -1 : 1);
   len_y = len_y < tmp ? len_y : tmp;
   x_prev = x_prev * find_value_prev_x(len_x, len_y);
   y_prev = y_prev * find_value_prev_y(len_x, len_y);
