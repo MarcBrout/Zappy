@@ -7,7 +7,7 @@
 #include <tools/Logger.hpp>
 #include "Core.hpp"
 
-zappy::Core::Core() : _running(false), _waitingForResponse(false)
+zappy::Core::Core() : _running(false), _waitingForResponse(false), _ai()
 {}
 
 zappy::Core::~Core()

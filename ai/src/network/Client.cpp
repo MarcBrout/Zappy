@@ -6,12 +6,12 @@
 #include "tools/Logger.hpp"
 #include "network/Client.hpp"
 
-zappy::network::Client::Client(uint16_t port, const std::string &hostname) : TCPClient(port, hostname)
+zappy::network::Client::Client(uint16_t port, const std::string &hostname) : TCPClient(port, hostname), _fdManager()
 {
     _fdManager.set_tv(300);
 }
 
-zappy::network::Client::Client() : TCPClient(0, "")
+zappy::network::Client::Client() : TCPClient(0, ""), _fdManager()
 {
     _fdManager.set_tv(300);
 }

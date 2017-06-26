@@ -17,7 +17,8 @@ Logger::~Logger() {
 
 }
 
-Logger::Logger() {
+Logger::Logger() : outFile("")
+{
 
 }
 
