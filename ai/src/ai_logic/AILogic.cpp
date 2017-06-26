@@ -22,8 +22,7 @@ namespace zappy
     return (inventory[OBJECTS::FOOD] < 10);
   }
 
-  inventory_t
-      AILogic::getInventory(std::string const &inventory)
+  inventory_t AILogic::getInventory(std::string const &inventory)
   {
     m_splitter.clear();
     m_splitter.split(inventory, "[,]", false);
@@ -33,14 +32,14 @@ namespace zappy
 
     inventory_t values;
     for (std::uint32_t i = 0; i < rawValues.size(); ++i)
-    {
-      std::uint64_t pos = rawValues[i].find(' ', 0);
-
-      if (rawValues[i] != "")
       {
-        values[i] = std::stoul(rawValues[i].substr(pos + 1));
+	std::uint64_t pos = rawValues[i].find(' ', 0);
+
+	if (rawValues[i] != "")
+	  {
+	    values[i] = std::stoul(rawValues[i].substr(pos + 1));
+	  }
       }
-    }
     return values;
   }
 }
