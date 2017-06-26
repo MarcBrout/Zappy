@@ -7,7 +7,6 @@
 
 #include <map>
 #include <vector>
-#include <pair>
 #include "core_ai/CoreAI.hpp"
 
 namespace zappy
