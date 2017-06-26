@@ -5,7 +5,7 @@
 ## Login   <pierre@e	pitech.net>
 ##
 ## Started on  Sat Jun 10 21:33:53 2017 PierreBougon
-## Last update Fri Jun 23 17:34:42 2017 brout_m
+## Last update Mon Jun 26 14:35:42 2017 brout_m
 ##
 
 include ../mk/colors.mk ../mk/commands.mk ../mk/definitions.mk
@@ -16,19 +16,19 @@ include ../mk/colors.mk ../mk/commands.mk ../mk/definitions.mk
 
 PROJECT_NAME=		zappy_server
 
-NAME=				../$(PROJECT_NAME)
+NAME=			../$(PROJECT_NAME)
 
-ARGS= 				argument_processors/argument_
+ARGS= 			argument_processors/argument_
 
-GUICMD= 			gui_commands/gui_
+GUICMD= 		gui_commands/gui_
 
-GUIEVE=				gui_events/event_
+GUIEVE=			gui_events/event_
 
-IACMD= 				ia_commands/ia_
+IACMD= 			ia_commands/ia_
 
-IALOG=				ia_logic/logic_
+IALOG=			ia_logic/logic_
 
-CORE= 				core/
+CORE= 			core/
 
 # Project sources
 
@@ -85,29 +85,28 @@ SERVER_RAW_SRC=		server.c 			\
 			$(IACMD)broadcast.c		\
 			$(IACMD)connect_nbr.c		\
 			$(IACMD)death.c			\
-                    	$(IACMD)eject.c			\
-                    	$(IACMD)fork.c			\
-                    	$(IACMD)forward.c 		\
-                    	$(IACMD)incantation.c		\
-                    	$(IACMD)inventory_look.c	\
-                    	$(IACMD)left.c 			\
-                    	$(IACMD)right.c 		\
-                    	$(IACMD)take_set.c 		\
+			$(IACMD)eject.c			\
+		 	$(IACMD)fork.c			\
+			$(IACMD)forward.c 		\
+			$(IACMD)incantation.c		\
+			$(IACMD)inventory_look.c	\
+			$(IACMD)left.c 			\
+			$(IACMD)right.c 		\
+			$(IACMD)take_set.c 		\
 			$(IACMD)unknown.c
 
-SERVER_SRC=			$(addprefix src/, $(SERVER_RAW_SRC))
+SERVER_SRC=		$(addprefix src/, $(SERVER_RAW_SRC))
 
-OBJ=				$(SERVER_SRC:.c=.o)
+OBJ=			$(SERVER_SRC:.c=.o)
 
-INC=				-Iinclude \
-					-Iinclude/logger \
-					-Iinclude/timer
+INC=			-Iinclude \
+			-Iinclude/logger \
+			-Iinclude/timer
 
-LDFLAGS+=			-lm
+LDFLAGS+=		-lm
 
-CFLAGS+=			-Ofast
+CFLAGS+=		-Ofast
 
 ## Core rules
 
 include ../mk/rules.mk
-
