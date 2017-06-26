@@ -23,6 +23,7 @@ void zappy::Core::run()
     {
         _ai.nextAction();
         //check server send
+        servMessages.clear();
         servMessages = network::Client::getInstance().getServerMessages();
         for (std::vector<std::string>::iterator it = servMessages.begin(); it < servMessages.end(); ++it)
             manageResponse(*it);
