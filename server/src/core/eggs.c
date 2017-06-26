@@ -9,6 +9,7 @@
 */
 #include <server.h>
 #include <stdlib.h>
+#include "server/gui_events.h"
 #include "server/eggs.h"
 
 int		add_egg(t_server *server, t_position *pos, Team id)
@@ -90,7 +91,7 @@ void		check_eggs(t_server *server)
 	  else
 	    prev->next = tmp->next;
 	  tmp = tmp->next;
-	  //TODO send message to warn the gui an egg die
+          event_edi(server, tmp->id);
 	  free(tmp);
 	}
       else
