@@ -41,7 +41,7 @@ namespace zappy
             return *this;
         }
 
-        Vector2<T> &operator+(Vector2 const& b)
+        Vector2<T> operator+(Vector2 const& b)
         {
             Vector2 res;
             res.x = x + b.x;
@@ -63,7 +63,7 @@ namespace zappy
             return (*this);
         }
 
-        Vector2<T> &operator-(Vector2 const& b)
+        Vector2<T> operator-(Vector2 const& b)
         {
             Vector2 res;
             res.x = x + b.x;

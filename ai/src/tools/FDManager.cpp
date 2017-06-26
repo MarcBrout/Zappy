@@ -4,7 +4,7 @@
 
 #include "tools/FDManager.hpp"
 
-zappy::FDManager::FDManager()
+zappy::FDManager::FDManager() : _rfds(), _wfds(), _tv()
 {
     reset_fds();
 }

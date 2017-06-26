@@ -11,14 +11,15 @@
 template <typename T>
 class Singleton
 {
-    T& operator=(const T&) = delete;
+  T &operator=(const T &) = delete;
 
 public:
-    static T &getInstance()
-    {
-        static T instance;
-        return instance;
-    }
+  virtual ~Singleton(){};
+  static T &getInstance()
+  {
+    static T instance;
+    return instance;
+  }
 };
 
 #endif // !CPP_ZAPPY_SINGLETON_HPP_
