@@ -6,6 +6,7 @@
 #define CLIENTAI_COREAI_HPP_
 
 #include <vector>
+#include "Core.hpp"
 #include "tools/Vector2.hpp"
 
 namespace zappy
@@ -31,18 +32,25 @@ namespace zappy
     };
 
     virtual ~CoreAI(){};
-    CoreAI();
+    explicit CoreAI(Core &core);
     void nextAction();
     void sendAction(CoreAI::ACTION, const std::string &str = "");
+    bool sendActionAndCheckResponse(CoreAI::ACTION                  action,
+                                    const std::string &             str,
+                                    std::uint32_t                   count,
+                                    const std::vector<std::string> &anws);
     void setMessage(const std::string &string);
-    void setResponse(std::string const &basic_string);
+    void addResponse(const std::string &string);
+    void                            resetResponse();
+    std::vector<std::string> const &getResponse();
 
     void setX(size_t x);
     void setY(size_t y);
 
   protected:
+    Core &                   _core;
     std::vector<std::string> _message;
-    std::string              _response;
+    std::vector<std::string> _response;
     Vector2s                 _pos;
 
     typedef void (*_action_t)(const std::string &);
