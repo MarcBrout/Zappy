@@ -26,6 +26,8 @@ typedef struct s_position	t_position;
 typedef struct s_game		t_game;
 typedef struct s_store		t_store;
 
+#define FIND_POS(x, y, width) ((x) + (y) * (width))
+
 struct				s_position
 {
   int				x;
