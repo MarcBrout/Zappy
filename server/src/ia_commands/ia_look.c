@@ -2,9 +2,9 @@
 // Created by puilla_e on 09/06/17.
 //
 
-#include "server/server_data.h"
+#include "server/ia_commands.h"
 
-int	ia_forward(t_server *server, ID id, char *cmd)
+int		ia_look(t_server *server, ID id, char *cmd)
 {
   return (store_command(&server->game.clients[id].store, cmd, 7));
 }

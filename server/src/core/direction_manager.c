@@ -96,12 +96,11 @@ int		find_direction(t_server *server,
   x_prev = x_prev * find_value_prev_x(len_x, len_y);
   y_prev = y_prev * find_value_prev_y(len_x, len_y);
   change_dir(dir_dest, &x_prev, &y_prev);
-  i = 0;
-  while (i < NB_DIRECTIONS)
+  i = -1;
+  while (++i < NB_DIRECTIONS)
     {
       if (direction_tab[i].x_r == x_prev && direction_tab[i].y_r == y_prev)
 	return (direction_tab[i].id);
-      ++i;
     }
   return (0);
 }
