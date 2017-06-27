@@ -35,18 +35,20 @@ static int	count_player(t_server *server,
     {
       if (server->game.clients[cli].alive && cli != client->sock &&
 	  server->game.clients[cli].ia.pos.x == client->ia.pos.x &&
-	  server->game.clients[cli].ia.pos.y == client->ia.pos.y &&
-	  server->game.clients[cli].ia.level == client->ia.level)
+	  server->game.clients[cli].ia.pos.y == client->ia.pos.y)
 	{
-	  ++nb_player;
+	  if (server->game.clients[cli].ia.level == client->ia.level)
+	    ++nb_player;
+	  else
+	    return (-1);
 	}
       ++cli;
     }
   return (nb_player);
 }
 
-static int	check_incantation(t_server *server, ID id,
-				    t_client *client, t_cell *cell)
+int	check_incantation(t_server *server, ID id,
+			     t_client *client, t_cell *cell)
 {
   Object	obj;
 

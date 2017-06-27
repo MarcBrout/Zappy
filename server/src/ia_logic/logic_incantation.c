@@ -8,7 +8,7 @@
 ** Last update Tue Jun 27 17:30:47 2017 Edouard
 */
 
-#include <string.h>
+#include "server/logic_commands.h"
 #include "server/gui_events.h"
 #include "server/ia_commands.h"
 
@@ -22,28 +22,6 @@ static const int incant_tab[MAX_INCANT][OBJ_COUNT] =
   {6, 1, 2, 3, 0, 1, 0},
   {6, 2, 2, 2, 2, 2, 1}
  };
-
-static int	count_player(t_server *server,
-			     t_client *client)
-{
-  ID 		cli;
-  int 		nb_player;
-
-  cli = 0;
-  nb_player = 1;
-  while (cli < server->game.max_slot)
-    {
-      if (server->game.clients[cli].alive && cli != client->sock &&
-       	  server->game.clients[cli].ia.pos.x == client->ia.pos.x &&
-          server->game.clients[cli].ia.pos.y == client->ia.pos.y &&
-          server->game.clients[cli].ia.level == client->ia.level)
-	{
-	  ++nb_player;
-	}
-      ++cli;
-    }
-  return (nb_player);
-}
 
 static int	send_incantation_end(t_server *server,
 				     t_client *client,
@@ -76,29 +54,6 @@ static int	send_incantation_end(t_server *server,
   return (0);
 }
 
-static int	check_incantation(t_server *server, ID id,
-				  t_client *client, t_cell *cell)
-{
-  Object	obj;
-
-  if (incant_tab[client->ia.level][0] != count_player(server, client))
-    {
-      strncircular(&client->w, "ko\n", strlen("ko\n"));
-      return (1);
-    }
-  obj = LINEMATE;
-  while (obj < OBJ_COUNT)
-    {
-      if (incant_tab[client->ia.level][obj] != cell->objects[obj])
-	{
-	  strncircular(&server->game.clients[id].w, "ko\n", strlen("ko\n"));
-	  return (1);
-	}
-      ++obj;
-    }
-  return (0);
-}
-
 int		logic_incantation(t_server *server, ID id, char *cmd)
 {
   t_client	*client;
@@ -110,7 +65,7 @@ int		logic_incantation(t_server *server, ID id, char *cmd)
   cell = &server->game.map[FIND_POS(client->ia.pos.x,
 				    client->ia.pos.y,
 				    server->config.width)];
-  if (check_incantation(server, id, client, cell)== 1)
+  if (check_incantation(server, id, client, cell) == 1)
     {
       event_pie(server, &client->ia.pos, 0);
       return (0);
