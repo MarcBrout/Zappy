@@ -23,7 +23,8 @@ int 	logic_eject(t_server *server, ID id, char *cmd);
 int 	logic_take(t_server *server, ID id, char *cmd);
 int 	logic_set(t_server *server, ID id, char *cmd);
 int	logic_incantation(t_server *server, ID id, char *cmd);
-
+int	logic_fork_start(t_server *server, ID id, char *cmd);
+int	logic_incantation_start(t_server *server, ID id, char *cmd);
 void	forward_pos(t_server *server, t_position *pos, Direction dir, int nb);
 
 #endif /* !LOGIC_COMMANDS_H_ */

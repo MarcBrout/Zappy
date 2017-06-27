@@ -30,7 +30,7 @@ void	forward_pos(t_server *server, t_position *pos, Direction dir, int nb)
 
 int	logic_forward(t_server *server, ID id, char *cmd)
 {
-  //TODO add time management
+  //TODO GUI add event ppo
   (void)cmd;
   forward_pos(server,
 	      &server->game.clients[id].ia.pos,

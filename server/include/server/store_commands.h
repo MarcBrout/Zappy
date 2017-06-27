@@ -13,6 +13,7 @@
 # define CMD_LENGTH 100
 
 # include <stdint.h>
+# include <stdbool.h>
 
 typedef struct s_cmd	t_cmd;
 typedef struct s_store	t_store;
@@ -21,6 +22,7 @@ struct			s_cmd
 {
   char			command[CMD_LENGTH];
   uint64_t		cooldown;
+  bool			in_limit;
   struct s_cmd		*next;
 };
 
@@ -37,6 +39,14 @@ struct			s_store
 ** and updated automatically
 */
 int store_command(t_store *store, const char *cmd, uint64_t cooldown);
+
+/*
+** Returns 1 if an allocation error occurred, return -1 if there are no first
+** element in the list (bad use), return 0 otherwise.
+*/
+int 		store_command_sequel(t_store *store,
+				     const char *cmd,
+				     uint64_t cooldown);
 
 /*
 ** Returns NULL if no commands were found

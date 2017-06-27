@@ -3,7 +3,7 @@
 //
 
 #include <string.h>
-#include "server/send.h"
+#include "server/gui_events.h"
 #include "server/direction_manager.h"
 #include "server/logic_commands.h"
 
@@ -29,6 +29,7 @@ static int	send_eject_to_player(t_server *server, t_client *client)
 				    &client->ia.pos,
 				    &server->game.clients[cli].ia.pos,
 				    server->game.clients[cli].ia.dir));
+	  //TODO GUI add event ppo
 	}
       ++cli;
     }
@@ -61,6 +62,7 @@ int		logic_eject(t_server *server, ID id, char *cmd)
   client = &server->game.clients[id];
   if (check_if_player(server, client))
     {
+      event_pex(server, id);
       strncircular(&client->w, "ok\n", strlen("ok\n"));
       return (send_eject_to_player(server, client));
     }

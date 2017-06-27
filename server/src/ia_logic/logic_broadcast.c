@@ -3,7 +3,7 @@
 //
 
 #include <string.h>
-#include "server/send.h"
+#include "server/gui_events.h"
 #include "server/direction_manager.h"
 
 int		logic_broadcast(t_server *server, ID id, char *cmd)
@@ -16,6 +16,7 @@ int		logic_broadcast(t_server *server, ID id, char *cmd)
   cli = 0;
   client = &server->game.clients[id];
   text = strtok(NULL, " ");
+  event_pbc(server, id, text);
   while (cli < server->config.max_player * server->config.team_count)
     {
       if (server->game.clients[cli].alive == true &&

@@ -3,7 +3,7 @@
 //
 
 #include <string.h>
-#include "server.h"
+#include "server/gui_events.h"
 
 static const char *obj_tab[OBJ_COUNT] =
  {
@@ -50,6 +50,7 @@ int		logic_take(t_server *server, ID id, char *cmd)
 					   server->game.clients[id].ia.pos.y,
 					   server->config.width)];
       ++server->game.clients[id].ia.inventory[obj];
+      event_pgt(server, id, obj);
       strncircular(&server->game.clients[id].w, "ok\n", strlen("ok\n"));
     }
   else
@@ -75,6 +76,7 @@ int		logic_set(t_server *server, ID id, char *cmd)
       ++server->game.map[FIND_POS(server->game.clients[id].ia.pos.x,
 				  server->game.clients[id].ia.pos.y,
 				  server->config.width)].objects[obj];
+      event_pdr(server, id, obj);
       strncircular(&server->game.clients[id].w, "ok\n", strlen("ok\n"));
     }
   else

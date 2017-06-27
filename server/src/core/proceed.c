@@ -45,7 +45,7 @@ static const t_command	ia_commands[IA_END + 1] =
     {NULL, 0, ia_unknown}
   };
 
-static const t_command	ia_logic[IA_END + 1] =
+static const t_command	ia_logic[LOGIC_END + 1] =
  {
   {"Forward", 7, logic_forward},
   {"Right", 5, logic_right},
@@ -54,10 +54,12 @@ static const t_command	ia_logic[IA_END + 1] =
   {"Inventory", 9, logic_inventory},
   {"Broadcast", 9, logic_broadcast},
   {"Connect_nbr", 11, logic_connect_nbr},
+  {"ForkStart", 9, logic_fork_start},
   {"Fork", 4, logic_fork},
   {"Eject", 5, logic_eject},
   {"Take", 4, logic_take},
   {"Set", 3, logic_set},
+  {"IncantationStart", 16, logic_incantation_start},
   {"Incantation", 11, logic_incantation},
   {NULL, 0, logic_unknown}
  };

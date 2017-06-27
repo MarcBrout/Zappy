@@ -7,7 +7,7 @@
 
 int	logic_right(t_server *server, ID id, char *cmd)
 {
-  //TODO add time management
+  //TODO GUI add event ppo
   (void)cmd;
   server->game.clients[id].ia.dir =
    server->game.clients[id].ia.dir == WEST ? NORTH :

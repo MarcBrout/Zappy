@@ -3,7 +3,7 @@
 //
 
 #include <string.h>
-#include "server.h"
+#include "server/gui_events.h"
 #include "server/ia_commands.h"
 
 static const int incant_tab[MAX_INCANT][OBJ_COUNT] =
@@ -49,6 +49,7 @@ static int	send_incantation_end(t_server *server,
   cli = 0;
   nb_player = 1;
   ++client->ia.level;
+  //TODO GUI add event plv (level of player)
   send_to_ia(server, client->id, "Current level: %u\n", client->ia.level);
   while (nb_player < max_player &&
    	 cli < server->config.max_player * server->config.team_count)
@@ -59,6 +60,7 @@ static int	send_incantation_end(t_server *server,
 	  server->game.clients[cli].ia.level == client->ia.level)
 	{
 	  ++server->game.clients[cli].ia.level;
+	  //TODO GUI add event plv (level of player)
 	  send_to_ia(server, cli, "Current level: %u\n",
 		     server->game.clients[cli].ia.level);
 	  ++nb_player;
@@ -103,13 +105,18 @@ int		logic_incantation(t_server *server, ID id, char *cmd)
 				    client->ia.pos.y,
 				    server->config.width)];
   if (check_incantation(server, id, client, cell)== 1)
-    return (0);
+    {
+      event_pie(server, &client->ia.pos, 0);
+      return (0);
+    }
+  event_pie(server, &client->ia.pos, 1);
   obj = LINEMATE;
   while (obj < OBJ_COUNT)
     {
       cell->objects[obj] -= incant_tab[client->ia.level][obj];
       ++obj;
     }
+  //TODO GUI add event bct (resources used on tile)
   return (send_incantation_end(server, client,
 			       incant_tab[client->ia.level][0]));
 }

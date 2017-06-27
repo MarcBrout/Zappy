@@ -21,6 +21,7 @@ static int		add_command(t_cmd **first,
   if ((node = calloc(1, sizeof(*node))) == NULL)
     return (1);
   node->cooldown = cooldown;
+  node->in_limit = true;
   strncpy(node->command, cmd, CMD_LENGTH);
   cur = *first;
   if (!cur)
@@ -31,6 +32,26 @@ static int		add_command(t_cmd **first,
   while (cur->next != NULL)
     cur = cur->next;
   cur->next = node;
+  return (0);
+}
+
+int 		store_command_sequel(t_store *store,
+				     const char *cmd,
+				     uint64_t cooldown)
+{
+  t_cmd		*node;
+
+  if (!store->commands)
+    {
+      return (-1);
+    }
+  if ((node = calloc(1, sizeof(*node))) == NULL)
+    return (1);
+  node->cooldown = cooldown;
+  node->in_limit = false;
+  strncpy(node->command, cmd, CMD_LENGTH);
+  node->next = store->commands->next;
+  store->commands->next = node;
   return (0);
 }
 
@@ -73,7 +94,8 @@ void			pop_command(t_store *store)
     {
       first = store->commands;
       store->commands = first->next;
+      if (first->in_limit == true)
+	--store->command_count;
       free(first);
-      --store->command_count;
     }
 }

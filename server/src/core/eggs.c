@@ -12,13 +12,13 @@
 #include "server/gui_events.h"
 #include "server/eggs.h"
 
-int		add_egg(t_server *server, t_position *pos, Team id)
+t_egg		*add_egg(t_server *server, t_position *pos, Team id)
 {
   t_egg		*egg;
   t_egg		*tmp;
 
   if ((egg = malloc(sizeof(egg))) == NULL)
-    return (1);
+    return (NULL);
   egg->pos.y = pos->y;
   egg->pos.x = pos->x;
   egg->team = id;
@@ -33,7 +33,7 @@ int		add_egg(t_server *server, t_position *pos, Team id)
 	tmp = tmp->next;
       tmp->next = egg;
     }
-  return (0);
+  return (egg);
 }
 
 bool		remove_first_egg(t_server *server, Team id)

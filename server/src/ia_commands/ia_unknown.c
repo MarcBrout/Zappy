@@ -6,7 +6,5 @@
 
 int ia_unknown(t_server *server, ID id, char *cmd)
 {
-  (void)cmd;
-  send_to_ia(server, id, "ko\n");
-  return (0);
+  return (store_command(&server->game.clients[id].store, cmd, 0));
 }
