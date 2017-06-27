@@ -91,7 +91,6 @@ static int		proceed_gui(t_server *server)
 {
   char			cmd[MESSAGE_MAX_SIZE];
 
-  log_this("\t====\nReading GUI commands\n\t====\n");
   if (set_gui_connected(true, false) && send_informations(server))
     return (1);
   while (find_command(&server->gui.r))
@@ -109,13 +108,12 @@ static int		proceed_commands(t_server *server)
   int			i = 0;
 
   check_eggs(server);
-  log_this("\t====\nReading CLIENTS commands\n\t====\n");
   while (i < server->game.max_slot)
   {
     while (find_command(&server->game.clients[i].r))
       {
 	strfromcircular(&server->game.clients[i].r, cmd);
-        if (player_connecting(server, i, cmd) == 1)
+        if (player_connecting(server, i, cmd) == 1) // TODO check if -1
           continue;
         if (run(server, &server->game.clients[i], ia_commands, cmd))
 	  return (1);

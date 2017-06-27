@@ -62,7 +62,7 @@ static int		running(t_server *server)
   Socket		max;
 
   log_this("Running server now\n");
-  while (!gl_stop)
+  while (!gl_stop /* TODO add winning end */)
     {
       time.tv_sec = 0;
       time.tv_usec = 100;
