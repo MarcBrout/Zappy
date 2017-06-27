@@ -5,11 +5,7 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sun Jun 25 02:36:40 2017 brout_m
-<<<<<<< HEAD
-** Last update Tue Jun 27 01:44:28 2017 brout_m
-=======
-** Last update Tue Jun 27 17:20:57 2017 Edouard
->>>>>>> make_ia_logic
+** Last update Tue Jun 27 18:19:30 2017 brout_m
 */
 
 #include <server.h>

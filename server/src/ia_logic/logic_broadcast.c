@@ -5,7 +5,7 @@
 ** Login   <edouard@epitech.net>
 **
 ** Started on  Tue Jun 27 17:27:50 2017 Edouard
-** Last update Tue Jun 27 17:27:57 2017 Edouard
+** Last update Tue Jun 27 18:21:56 2017 brout_m
 */
 
 #include <string.h>
@@ -15,11 +15,10 @@
 int		logic_broadcast(t_server *server, ID id, char *cmd)
 {
   char 		*text;
-  ID		cli;
+  ID		cli = 0;
   t_client	*client;
 
   strtok(cmd, " ");
-  cli = 0;
   client = &server->game.clients[id];
   text = strtok(NULL, " ");
   event_pbc(server, id, text);
