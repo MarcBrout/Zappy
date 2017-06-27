@@ -113,7 +113,7 @@ static int		proceed_commands(t_server *server)
       {
 	strfromcircular(&server->game.clients[i].r, cmd);
         if (player_connecting(server, i, cmd) == 1)
-          return (0);
+          continue;
         if (run(server, &server->game.clients[i], ia_commands, cmd))
 	  return (1);
       }
