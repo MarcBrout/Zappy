@@ -97,8 +97,10 @@ SERVER_RAW_SRC=		server.c 			\
 			$(IALOG)broadcast.c		\
 			$(IALOG)connect_nbr.c		\
 			$(IALOG)eject.c			\
+			$(IALOG)fork_start.c		\
 		 	$(IALOG)fork.c			\
 			$(IALOG)forward.c 		\
+			$(IALOG)incantation_start.c	\
 			$(IALOG)incantation.c		\
 			$(IALOG)inventory.c		\
 			$(IALOG)look.c			\
