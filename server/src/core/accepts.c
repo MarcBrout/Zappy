@@ -5,10 +5,11 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sun Jun 25 02:35:22 2017 brout_m
-** Last update Sun Jun 25 02:35:30 2017 brout_m
+** Last update Tue Jun 27 17:01:04 2017 brout_m
 */
 #include <netinet/in.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include "server/gui_commands.h"
 #include "server.h"
 
@@ -30,6 +31,17 @@ int			accept_new_gui(t_server *server)
   return (send_to_gui(server, "WELCOME\n"));
 }
 
+static int		add_slot(t_server *server, int *cli)
+{
+  uint32_t		size;
+
+  size = sizeof(t_client) * (server->game.max_slot + 1);
+  if ((server->game.clients = realloc(server->game.clients, size)) == NULL)
+    return (1);
+  *cli = server->game.max_slot++;
+  return (0);
+}
+
 int			accept_new_client(t_server *server)
 {
   struct sockaddr_in	addr;
@@ -44,6 +56,8 @@ int			accept_new_client(t_server *server)
       return (1);
     }
   cli = find_ID(server, 0, false);
+  if (cli < 0 && add_slot(server, &cli))
+    return (1);
   server->game.clients[cli].alive = true;
   server->game.clients[cli].sock = sock;
   server->game.clients[cli].id = cli;

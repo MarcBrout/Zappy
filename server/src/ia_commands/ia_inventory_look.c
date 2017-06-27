@@ -45,7 +45,7 @@ static bool	look_tile_player(t_server *server,
 
   cli = 0;
   space = false;
-  while (cli < server->config.max_player * server->config.team_count)
+  while (cli < server->game.max_slot)
     {
       if (server->game.clients[cli].alive == true &&
 	  server->game.clients[cli].ia.pos.x == pos->x &&

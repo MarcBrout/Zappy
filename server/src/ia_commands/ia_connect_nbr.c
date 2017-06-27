@@ -11,7 +11,7 @@ int	count_empty_slot(t_server *server, Team team)
 
   cli = 0;
   nb_slot = 0;
-  while (cli < server->config.max_player * server->config.team_count)
+  while (cli < server->game.max_slot)
     {
       if (server->game.clients[cli].ia.team == team &&
 	  server->game.clients[cli].alive == false)

@@ -5,16 +5,15 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sun Jun 25 02:51:50 2017 brout_m
-** Last update Sun Jun 25 03:01:24 2017 brout_m
+** Last update Tue Jun 27 17:12:13 2017 brout_m
 */
 #include <sys/socket.h>
 #include <signal.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "server/eggs.h"
 #include "argument_processor.h"
-#include "server/proceed.h"
-#include "server.h"
 
 static bool		gl_stop = false;
 
@@ -39,7 +38,7 @@ static int		set_fds(t_server *server,
   FD_SET(server->ia_sock, fds_read);
   max = server->ia_sock > max ? server->ia_sock : max;
   log_this("Setting Clients fds\n");
-  while (ia < server->config.max_player * server->config.team_count)
+  while (ia < server->game.max_slot)
     {
       client = &server->game.clients[ia];
       if (client->alive)
@@ -100,6 +99,7 @@ static int		init_server(t_server *server)
   log_this("Allocated clients:\n\tcount: %d\n\tsize: %d\n",
 	   config->max_player * config->team_count,
 	   sizeof(*server->game.clients));
+  server->game.max_slot = config->max_player * config->team_count;
   set_teams(&server->config);
   return (0);
 }
@@ -114,18 +114,19 @@ int			launch_server(t_server *server)
   log_this("Launching Server...\n");
   init_timer(server->config.time);
   if (sigaction(SIGINT, &action, NULL) == -1 ||
-	  signal(SIGPIPE, SIG_IGN) == SIG_ERR ||
-	  init_server(server) ||
-	  create_socket(&server->ia_sock, server->config.port,
-			server->config.max_player * server->config.team_count)
-      || create_socket(&server->gui_sock, 8484, 1))
-      return (1);
+      signal(SIGPIPE, SIG_IGN) == SIG_ERR ||
+      init_server(server) ||
+      create_socket(&server->ia_sock, server->config.port, 1000) ||
+      create_socket(&server->gui_sock, 8484, 1))
+    return (1);
   log_this("Running Server...\n");
   if (running(server))
     {
       free(server->game.clients);
+      free_eggs(server);
       return (1);
     }
   free(server->game.clients);
+  free_eggs(server);
   return (0);
 }

@@ -16,7 +16,7 @@ int		ia_broadcast(t_server *server, ID id, char *cmd)
   cli = 0;
   client = &server->game.clients[id];
   text = strtok(NULL, " ");
-  while (cli < server->config.max_player * server->config.team_count)
+  while (cli < server->game.max_slot)
     {
       if (server->game.clients[cli].alive == true &&
 	  &server->game.clients[cli] != client)

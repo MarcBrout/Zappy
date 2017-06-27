@@ -5,7 +5,7 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sun Jun 25 02:47:51 2017 brout_m
-** Last update Sun Jun 25 02:47:59 2017 brout_m
+** Last update Tue Jun 27 17:02:24 2017 brout_m
 */
 #include <string.h>
 #include "server/eggs.h"
@@ -34,9 +34,9 @@ static const t_command	ia_commands[IA_END + 1] =
     {"Forward", 7, ia_forward},
     {"Right", 5, ia_right},
     {"Left", 4, ia_left},
-    {"Look", 4, ia_unknown}, // TODO set function
-    {"Inventory", 9, ia_unknown}, // TODO set function
-    {"Broadcast", 9, ia_unknown}, // TODO set function
+    {"Look", 4, ia_unknown},
+    {"Inventory", 9, ia_unknown},
+    {"Broadcast", 9, ia_unknown},
     {"Connect_nbr", 11, ia_connect_nbr},
     {"Fork", 4, ia_fork},
     {"Eject", 5, ia_eject},
@@ -84,7 +84,7 @@ static int		run(t_server *server,
   return (0);
 }
 
-static int proceed_gui(t_server *server)
+static int		proceed_gui(t_server *server)
 {
   char			cmd[MESSAGE_MAX_SIZE];
 
@@ -92,11 +92,11 @@ static int proceed_gui(t_server *server)
   if (set_gui_connected(true, false) && send_informations(server))
     return (1);
   while (find_command(&server->gui.r))
-  {
-    strfromcircular(&server->gui.r, cmd);
-    if (run(server, &server->gui, gui_commands, cmd))
-      return (1);
-  }
+    {
+      strfromcircular(&server->gui.r, cmd);
+      if (run(server, &server->gui, gui_commands, cmd))
+	return (1);
+    }
   return (0);
 }
 
@@ -107,7 +107,7 @@ static int		proceed_commands(t_server *server)
 
   check_eggs(server);
   log_this("\t====\nReading CLIENTS commands\n\t====\n");
-  while (i < server->config.max_player * server->config.team_count)
+  while (i < server->game.max_slot)
   {
     while (find_command(&server->game.clients[i].r))
       {
@@ -129,8 +129,7 @@ static int		proceed_logic(t_server *server)
 
   if (isTick())
     {
-      log_this("TICK\n");
-      while (i < server->config.max_player * server->config.team_count)
+      while (i < server->game.max_slot)
 	{
 	  if ((cmd = get_command_from_store(&server->game.clients[i].store)))
 	    {
@@ -140,6 +139,7 @@ static int		proceed_logic(t_server *server)
 	    }
 	  ++i;
 	}
+      return (proceed_one_turn(server));
     }
   return (0);
 }
@@ -148,7 +148,7 @@ int			proceed(t_server *server,
 				fd_set *fds_read, fd_set *fds_write)
 {
   return (proceed_reads(server, fds_read) ||
-          proceed_gui(server) ||
+	  proceed_gui(server) ||
 	  proceed_commands(server) ||
 	  proceed_logic(server) ||
 	  proceed_writes(server, fds_write));

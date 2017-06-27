@@ -12,7 +12,7 @@ static int	send_eject_to_player(t_server *server, t_client *client)
   ID		cli;
 
   cli = 0;
-  while (cli < server->config.max_player * server->config.team_count)
+  while (cli < server->game.max_slot)
     {
       if (server->game.clients[cli].alive == true &&
 	  server->game.clients[cli].ia.pos.x == client->ia.pos.x &&
@@ -40,7 +40,7 @@ static bool	check_if_player(t_server *server, t_client *client)
   ID		cli;
 
   cli = 0;
-  while (cli < server->config.max_player * server->config.team_count)
+  while (cli < server->game.max_slot)
     {
       if (server->game.clients[cli].alive == true &&
 	  server->game.clients[cli].ia.pos.x == client->ia.pos.x &&

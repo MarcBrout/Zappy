@@ -5,7 +5,7 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sat Jun 24 16:46:15 2017 brout_m
-** Last update Sat Jun 24 16:48:59 2017 brout_m
+** Last update Tue Jun 27 16:57:47 2017 brout_m
 */
 #ifndef SERVER_DATA_H_
 # define SERVER_DATA_H_
@@ -41,10 +41,10 @@ struct				s_cell
 
 struct				s_egg
 {
-  t_egg				*next;
+  t_egg			*next;
   Team				team;
   ID				id;
-  ID layer;
+  ID				layer;
   int				hatching;
   t_position			pos;
 };
@@ -52,7 +52,7 @@ struct				s_egg
 struct				s_ia
 {
   Team				team;
-  Level				level;
+  Level			level;
   Direction			dir;
   t_position			pos;
   int				inventory[OBJ_COUNT];
@@ -71,10 +71,11 @@ struct s_client
 
 struct				s_game
 {
-  t_egg				*eggs;
+  t_egg			*eggs;
   t_cell			*map;
   size_t			width;
   size_t			height;
+  uint16_t			max_slot;
   t_client			*clients;
 };
 

@@ -37,6 +37,7 @@ SERVER_RAW_SRC=		server.c 			\
 			help.c 				\
 			logger/logger.c 		\
 			timer/timer.c 			\
+			game_logic/resources_generator.c \
 			$(ARGS)height.c 		\
 			$(ARGS)name.c 			\
 			$(ARGS)nbclients.c 		\

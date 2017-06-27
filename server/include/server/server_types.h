@@ -5,7 +5,7 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sat Jun 24 16:49:08 2017 brout_m
-** Last update Sat Jun 24 16:50:19 2017 brout_m
+** Last update Tue Jun 27 16:58:41 2017 brout_m
 */
 #ifndef SERVER_TYPES_H_
 # define SERVER_TYPES_H_
@@ -19,6 +19,7 @@ typedef unsigned int		Level;
 typedef enum e_direction	Direction;
 typedef enum e_rdirection	RDirection;
 typedef int			ID;
+typedef struct s_luck t_luck;
 
 enum				e_object
   {
@@ -31,6 +32,12 @@ enum				e_object
     THYSTAME,
     OBJ_COUNT
   };
+
+struct				s_luck
+{
+  const enum e_object		type;
+  double			value;
+};
 
 enum				e_direction
   {

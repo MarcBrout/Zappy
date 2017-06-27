@@ -25,7 +25,7 @@ static int	count_player(t_server *server,
 
   cli = 0;
   nb_player = 1;
-  while (cli < server->config.max_player * server->config.team_count)
+  while (cli < server->game.max_slot)
     {
       if (server->game.clients[cli].alive && cli != client->sock &&
        	  server->game.clients[cli].ia.pos.x == client->ia.pos.x &&
@@ -58,7 +58,7 @@ static int	send_incantation_end(t_server *server,
   nb_player = 1;
   //TODO add first to the tick queue the msg of current lvl (end of incantation) to principal client
   while (nb_player < max_player &&
-   	 cli < server->config.max_player * server->config.team_count)
+   	 cli < server->game.max_slot)
     {
       if (server->game.clients[cli].alive && cli != client->sock &&
 	  server->game.clients[cli].ia.pos.x == client->ia.pos.x &&

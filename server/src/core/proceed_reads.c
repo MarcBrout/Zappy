@@ -5,13 +5,14 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sun Jun 25 02:43:34 2017 brout_m
-** Last update Sun Jun 25 02:43:51 2017 brout_m
+** Last update Tue Jun 27 17:07:12 2017 brout_m
 */
 #include <unistd.h>
 #include <sys/socket.h>
 #include <string.h>
 #include <arpa/inet.h>
 #include <stdio.h>
+#include <server/gui_events.h>
 #include "server.h"
 
 int			find_ID(t_server *server, ID client, bool active)
@@ -19,7 +20,7 @@ int			find_ID(t_server *server, ID client, bool active)
   ID			cli;
 
   cli = 0;
-  while (cli < server->config.max_player * server->config.team_count)
+  while (cli < server->game.max_slot)
     {
       if (!active && !server->game.clients[cli].alive)
 	return (cli);
@@ -30,9 +31,12 @@ int			find_ID(t_server *server, ID client, bool active)
   return (-1);
 }
 
-static int		read_client(t_client *client, Socket sock)
+static char const	ctrl_c[5] = {0xff, 0xf4, 0xff, 0xfd, 0x06};
+
+static int		read_client(t_server *server,
+				    t_client *client,
+				    Socket sock)
 {
-  static char const	ctrl_c[5] = {0xff, 0xf4, 0xff, 0xfd, 0x06};
   char			buff[MESSAGE_MAX_SIZE];
   ssize_t		len;
 
@@ -46,9 +50,9 @@ static int		read_client(t_client *client, Socket sock)
   if (!len || strchr(buff, 4) ||
       (len == sizeof(ctrl_c) && !memcmp(buff, ctrl_c, sizeof(ctrl_c))))
     {
+      event_pdi(server, client->id);
       close(sock);
       memset(client, 0, sizeof(t_client));
-      //TODO client quitted -> death to check
       return (0);
     }
   if (strcmp(buff, "\n"))
@@ -58,7 +62,6 @@ static int		read_client(t_client *client, Socket sock)
 
 static int		read_gui(t_client *gui, Socket sock)
 {
-  static char const	ctrl_c[5] = {0xff, 0xf4, 0xff, 0xfd, 0x06};
   char			buff[MESSAGE_MAX_SIZE];
   ssize_t		len;
 
@@ -74,7 +77,6 @@ static int		read_gui(t_client *gui, Socket sock)
     {
       close(sock);
       memset(gui, 0, sizeof(t_client));
-      //TODO client quitted -> death to check
       return (0);
     }
   if (strcmp(buff, "\n"))
@@ -87,17 +89,18 @@ int			proceed_reads(t_server *server, fd_set *fds_read)
   Socket		sock;
 
   sock = 0;
-  while (sock < server->config.max_player * server->config.team_count)
+  while (sock < server->game.max_slot)
     {
       if (FD_ISSET(sock, fds_read))
 	{
 	  if ((sock == server->gui_sock && accept_new_gui(server)) ||
-              (sock == server->ia_sock && accept_new_client(server)) ||
-              (sock == server->gui.sock && read_gui(&server->gui, sock)) ||
+	      (sock == server->ia_sock && accept_new_client(server)) ||
+	      (sock == server->gui.sock && read_gui(&server->gui, sock)) ||
 	      (sock != server->ia_sock && sock != server->gui_sock && sock !=
 	       server->gui.sock &&
-	       read_client(&server->game.clients[find_Socket(server, sock)],
-                           sock)))
+	       read_client(server,
+			   &server->game.clients[find_Socket(server, sock)],
+			   sock)))
 	    return (1);
 	}
       ++sock;

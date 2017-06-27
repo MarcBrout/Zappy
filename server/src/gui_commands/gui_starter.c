@@ -50,7 +50,7 @@ static int		send_player_informations(t_server *server)
   ID			id = 0;
   t_client		*newClient;
 
-  while (id < server->config.max_player * server->config.team_count)
+  while (id < server->game.max_slot)
     {
       newClient = &server->game.clients[id];
       if (newClient->alive)

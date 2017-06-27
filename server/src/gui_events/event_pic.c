@@ -5,7 +5,7 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sun Jun 25 02:33:24 2017 brout_m
-** Last update Sun Jun 25 02:33:32 2017 brout_m
+** Last update Tue Jun 27 17:17:01 2017 brout_m
 */
 #include "server.h"
 
@@ -17,17 +17,17 @@ int		event_pic(t_server *server, t_client const *incantor)
 
   log_this("[PIC] Incantation level '%d' started on:\n\tx: %d\n\ty: %d\n "
 	   "with :\n\t%d",
-           incantor->ia.level, pos.x, pos.y, incantor->id);
+	   incantor->ia.level, pos.x, pos.y, incantor->id);
   if (send_to_gui(server, "pic %d %d %d %d", pos.x, pos.y, incantor->ia.level,
-                  incantor->id))
+		  incantor->id))
     return (1);
-  while (i < server->config.max_player * server->config.team_count)
+  while (i < server->game.max_slot)
     {
       client = &server->game.clients[i];
       if (client->ia.pos.x == pos.x && client->ia.pos.y == pos.y &&
-          client->ia.level == incantor->ia.level)
+	  client->ia.level == incantor->ia.level)
 	{
-          log_this(" %d", client->id);
+	  log_this(" %d", client->id);
 	  if (send_to_gui(server, " %d", client->id))
 	    return (1);
 	}
