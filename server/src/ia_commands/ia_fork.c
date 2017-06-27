@@ -1,19 +1,17 @@
-//
-// Created by puilla_e on 09/06/17.
-//
+/*
+** ia_fork.c for zappy in server
+**
+** Made by Edouard
+** Login   <edouard@epitech.net>
+**
+** Started on  Tue Jun 27 17:34:26 2017 Edouard
+** Last update Tue Jun 27 17:34:33 2017 Edouard
+*/
 
-#include <string.h>
 #include "server/server_data.h"
-#include "server/eggs.h"
 
 int	ia_fork(t_server *server, ID id, char *cmd)
 {
-  (void)cmd;
-//TODO add time management
-  if (add_egg(server, &server->game.clients[id],
-              &server->game.clients[id].ia.pos,
-	      server->game.clients[id].ia.team))
-    return (1);
-  send_to_ia(server, id, "ok\n");
-  return (0);
+  (void) cmd;
+  return (store_command(&server->game.clients[id].store, "ForkStart", 42));
 }

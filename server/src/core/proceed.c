@@ -7,6 +7,7 @@
 ** Started on  Sun Jun 25 02:47:51 2017 brout_m
 ** Last update Tue Jun 27 17:02:24 2017 brout_m
 */
+
 #include <string.h>
 #include "server/eggs.h"
 #include "server/gui_commands.h"
@@ -34,9 +35,9 @@ static const t_command	ia_commands[IA_END + 1] =
     {"Forward", 7, ia_forward},
     {"Right", 5, ia_right},
     {"Left", 4, ia_left},
-    {"Look", 4, ia_unknown},
-    {"Inventory", 9, ia_unknown},
-    {"Broadcast", 9, ia_unknown},
+    {"Look", 4, ia_look},
+    {"Inventory", 9, ia_inventory},
+    {"Broadcast", 9, ia_broadcast},
     {"Connect_nbr", 11, ia_connect_nbr},
     {"Fork", 4, ia_fork},
     {"Eject", 5, ia_eject},
@@ -46,22 +47,24 @@ static const t_command	ia_commands[IA_END + 1] =
     {NULL, 0, ia_unknown}
   };
 
-static const t_command	ia_logic[IA_END + 1] =
-  {
-    {"Advance", 7, logic_unknown},
-    {"Right", 5, logic_unknown},
-    {"Left", 4, logic_unknown},
-    {"See", 3, logic_unknown},
-    {"Inventory", 9, logic_unknown},
-    {"Broadcast", 9, logic_unknown},
-    {"Connect_nbr", 11, logic_unknown},
-    {"Fork", 4, logic_unknown},
-    {"Eject", 5, logic_unknown},
-    {"Take", 4, logic_unknown},
-    {"Set", 3, logic_unknown},
-    {"Incantation", 11, logic_unknown},
-    {NULL, 0, logic_unknown}
-  };
+static const t_command	ia_logic[LOGIC_END + 1] =
+ {
+  {"Forward", 7, logic_forward},
+  {"Right", 5, logic_right},
+  {"Left", 4, logic_left},
+  {"Look", 4, logic_look},
+  {"Inventory", 9, logic_inventory},
+  {"Broadcast", 9, logic_broadcast},
+  {"Connect_nbr", 11, logic_connect_nbr},
+  {"ForkStart", 9, logic_fork_start},
+  {"Fork", 4, logic_fork},
+  {"Eject", 5, logic_eject},
+  {"Take", 4, logic_take},
+  {"Set", 3, logic_set},
+  {"IncantationStart", 16, logic_incantation_start},
+  {"Incantation", 11, logic_incantation},
+  {NULL, 0, logic_unknown}
+ };
 
 static int		run(t_server *server,
 			    t_client *client,

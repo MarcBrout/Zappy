@@ -1,12 +1,13 @@
 /*
-** direction_manager.c for zappy in server/src/core
+** direction_manager.c for zappy in /Documents/reseau/PSU_2016_zappy
 **
-** Made by brout_m
-** Login   <marc.brout@epitech.eu>
+** Made by Edouard
+** Login   <edouard@epitech.net>
 **
-** Started on  Tue Jun 27 01:47:19 2017 brout_m
-** Last update Tue Jun 27 01:50:50 2017 brout_m
+** Started on  Tue Jun 27 17:21:11 2017 Edouard
+** Last update Tue Jun 27 17:21:27 2017 Edouard
 */
+
 #include <math.h>
 #include <stdlib.h>
 #include "server.h"
@@ -68,9 +69,9 @@ static int			find_value_prev_x(size_t len_x, size_t len_y)
   return (1);
 }
 
-static void			change_dir(Direction dir, int *pos_x, int *pos_y)
+static void	change_dir(Direction dir, int *pos_x, int *pos_y)
 {
-  int				tmp;
+  int		tmp;
 
   if (dir == WEST)
     {
@@ -112,7 +113,6 @@ int				find_direction(t_server *server,
     {
       if (direction_tab[i].x_r == x_prev && direction_tab[i].y_r == y_prev)
 	return (direction_tab[i].id);
-      ++i;
     }
   return (0);
 }

@@ -5,7 +5,7 @@
 ## Login   <pierre@e	pitech.net>
 ##
 ## Started on  Sat Jun 10 21:33:53 2017 PierreBougon
-## Last update Mon Jun 26 14:35:42 2017 brout_m
+## Last update Tue Jun 27 11:45:50 2017 Edouard
 ##
 
 include ../mk/colors.mk ../mk/commands.mk ../mk/definitions.mk
@@ -85,7 +85,6 @@ SERVER_RAW_SRC=		server.c 			\
 			$(GUIEVE)pnw.c 			\
 			$(GUIEVE)seg.c 			\
 			$(GUIEVE)smg.c 			\
-			$(IALOG)unknown.c		\
 			$(IACMD)broadcast.c		\
 			$(IACMD)connect_nbr.c		\
 			$(IACMD)death.c			\
@@ -93,11 +92,26 @@ SERVER_RAW_SRC=		server.c 			\
 		 	$(IACMD)fork.c			\
 			$(IACMD)forward.c 		\
 			$(IACMD)incantation.c		\
-			$(IACMD)inventory_look.c	\
+			$(IACMD)inventory.c		\
+			$(IACMD)look.c			\
 			$(IACMD)left.c 			\
 			$(IACMD)right.c 		\
 			$(IACMD)take_set.c 		\
-			$(IACMD)unknown.c
+			$(IACMD)unknown.c		\
+			$(IALOG)broadcast.c		\
+			$(IALOG)connect_nbr.c		\
+			$(IALOG)eject.c			\
+			$(IALOG)fork_start.c		\
+		 	$(IALOG)fork.c			\
+			$(IALOG)forward.c 		\
+			$(IALOG)incantation_start.c	\
+			$(IALOG)incantation.c		\
+			$(IALOG)inventory.c		\
+			$(IALOG)look.c			\
+			$(IALOG)left.c 			\
+			$(IALOG)right.c 		\
+			$(IALOG)take_set.c 		\
+			$(IALOG)unknown.c
 
 SERVER_SRC=		$(addprefix src/, $(SERVER_RAW_SRC))
 

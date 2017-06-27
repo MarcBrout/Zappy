@@ -1,10 +1,16 @@
-//
-// Created by puilla_e on 09/06/17.
-//
+/*
+** logic_look.c for zappy in server
+**
+** Made by Edouard
+** Login   <edouard@epitech.net>
+**
+** Started on  Tue Jun 27 17:31:57 2017 Edouard
+** Last update Tue Jun 27 17:32:03 2017 Edouard
+*/
 
 #include <string.h>
-#include "server/ia_commands.h"
-#include "server/send.h"
+#include "server.h"
+#include "server/logic_commands.h"
 
 static const char *obj_tab[OBJ_COUNT] =
  {
@@ -17,28 +23,9 @@ static const char *obj_tab[OBJ_COUNT] =
   "thystame"
  };
 
-int		ia_inventory(t_server *server, ID id, char *cmd)
-{
-  Object	obj;
-  t_client	*client;
-
-  (void) cmd;
-  obj = FOOD;
-  client = &server->game.clients[id];
-  send_to_ia(server, id, "[%s %d", obj_tab[obj], client->ia.inventory[obj]);
-  ++obj;
-  while (obj < THYSTAME)
-    {
-      send_to_ia(server, id, ",%s %d", obj_tab[obj], client->ia.inventory[obj]);
-      ++obj;
-    }
-  send_to_ia(server, id, ",%s %d]\n", obj_tab[obj], client->ia.inventory[obj]);
-  return (0);
-}
-
 static bool	look_tile_player(t_server *server,
-				 t_client *client,
-				 t_position *pos)
+				    t_client *client,
+				    t_position *pos)
 {
   ID		cli;
   bool		space;
@@ -100,12 +87,29 @@ static Direction change_dir(Direction src, bool left)
   return (src + 1);
 }
 
-int		ia_look(t_server *server, ID id, char *cmd)
+static	void	look_print_line(t_server *server,
+				t_client *client,
+				t_position *pos,
+				int len_line)
+{
+  int 		j;
+
+  j = -1;
+  while (++j < 2 * len_line + 1)
+    {
+      if (len_line != 0)
+	strncircular(&client->w, ",", strlen(","));
+      look_tile(server, client, pos);
+      if (j != 2 * len_line)
+	forward_pos(server, pos, change_dir(client->ia.dir, false), 1);
+    }
+}
+
+int		logic_look(t_server *server, ID id, char *cmd)
 {
   t_client	*client;
   t_position	pos;
   int		i;
-  int 		j;
 
   (void) cmd;
   client = &server->game.clients[id];
@@ -114,15 +118,7 @@ int		ia_look(t_server *server, ID id, char *cmd)
   i = -1;
   while (++i <= (int) client->ia.level)
     {
-      j = -1;
-      while (++j < 2 * i + 1)
-	{
-	  if (i != 0)
-	    strncircular(&client->w, ",", strlen(","));
-	  look_tile(server, client, &pos);
-	  if (j != 2 * i)
-	    forward_pos(server, &pos, change_dir(client->ia.dir, false), 1);
-	}
+      look_print_line(server, client, &pos, i);
       forward_pos(server, &pos, client->ia.dir, 1);
       forward_pos(server, &pos, change_dir(client->ia.dir, true), i + i - 1);
     }

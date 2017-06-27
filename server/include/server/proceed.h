@@ -11,7 +11,7 @@
 # define PROCEED_H_
 
 # include <sys/socket.h>
-# include "server/server_data.h"
+# include "server_data.h"
 
 typedef int		(*func_t)(t_server *server, ID id, char *cmd);
 
@@ -46,6 +46,25 @@ enum			IA_COMMANDS
     INCANTATION,
     IA_END
   };
+
+enum			IA_LOGICS
+{
+  LOGIC_FORWARD = 0,
+  LOGIC_RIGHT,
+  LOGIC_LEFT,
+  LOGIC_LOOK,
+  LOGIC_INVENTORY,
+  LOGIC_BRODCAST,
+  LOGIC_CONNECT_NBR,
+  LOGIC_FORK_START,
+  LOGIC_FORK,
+  LOGIC_EJECT,
+  LOGIC_TAKE,
+  LOGIC_SET,
+  LOGIC_INCANTATION_START,
+  LOGIC_INCANTATION,
+  LOGIC_END
+};
 
 typedef struct		s_command
 {

@@ -1,12 +1,13 @@
 /*
-** direction_manager.h for zappy in PSU_2016_zappy/server
+** direction_manager.h for zappy in PSU_2016_zappyserver
 **
-** Made by brout_m
-** Login   <marc.brout@epitech.eu>
+** Made by Edouard
+** Login   <edouard@epitech.net>
 **
-** Started on  Tue Jun 27 01:33:11 2017 brout_m
-** Last update Tue Jun 27 16:56:48 2017 brout_m
+** Started on  Tue Jun 27 17:22:52 2017 Edouard
+** Last update Tue Jun 27 17:23:02 2017 Edouard
 */
+
 #ifndef DIRECTION_MANAGER_H_
 # define DIRECTION_MANAGER_H_
 
@@ -20,9 +21,9 @@
 
 typedef struct	s_direction
 {
-  int 		x_r;
-  int 		y_r;
-  int 		id;
+  int		x_r;
+  int		y_r;
+  int		id;
 }		t_direction;
 
 int		find_direction(t_server *server,

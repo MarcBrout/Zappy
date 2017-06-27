@@ -5,7 +5,7 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sat Jun 24 16:51:27 2017 brout_m
-** Last update Sat Jun 24 16:53:14 2017 brout_m
+** Last update Tue Jun 27 17:27:10 2017 Edouard
 */
 #ifndef STORE_COMMANDS_H_
 # define STORE_COMMANDS_H_
@@ -13,6 +13,7 @@
 # define CMD_LENGTH 100
 
 # include <stdint.h>
+# include <stdbool.h>
 
 typedef struct s_cmd	t_cmd;
 typedef struct s_store	t_store;
@@ -21,6 +22,7 @@ struct			s_cmd
 {
   char			command[CMD_LENGTH];
   uint64_t		cooldown;
+  bool			in_limit;
   struct s_cmd		*next;
 };
 
@@ -37,6 +39,14 @@ struct			s_store
 ** and updated automatically
 */
 int store_command(t_store *store, const char *cmd, uint64_t cooldown);
+
+/*
+** Returns 1 if an allocation error occurred, return -1 if there are no first
+** element in the list (bad use), return 0 otherwise.
+*/
+int	store_command_sequel(t_store *store,
+			     const char *cmd,
+			     uint64_t cooldown);
 
 /*
 ** Returns NULL if no commands were found

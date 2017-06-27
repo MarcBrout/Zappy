@@ -5,8 +5,13 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sun Jun 25 02:36:40 2017 brout_m
+<<<<<<< HEAD
 ** Last update Tue Jun 27 01:44:28 2017 brout_m
+=======
+** Last update Tue Jun 27 17:20:57 2017 Edouard
+>>>>>>> make_ia_logic
 */
+
 #include <server.h>
 #include <stdlib.h>
 #include "server/gui_events.h"
@@ -26,20 +31,19 @@ static void	increment_team_count(t_server *server, Team id, int value)
   }
 }
 
-int		add_egg(t_server *server, t_client *ia,
-                           t_position *pos, Team id)
+t_egg		*add_egg(t_server *server, t_position *pos, Team id)
 {
   t_egg		*egg;
   t_egg		*tmp;
 
   if ((egg = malloc(sizeof(egg))) == NULL)
-    return (1);
+    return (NULL);
   egg->pos.y = pos->y;
   egg->pos.x = pos->x;
   egg->team = id;
   egg->hatching = HATCHING;
   egg->next = NULL;
-  egg->layer = ia->id;
+  egg->layer = id;
   tmp = server->game.eggs;
   if (tmp == NULL)
     server->game.eggs = egg;
@@ -50,7 +54,7 @@ int		add_egg(t_server *server, t_client *ia,
       tmp->next = egg;
     }
   increment_team_count(server, id, 1);
-  return (0);
+  return (egg);
 }
 
 bool		remove_first_egg(t_server *server, Team id)
