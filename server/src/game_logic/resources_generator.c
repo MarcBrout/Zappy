@@ -44,6 +44,7 @@ static uint32_t	check_deads(t_server *server, t_client *clients, int size)
 	  else
 	    {
 	      ++alive;
+              --clients->ia.inventory[FOOD];
 	    }
 	}
       ++i;
