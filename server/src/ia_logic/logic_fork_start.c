@@ -1,6 +1,12 @@
-//
-// Created by puilla_e on 09/06/17.
-//
+/*
+** logic_fork_start.c for zappy in server
+**
+** Made by Edouard
+** Login   <edouard@epitech.net>
+**
+** Started on  Tue Jun 27 17:28:55 2017 Edouard
+** Last update Tue Jun 27 17:29:01 2017 Edouard
+*/
 
 #include "server/gui_events.h"
 

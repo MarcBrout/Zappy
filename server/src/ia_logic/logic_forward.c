@@ -1,6 +1,12 @@
-//
-// Created by puilla_e on 09/06/17.
-//
+/*
+** logic_forward.c for zappy in server
+**
+** Made by Edouard
+** Login   <edouard@epitech.net>
+**
+** Started on  Tue Jun 27 17:29:56 2017 Edouard
+** Last update Tue Jun 27 17:30:02 2017 Edouard
+*/
 
 #include <string.h>
 #include "server/server_data.h"

@@ -1,6 +1,12 @@
-//
-// Created by puilla_e on 09/06/17.
-//
+/*
+** logic_incantation_start.c for zappy in server
+**
+** Made by Edouard
+** Login   <edouard@epitech.net>
+**
+** Started on  Tue Jun 27 17:30:59 2017 Edouard
+** Last update Tue Jun 27 17:31:04 2017 Edouard
+*/
 
 #include <string.h>
 #include "server/gui_events.h"

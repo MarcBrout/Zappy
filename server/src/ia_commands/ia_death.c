@@ -1,6 +1,12 @@
-//
-// Created by puilla_e on 09/06/17.
-//
+/*
+** ia_death.c for zappy in server
+**
+** Made by Edouard
+** Login   <edouard@epitech.net>
+**
+** Started on  Tue Jun 27 17:33:50 2017 Edouard
+** Last update Tue Jun 27 17:33:56 2017 Edouard
+*/
 
 #include <string.h>
 #include "server.h"

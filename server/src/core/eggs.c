@@ -5,8 +5,9 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sun Jun 25 02:36:40 2017 brout_m
-** Last update Sun Jun 25 02:38:22 2017 brout_m
+** Last update Tue Jun 27 17:20:57 2017 Edouard
 */
+
 #include <server.h>
 #include <stdlib.h>
 #include "server/gui_events.h"

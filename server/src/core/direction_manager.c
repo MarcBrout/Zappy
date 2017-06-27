@@ -1,3 +1,13 @@
+/*
+** direction_manager.c for zappy in /Documents/reseau/PSU_2016_zappy
+**
+** Made by Edouard
+** Login   <edouard@epitech.net>
+**
+** Started on  Tue Jun 27 17:21:11 2017 Edouard
+** Last update Tue Jun 27 17:21:27 2017 Edouard
+*/
+
 #include <math.h>
 #include <stdlib.h>
 #include "server.h"
@@ -56,7 +66,7 @@ static int	find_value_prev_x(size_t len_x, size_t len_y)
   return (1);
 }
 
-static void 	change_dir(Direction dir, int *pos_x, int *pos_y)
+static void	change_dir(Direction dir, int *pos_x, int *pos_y)
 {
   int 		tmp;
 

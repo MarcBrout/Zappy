@@ -1,6 +1,12 @@
-//
-// Created by puilla_e on 09/06/17.
-//
+/*
+** logic_eject.c for zappy in server
+**
+** Made by Edouard
+** Login   <edouard@epitech.net>
+**
+** Started on  Tue Jun 27 17:28:29 2017 Edouard
+** Last update Tue Jun 27 17:28:36 2017 Edouard
+*/
 
 #include <string.h>
 #include "server/gui_events.h"

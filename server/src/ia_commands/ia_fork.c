@@ -1,6 +1,12 @@
-//
-// Created by puilla_e on 09/06/17.
-//
+/*
+** ia_fork.c for zappy in server
+**
+** Made by Edouard
+** Login   <edouard@epitech.net>
+**
+** Started on  Tue Jun 27 17:34:26 2017 Edouard
+** Last update Tue Jun 27 17:34:33 2017 Edouard
+*/
 
 #include "server/server_data.h"
 
