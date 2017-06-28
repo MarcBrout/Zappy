@@ -45,7 +45,6 @@ namespace zappy
 
     AILogic(Core &core);
     virtual ~AILogic();
-
     void run();
 
   private:
@@ -61,12 +60,28 @@ namespace zappy
     std::size_t m_id;
     std::size_t m_trackId;
     std::size_t m_dir;
+    bool m_needFood;
 
-    bool        needFood();
     inventory_t getInventory(std::string const &inventory);
     void getLook(std::string const &);
     bool wasWaiting();
     bool stopBroadcast();
+
+    void fillInitialState();
+    bool needFood();
+    bool searchFood();
+    bool wasOnWaitingState();
+    bool goToWaitingState();
+    bool wasOnJoinningState();
+    bool goToJoinningState();
+    bool receivedHelp();
+    bool initJoinningState();
+    bool wasOnSearchingState();
+    bool goToSearchingState();
+    bool canIFork();
+    bool goFork();
+    bool missingObject();
+    bool searchObject();
 
     void fillSearchState();
     bool objOnCase();
