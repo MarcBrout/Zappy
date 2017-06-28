@@ -40,8 +40,7 @@ static int	send_incantation_end(t_server *server,
     {
       if (server->game.clients[cli].alive && cli != client->sock &&
 	  server->game.clients[cli].ia.pos.x == client->ia.pos.x &&
-	  server->game.clients[cli].ia.pos.y == client->ia.pos.y &&
-	  server->game.clients[cli].ia.level == client->ia.level)
+	  server->game.clients[cli].ia.pos.y == client->ia.pos.y)
 	{
 	  ++server->game.clients[cli].ia.level;
 	  //TODO GUI add event plv (level of player)

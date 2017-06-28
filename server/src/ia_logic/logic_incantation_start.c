@@ -23,6 +23,34 @@ static const int incant_tab[MAX_INCANT][OBJ_COUNT] =
   {6, 2, 2, 2, 2, 2, 1}
  };
 
+static void	send_incantation_start(t_server *server,
+				       t_client *client,
+				       int max_player)
+{
+  ID 		cli;
+  int 		nb_player;
+  int 		len;
+
+  cli = 0;
+  nb_player = 1;
+  len = strlen("Elevation underway\n");
+  strncircular(&client->w, "Elevation underway\n", len);
+  while (nb_player < max_player &&
+	 cli < server->game.max_slot)
+    {
+      if (server->game.clients[cli].alive && cli != client->sock &&
+	  server->game.clients[cli].ia.pos.x == client->ia.pos.x &&
+	  server->game.clients[cli].ia.pos.y == client->ia.pos.y)
+	{
+	  strncircular(&server->game.clients[cli].w,
+		       "Elevation underway\n",
+		       len);
+	  ++nb_player;
+	}
+      ++cli;
+    }
+}
+
 static int	count_player(t_server *server,
 			       t_client *client)
 {
@@ -84,6 +112,7 @@ int		logic_incantation_start(t_server *server, ID id, char *cmd)
   if (check_incantation(server, id, client, cell) == 1)
     return (0);
   event_pic(server, client);
+  send_incantation_start(server, client, incant_tab[client->ia.level][0]);
   ret = store_command_sequel(&server->game.clients[id].store,
 			     "Incantation",
 			     300);
