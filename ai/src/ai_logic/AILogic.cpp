@@ -16,7 +16,7 @@ namespace zappy
         m_splitter(), m_search(""), m_look(), m_directObj(false),
         m_fullLine(0), m_fullTurn(0), m_curLvl(1),
         m_id(static_cast<std::size_t>(std::rand())), m_trackId(0), m_dir(1),
-        m_needFood(false)
+        m_needFood(false), m_incant(false)
   {
     fillInitialState();
     fillSearchState();
@@ -63,7 +63,6 @@ namespace zappy
 		finalForwardJoin();
 		break;
 	      case STATE::ACTIVE_WAITING:
-		takeObjActive();
 		break;
 	      case STATE::PASSIVE_WAITING:
 		turnPass();
@@ -95,11 +94,13 @@ namespace zappy
     inventory_t values;
     for (std::uint32_t i = 0; i < rawValues.size(); ++i)
       {
-	std::uint64_t pos = rawValues[i].find(' ', 0);
+	std::uint32_t pos =
+	    static_cast<std::uint32_t>(rawValues[i].find(' ', 0));
 
 	if (rawValues[i] != "")
 	  {
-	    values[i] = std::stol(rawValues[i].substr(pos + 1));
+	    values[i] = static_cast<std::uint32_t>(
+	        std::stol(rawValues[i].substr(pos + 1)));
 	  }
       }
     return values;
@@ -122,7 +123,7 @@ namespace zappy
 
   bool AILogic::finalForward()
   {
-    sendActionAndCheckResponse(ACTION::FORWARD, "Forward", 1, {});
+    sendActionAndCheckResponse(ACTION::FORWARD, "", 0, {});
     ++m_fullLine;
     return true;
   }
@@ -138,7 +139,7 @@ namespace zappy
   {
     if (!m_directObj)
       {
-	sendActionAndCheckResponse(ACTION::FORWARD, "Forward", 1, {});
+	sendActionAndCheckResponse(ACTION::FORWARD, "", 0, {});
       }
     m_fullLine = 0;
     m_fullTurn = 0;
@@ -331,7 +332,7 @@ namespace zappy
 
   bool AILogic::finalForwardJoin()
   {
-    sendActionAndCheckResponse(ACTION::FORWARD, "Forward", 1, {});
+    sendActionAndCheckResponse(ACTION::FORWARD, "", 0, {});
     return true;
   }
 
@@ -624,64 +625,79 @@ namespace zappy
    */
   bool AILogic::adjustResources()
   {
-      // Compare resource of the current case and what it needs for the incantation
-      std::vector<std::uint32_t> nbObjInCase;
-      nbObjInCase.resize(7, 0);
+    // Compare resource of the current case and what it needs for the
+    // incantation
+    std::vector<std::uint32_t> nbObjInCase;
+    nbObjInCase.resize(7, 0);
 
-      nbObjInCase[0] = gl_incantations[m_curLvl - 1][0];
-      std::vector<std::string> typeObjInCase;
-      m_splitter.clear();
-      m_splitter.split(m_look[0], " ", false);
-      m_splitter.moveTokensTo(typeObjInCase);
+    nbObjInCase[0] = gl_incantations[m_curLvl - 1][0];
+    std::vector<std::string> typeObjInCase;
+    m_splitter.clear();
+    m_splitter.split(m_look[0], " ", false);
+    m_splitter.moveTokensTo(typeObjInCase);
 
-      // Loop on all obj in the case
-      for (std::string typeObj : typeObjInCase)
+    // Loop on all obj in the case
+    for (std::string typeObj : typeObjInCase)
       {
-          std::uint32_t idxType(0);
-          for (std::string type : gl_names)
-          {
-              if (type != "player" && type == typeObj)
-              {
-                  ++nbObjInCase[idxType];
-                  break;
-              }
-              ++idxType;
-          }
+	std::uint32_t idxType(0);
+	for (std::string type : gl_names)
+	  {
+	    if (type != "player" && type == typeObj)
+	      {
+		++nbObjInCase[idxType];
+		break;
+	      }
+	    ++idxType;
+	  }
       }
-      if (nbObjInCase == gl_incantations[m_curLvl - 1])
-        return true;
-      else
+    if (nbObjInCase == gl_incantations[m_curLvl - 1])
+      return true;
+    else
       {
-          // Miss or too much obj in the current case. Send a specific command
-          // which adjust nb of obj.
-          std::string   needed("");
-          std::uint32_t nbCommand(0);
-          for (std::uint32_t idx(0); idx < nbObjInCase.size(); ++idx)
-          {
-              if (nbObjInCase[idx] > gl_incantations[m_curLvl - 1][idx])
-              {
-                  if (needed != "")
-                      needed += "\n";
-                  needed += "Take " + gl_names[idx];
-                  ++nbCommand;
-              }
-              else if (nbObjInCase[idx] < gl_incantations[m_curLvl - 1][idx])
-              {
-                  if (needed != "")
-                      needed += "\n";
-                  needed += "Drop " + gl_names[idx];
-                  ++nbCommand;
-              }
-              ++idx;
-          }
-          sendActionAndCheckResponse(ACTION::RAW, needed, nbCommand, {});
-          return false;
+	// Miss or too much obj in the current case. Send a specific command
+	// which adjust nb of obj.
+	std::string   needed("");
+	std::uint32_t nbCommand(0);
+	for (std::uint32_t idx(0); idx < nbObjInCase.size(); ++idx)
+	  {
+	    if (nbObjInCase[idx] > gl_incantations[m_curLvl - 1][idx])
+	      {
+		if (needed != "")
+		  needed += "\n";
+		needed += "Take " + gl_names[idx];
+		++nbCommand;
+	      }
+	    else if (nbObjInCase[idx] < gl_incantations[m_curLvl - 1][idx])
+	      {
+		if (needed != "")
+		  needed += "\n";
+		needed += "Set " + gl_names[idx];
+		++nbCommand;
+	      }
+	    ++idx;
+	  }
+	sendActionAndCheckResponse(ACTION::RAW, needed, nbCommand, {});
+	return false;
       }
   }
 
   bool AILogic::incantation()
   {
-    return false;
+    if (sendActionAndCheckResponse(ACTION::INCANTATION, "", 1,
+                                   {"Elevation underway"}))
+      {
+	m_incant = true;
+	m_state = STATE::PASSIVE_WAITING;
+      }
+    else
+      {
+	m_state = STATE::INITIAL;
+	sendActionAndCheckResponse(ACTION::BROADCAST,
+	                           std::to_string(m_id) + " " +
+	                               std::to_string(m_curLvl) + " STOP",
+	                           1, {});
+      }
+    return true;
   }
 
   bool AILogic::wasWaiting()
@@ -744,27 +760,27 @@ namespace zappy
 
   bool AILogic::wasOnWaitingState()
   {
-    return false;
+    return m_state == STATE::PASSIVE_WAITING ||
+           m_state == STATE::ACTIVE_WAITING;
   }
 
   bool AILogic::goToWaitingState()
   {
-    return false;
+    return true;
   }
 
   bool AILogic::wasOnJoinningState()
   {
-    return false;
+    return m_state == STATE::JOINING;
   }
 
   bool AILogic::goToJoinningState()
   {
-    return false;
+    return true;
   }
 
   bool AILogic::receivedHelp()
   {
-
     return false;
   }
 
@@ -775,31 +791,45 @@ namespace zappy
 
   bool AILogic::wasOnSearchingState()
   {
-    return false;
+    return m_state == STATE::SEARCHING;
   }
 
   bool AILogic::goToSearchingState()
   {
-    return false;
+    return true;
   }
 
   bool AILogic::canIFork()
   {
-    return false;
+    sendActionAndCheckResponse(ACTION::UNUSED_SLOTS, "", 0, {});
+    return !std::stoi(_response[0]);
   }
 
   bool AILogic::goFork()
   {
+    sendActionAndCheckResponse(ACTION::FORK, "", 0, {});
+    sendActionAndCheckResponse(ACTION::FORWARD, "", 0, {});
     return false;
   }
 
   bool AILogic::missingObject()
   {
+    sendActionAndCheckResponse(ACTION::INVENTORY, "", 0, {});
+    inventory_t inventory = getInventory(_response[0]);
+    for (std::size_t idx(1); idx < gl_incantations[m_curLvl - 1].size(); ++idx)
+      {
+	if (inventory[idx] < gl_incantations[m_curLvl - 1][idx])
+	  {
+	    m_search = gl_names[idx];
+	    return true;
+	  }
+      }
     return false;
   }
 
   bool AILogic::searchObject()
   {
-    return false;
+    m_state = STATE::SEARCHING;
+    return true;
   }
 }

@@ -20,7 +20,7 @@ namespace zappy
     typedef bool (AILogic::*condPtr)();
     typedef bool (AILogic::*actionPtr)();
 
-    typedef std::vector<std::int64_t> inventory_t;
+    typedef std::vector<std::uint32_t> inventory_t;
     typedef std::vector<std::string>  look_t;
 
     enum STATE
@@ -61,6 +61,7 @@ namespace zappy
     std::size_t m_trackId;
     std::size_t m_dir;
     bool m_needFood;
+    bool m_incant;
 
     inventory_t getInventory(std::string const &inventory);
     void getLook(std::string const &);
