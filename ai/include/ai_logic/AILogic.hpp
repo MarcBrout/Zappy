@@ -94,7 +94,8 @@ namespace zappy
     bool passiveToInitial();
     bool turnPass();
     bool broadcastStopPass();
-    bool passEnd();
+    bool checkContent();
+    bool pickUpObject();
 
     void fillActiveState();
     bool missingPlayer();

@@ -67,8 +67,13 @@ void zappy::Core::manageResponse(std::string servMessage)
   Logger::log(Logger::_DEBUG_, "command received : " + servMessage);
   if (servMessage == "dead")
     _running = false;
-  else if (servMessage.substr(0, servMessage.find(" ")) == "message")
-    _ai->setMessage(servMessage);
+  else if (servMessage.substr(0, servMessage.find(" ")) == "message" ||
+           servMessage.substr(0, servMessage.find(":")) == "eject" ||
+           servMessage == "Elevation underway" ||
+           servMessage.substr(0, servMessage.find(":")) == "Current level")
+    {
+      _ai->setMessage(servMessage);
+    }
   else
     {
       --_waitingForResponse;
