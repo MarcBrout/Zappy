@@ -9,7 +9,9 @@
 #include "core_ai/CoreAI.hpp"
 #include "ai_logic/AILogic.hpp"
 
-zappy::Core::Core() : _running(false), _waitingForResponse(0), _ai(std::make_unique<AILogic>(*this))
+zappy::Core::Core()
+    : _running(false), _waitingForResponse(0),
+      _ai(std::make_unique<AILogic>(*this))
 {
 }
 
@@ -36,9 +38,9 @@ void zappy::Core::run()
       _ai->sendAction(CoreAI::FORWARD);
 
       if (waitForReponses(1, {"ok"}))
-      {
-        Logger::log(Logger::_DEBUG_, "forward ok!");
-      }
+	{
+	  Logger::log(Logger::_DEBUG_, "forward ok!");
+	}
 
       ::usleep(10);
     }
@@ -70,7 +72,8 @@ void zappy::Core::manageResponse(std::string servMessage)
   else if (servMessage.substr(0, servMessage.find(" ")) == "message" ||
            servMessage.substr(0, servMessage.find(":")) == "eject" ||
            servMessage == "Elevation underway" ||
-           servMessage.substr(0, servMessage.find(":")) == "Current level")
+           servMessage.substr(0, servMessage.find(":")) == "Current level" ||
+           (_ai->isIncantating() && servMessage == "ko"))
     {
       _ai->setMessage(servMessage);
     }

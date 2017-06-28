@@ -21,7 +21,7 @@ namespace zappy
     typedef bool (AILogic::*actionPtr)();
 
     typedef std::vector<std::uint32_t> inventory_t;
-    typedef std::vector<std::string>  look_t;
+    typedef std::vector<std::string>   look_t;
 
     enum STATE
     {
@@ -46,6 +46,7 @@ namespace zappy
     AILogic(Core &core);
     virtual ~AILogic();
     void run();
+    bool isIncantating() const;
 
   private:
     STATE m_state;
@@ -60,8 +61,8 @@ namespace zappy
     std::size_t m_id;
     std::size_t m_trackId;
     std::size_t m_dir;
-    bool m_needFood;
-    bool m_incant;
+    bool        m_needFood;
+    bool        m_incant;
 
     inventory_t getInventory(std::string const &inventory);
     void getLook(std::string const &);
@@ -105,6 +106,8 @@ namespace zappy
     bool endJoin();
 
     void fillPassiveState();
+    bool incantFailed();
+    bool sendStop();
     bool broadcastSuccess();
     bool updateLvl();
     bool passiveToInitial();
@@ -118,7 +121,6 @@ namespace zappy
     bool broadcastHelpActive();
     bool incantation();
     bool adjustResources();
-
   };
 }
 

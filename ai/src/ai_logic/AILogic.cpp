@@ -29,17 +29,20 @@ namespace zappy
   {
     std::vector<std::pair<condPtr, actionPtr>>::iterator it;
 
-    for (it = m_logic[STATE::INITIAL].begin();
-         it != m_logic[STATE::INITIAL].end(); ++it)
+    if (!m_incant)
       {
-	if ((this->*(it->first))())
-	  {
-	    (this->*(it->second))();
-	    break;
-	  }
+        for (it = m_logic[STATE::INITIAL].begin();
+             it != m_logic[STATE::INITIAL].end(); ++it)
+          {
+            if ((this->*(it->first))())
+              {
+                (this->*(it->second))();
+                break;
+              }
+          }
+        if (it == m_logic[STATE::INITIAL].end())
+          m_state = STATE::ACTIVE_WAITING;
       }
-    if (it == m_logic[STATE::INITIAL].end())
-      m_state = STATE::ACTIVE_WAITING;
 
     if (m_state != STATE::INITIAL)
       {
@@ -402,6 +405,8 @@ namespace zappy
     std::vector<std::pair<condPtr, actionPtr>> passiveVec;
 
     passiveVec.push_back(std::make_pair<condPtr, actionPtr>(
+        &zappy::AILogic::incantFailed, &zappy::AILogic::sendStop));
+    passiveVec.push_back(std::make_pair<condPtr, actionPtr>(
         &zappy::AILogic::broadcastSuccess, &zappy::AILogic::updateLvl));
     passiveVec.push_back(
         std::make_pair<condPtr, actionPtr>(&zappy::AILogic::broadcastStopPass,
@@ -409,6 +414,35 @@ namespace zappy
     passiveVec.push_back(std::make_pair<condPtr, actionPtr>(
         &zappy::AILogic::checkContent, &zappy::AILogic::pickUpObject));
     m_logic[STATE::PASSIVE_WAITING] = passiveVec;
+  }
+
+  bool AILogic::incantFailed()
+  {
+    bool ko = false;
+    if (m_incant)
+      {
+	// Searching an eventual ko from the server
+	if (std::for_each(_message.begin(), _message.end(),
+	                  [&ko, this](std::string const &str) {
+	                    if (str == "ko")
+	                      {
+	                        ko = true;
+	                      };
+	                  }));
+        if (ko)
+          m_incant = false;
+      }
+    return ko;
+  }
+
+  bool AILogic::sendStop()
+  {
+    sendActionAndCheckResponse(ACTION::BROADCAST,
+                               std::to_string(m_id) + " " +
+                                   std::to_string(m_curLvl) + " STOP",
+                               1, {});
+    m_state = STATE::INITIAL;
+    return false;
   }
 
   bool AILogic::broadcastSuccess()
@@ -433,6 +467,8 @@ namespace zappy
   bool AILogic::updateLvl()
   {
     ++m_curLvl;
+    if (m_incant)
+      m_incant = false;
     m_state = STATE::INITIAL;
     return true;
   }
@@ -446,7 +482,8 @@ namespace zappy
 
   bool AILogic::turnPass()
   {
-    sendActionAndCheckResponse(ACTION::LEFT, "", 0, {});
+    if (!m_incant)
+      sendActionAndCheckResponse(ACTION::LEFT, "", 0, {});
     return true;
   }
 
@@ -463,40 +500,44 @@ namespace zappy
 
   bool AILogic::checkContent()
   {
-    sendActionAndCheckResponse(ACTION::LOOK, "", 0, {});
-
-    // Getting content off cell 0
-    m_splitter.clear();
-    m_splitter.split(_response[0], "[,]");
-    std::vector<std::string> cells;
-    m_splitter.moveTokensTo(cells);
-
-    // Splitting cell 0 to a vector of object names
-    m_splitter.clear();
-    m_splitter.split(cells[1], " ");
-    std::vector<std::string> objects;
-    m_splitter.moveTokensTo(objects);
-
-    // Counting objects
-    gl_contentDiff.clear();
-    gl_contentDiff.resize(7, 0);
-    for (std::string const &obj : objects)
+    if (m_incant)
       {
-	for (std::uint32_t i = 0; i < gl_names.size(); ++i)
+	sendActionAndCheckResponse(ACTION::LOOK, "", 0, {});
+
+	// Getting content off cell 0
+	m_splitter.clear();
+	m_splitter.split(_response[0], "[,]");
+	std::vector<std::string> cells;
+	m_splitter.moveTokensTo(cells);
+
+	// Splitting cell 0 to a vector of object names
+	m_splitter.clear();
+	m_splitter.split(cells[1], " ");
+	std::vector<std::string> objects;
+	m_splitter.moveTokensTo(objects);
+
+	// Counting objects
+	gl_contentDiff.clear();
+	gl_contentDiff.resize(7, 0);
+	for (std::string const &obj : objects)
 	  {
-	    if (gl_names[i] == obj)
+	    for (std::uint32_t i = 0; i < gl_names.size(); ++i)
 	      {
-		++gl_contentDiff[i];
-		break;
+		if (gl_names[i] == obj)
+		  {
+		    ++gl_contentDiff[i];
+		    break;
+		  }
 	      }
 	  }
+
+	// Ignoring "player" difference
+	gl_contentDiff[0] = gl_incantations[m_curLvl - 1][0];
+
+	// Return difference between required and actual content
+	return gl_contentDiff != gl_incantations[m_curLvl - 1];
       }
-
-    // Ignoring "player" difference
-    gl_contentDiff[0] = gl_incantations[m_curLvl - 1][0];
-
-    // Return difference between required and actual content
-    return gl_contentDiff != gl_incantations[m_curLvl - 1];
+    return false;
   }
 
   bool AILogic::pickUpObject()
@@ -618,6 +659,7 @@ namespace zappy
                                    std::to_string(m_curLvl) + " HELP",
                                1, {});
     adjustResources();
+    return true;
   }
 
   /*
@@ -707,6 +749,10 @@ namespace zappy
 
   bool AILogic::stopBroadcast()
   {
+    sendActionAndCheckResponse(ACTION::BROADCAST,
+                               std::to_string(m_id) + " " +
+                                   std::to_string(m_curLvl) + " STOP",
+                               1, {});
     return false;
   }
 
@@ -786,19 +832,19 @@ namespace zappy
 
     for (std::string msg : _message)
       {
-        if (msg.substr(0, 7) == "message")
-          {
-            text = msg.substr(msg.find(',') + 1);
-            m_splitter.clear();
-            m_splitter.split(text, " ", false);
-            m_splitter.moveTokensTo(vecInfo);
-            if (std::stoi(vecInfo[1]) == m_curLvl && vecInfo[2] == "HELP")
-              {
-                m_dir = static_cast<std::size_t>(std::stoi(msg.substr(8, 1)));
-                m_trackId = std::stoul(vecInfo[0]);
-                return true;
-              }
-          }
+	if (msg.substr(0, 7) == "message")
+	  {
+	    text = msg.substr(msg.find(',') + 1);
+	    m_splitter.clear();
+	    m_splitter.split(text, " ", false);
+	    m_splitter.moveTokensTo(vecInfo);
+	    if (std::stoi(vecInfo[1]) == m_curLvl && vecInfo[2] == "HELP")
+	      {
+		m_dir = static_cast<std::size_t>(std::stoi(msg.substr(8, 1)));
+		m_trackId = std::stoul(vecInfo[0]);
+		return true;
+	      }
+	  }
       }
     return false;
   }
@@ -852,4 +898,9 @@ namespace zappy
     m_state = STATE::SEARCHING;
     return true;
   }
-}
+
+      bool AILogic::isIncantating() const
+      {
+        return m_incant;
+      }
+  }
