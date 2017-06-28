@@ -9,7 +9,7 @@
 */
 
 #include <string.h>
-#include "server/server_data.h"
+#include "server/gui_commands.h"
 
 void	forward_pos(t_server *server, t_position *pos, Direction dir, int nb)
 {
@@ -36,12 +36,12 @@ void	forward_pos(t_server *server, t_position *pos, Direction dir, int nb)
 
 int	logic_forward(t_server *server, ID id, char *cmd)
 {
-  //TODO GUI add event ppo
   (void)cmd;
   forward_pos(server,
 	      &server->game.clients[id].ia.pos,
 	      server->game.clients->ia.dir,
 	      1);
+  send_player_position(server, id);
   strncircular(&server->game.clients[id].w, "ok\n", strlen("ok\n"));
   return (0);
 }

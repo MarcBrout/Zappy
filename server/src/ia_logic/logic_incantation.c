@@ -8,6 +8,7 @@
 ** Last update Tue Jun 27 17:30:47 2017 Edouard
 */
 
+#include "server/gui_commands.h"
 #include "server/logic_commands.h"
 #include "server/gui_events.h"
 #include "server/ia_commands.h"
@@ -33,7 +34,7 @@ static int	send_incantation_end(t_server *server,
   cli = 0;
   nb_player = 1;
   ++client->ia.level;
-  //TODO GUI add event plv (level of player)
+  send_player_lvl(server, client->id);
   send_to_ia(server, client->id, "Current level: %u\n", client->ia.level);
   while (nb_player < max_player &&
    	 cli < server->game.max_slot)
@@ -43,7 +44,7 @@ static int	send_incantation_end(t_server *server,
 	  server->game.clients[cli].ia.pos.y == client->ia.pos.y)
 	{
 	  ++server->game.clients[cli].ia.level;
-	  //TODO GUI add event plv (level of player)
+	  send_player_lvl(server, cli);
 	  send_to_ia(server, cli, "Current level: %u\n",
 		     server->game.clients[cli].ia.level);
 	  ++nb_player;
@@ -76,7 +77,7 @@ int		logic_incantation(t_server *server, ID id, char *cmd)
       cell->objects[obj] -= incant_tab[client->ia.level][obj];
       ++obj;
     }
-  //TODO GUI add event bct (resources used on tile)
+  send_case_content(server, client->ia.pos.x, client->ia.pos.y);
   return (send_incantation_end(server, client,
 			       incant_tab[client->ia.level][0]));
 }
