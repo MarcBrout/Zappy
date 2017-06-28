@@ -20,9 +20,9 @@ void zappy::CoreAI::setMessage(std::string const &message)
   _message.push_back(message);
 }
 
-void zappy::CoreAI::setResponse(std::string const &response)
+void zappy::CoreAI::resetResponse()
 {
-  _response = response;
+  _response.clear();
 }
 
 void zappy::CoreAI::setX(size_t x)
@@ -35,8 +35,8 @@ void zappy::CoreAI::setY(size_t y)
   _pos.y = y;
 }
 
-zappy::CoreAI::CoreAI()
-    : _message(), _response(), _pos(),
+zappy::CoreAI::CoreAI(Core &core)
+    : _core(core), _message(), _response(), _pos(),
       _actions({&zappy::network::SendCommand::forward,
                 &zappy::network::SendCommand::turnLeft,
                 &zappy::network::SendCommand::turnRight,
@@ -51,4 +51,22 @@ zappy::CoreAI::CoreAI()
                 &zappy::network::SendCommand::incantation,
                 &zappy::network::SendCommand::rawcommand})
 {
+}
+
+void zappy::CoreAI::addResponse(const std::string &string)
+{
+  _response.push_back(string);
+}
+
+std::vector<std::string> const &zappy::CoreAI::getResponse()
+{
+  return _response;
+}
+
+bool zappy::CoreAI::sendActionAndCheckResponse(
+    zappy::CoreAI::ACTION action, const std::string &str, std::uint32_t count,
+    const std::vector<std::string> &answ)
+{
+  sendAction(action, str);
+  return (_core.waitForReponses(count, answ));
 }
