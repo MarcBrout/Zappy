@@ -24,7 +24,18 @@ static t_luck		drop_rates[OBJ_COUNT] =
     {THYSTAME, 0.16}
   };
 
-static uint32_t	check_deads(t_server *server, t_client *clients, int size)
+static void	kill_client(t_server *server, t_client *client)
+{
+  ia_death(server, client->id, "");
+  client->alive = false;
+  client->active = false;
+  --server->config.teams[client->ia.team].memberCount;
+  decrement_team_count(server, client->ia.team);
+}
+
+static uint32_t		check_deads(t_server *server,
+				    t_client *clients,
+				    int size)
 {
   int			i = 0;
   uint32_t		alive = 0;
@@ -33,31 +44,30 @@ static uint32_t	check_deads(t_server *server, t_client *clients, int size)
   while (i < size)
     {
       client = &clients[i];
-      if (clients->alive)
+      if (client->alive)
 	{
-	  if (clients->ia.inventory[FOOD] - 1 == 0)
+	  if (client->ia.life_unit == 0)
 	    {
-	      ia_death(server, i, "");
-	      event_pdi(server, i);
-	      client->alive = false;
+	      client->ia.life_unit = LIFE_UNIT_MAX;
+	      --client->ia.inventory[FOOD];
 	    }
+	  --client->ia.life_unit;
+	  if (client->ia.inventory[FOOD] == 0 && client->ia.life_unit == 0)
+	    kill_client(server, client);
 	  else
-	    {
-	      ++alive;
-              --clients->ia.inventory[FOOD];
-	    }
+	    ++alive;
 	}
       ++i;
     }
   return (alive);
 }
 
-static int		generate(t_server *server,
-				 t_luck const *luck,
-				 uint32_t alive)
+static int	generate(t_server *server,
+			 t_luck const *luck,
+			 uint32_t alive)
 {
-  size_t		x;
-  size_t		y;
+  size_t	x;
+  size_t	y;
 
   if (rand() % 100 < luck->value * (double)alive)
     {
@@ -69,9 +79,9 @@ static int		generate(t_server *server,
   return (0);
 }
 
-static int		generate_resources(t_server *server, uint32_t alive)
+static int	generate_resources(t_server *server, uint32_t alive)
 {
-  uint16_t		j = 0;
+  uint16_t	j = 0;
 
   while (j < OBJ_COUNT)
     {
@@ -82,9 +92,9 @@ static int		generate_resources(t_server *server, uint32_t alive)
   return (0);
 }
 
-int			proceed_one_turn(t_server *server)
+int		proceed_one_turn(t_server *server)
 {
-  uint32_t		alive;
+  uint32_t	alive;
 
   alive = check_deads(server, server->game.clients, server->game.max_slot);
   return (generate_resources(server, alive));

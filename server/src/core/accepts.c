@@ -27,7 +27,7 @@ int			accept_new_gui(t_server *server)
     }
   log_this("Accepted gui on sock : %d\n", sock);
   server->gui.sock = sock;
-  server->gui.alive = true;
+  server->gui.active = true;
   return (send_to_gui(server, "WELCOME\n"));
 }
 
@@ -58,7 +58,7 @@ int			accept_new_client(t_server *server)
   cli = find_ID(server, 0, false);
   if (cli < 0 && add_slot(server, &cli))
     return (1);
-  server->game.clients[cli].alive = true;
+  server->game.clients[cli].active = true;
   server->game.clients[cli].sock = sock;
   server->game.clients[cli].id = cli;
   log_this("Accepted client ID: %d on sock : %d\n", cli, sock);

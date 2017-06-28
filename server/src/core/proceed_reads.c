@@ -7,6 +7,7 @@
 ** Started on  Sun Jun 25 02:43:34 2017 brout_m
 ** Last update Tue Jun 27 17:07:12 2017 brout_m
 */
+
 #include <unistd.h>
 #include <sys/socket.h>
 #include <string.h>
@@ -22,7 +23,7 @@ int			find_ID(t_server *server, ID client, bool active)
   cli = 0;
   while (cli < server->game.max_slot)
     {
-      if (!active && !server->game.clients[cli].alive)
+      if (!active && !server->game.clients[cli].active)
 	return (cli);
       if (active && client == server->game.clients[cli].id)
 	return (cli);

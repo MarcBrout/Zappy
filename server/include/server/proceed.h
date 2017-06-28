@@ -82,5 +82,10 @@ int accept_new_gui(t_server *server);
 int accept_new_client(t_server *server);
 int player_connecting(t_server *server, ID playerId, char *cmd);
 int proceed_one_turn(t_server *server);
+void increment_team_count(t_server *server, Team id);
+void decrement_team_count(t_server *server, Team id);
+int count_empty_slot(t_server *server, Team team);
+void initiate_client_egg(t_server *server, ID id, Team team, t_position *pos);
+void initiate_client(t_server *server, ID id, Team team);
 
 #endif /* !PROCEED_H_ */

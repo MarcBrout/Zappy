@@ -38,7 +38,7 @@ static int		set_fds(t_server *server,
   while (ia < server->game.max_slot)
     {
       client = &server->game.clients[ia];
-      if (client->alive)
+      if (client->active)
 	{
 	  FD_SET(client->sock, fds_read);
 	  if (find_command(&client->w))

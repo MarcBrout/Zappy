@@ -27,6 +27,8 @@ static int	is_name_taken(t_config const *config, char const *name)
 {
   int		i = 0;
 
+  if (!strcmp("GRAPHIC", name))
+    return (1);
   while (i < config->team_count)
     {
       if (!strcmp(config->teams[i].name, name))

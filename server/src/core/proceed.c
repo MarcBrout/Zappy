@@ -113,7 +113,9 @@ static int		proceed_commands(t_server *server)
     while (find_command(&server->game.clients[i].r))
       {
 	strfromcircular(&server->game.clients[i].r, cmd);
-        if (player_connecting(server, i, cmd) == 1) // TODO check if -1
+        if (server->game.clients[i].active &&
+	    !server->game.clients[i].alive &&
+	    player_connecting(server, i, cmd) == 1) // TODO check if -1
           continue;
         if (run(server, &server->game.clients[i], ia_commands, cmd))
 	  return (1);

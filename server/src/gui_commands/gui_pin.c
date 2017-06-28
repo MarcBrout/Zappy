@@ -18,7 +18,7 @@ int		send_player_inventory(t_server *server, ID id)
 
   i = 0;
   ia = &server->game.clients[id].ia;
-  send_to_gui(server, "pin #%d %d %d ", id, ia->pos.x, ia->pos.y);
+  send_to_gui(server, "pin %d %d %d ", id, ia->pos.x, ia->pos.y);
   while (i < OBJ_COUNT)
     {
       send_to_gui(server, "%d", ia->inventory[i]);
@@ -26,7 +26,7 @@ int		send_player_inventory(t_server *server, ID id)
 	send_to_gui(server, " ");
       ++i;
     }
-  return (send_to_gui(server, "plv #%d %d\n", id, ia->level));
+  return (send_to_gui(server, "plv %d %d\n", id, ia->level));
 }
 
 int		gui_pin(t_server *server, ID ids, char *cmd)
@@ -38,8 +38,6 @@ int		gui_pin(t_server *server, ID ids, char *cmd)
   strtok(cmd, " ");
   if ((idstr = strtok(NULL, " ")) == NULL)
     return (send_to_gui(server, "suc\n"));
-  if (idstr[0] != '#')
-    return (send_to_gui(server, "sbp\n"));
   id = atoi(idstr);
   if (find_ID(server, id, true) < 0)
     return (send_to_gui(server, "sbp\n"));

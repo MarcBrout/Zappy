@@ -82,11 +82,12 @@ static int		write_client(t_client *client, Socket sock)
     {
       if (send_client(client, sock))
 	return (1);
-      if (!client->alive)
-	{
-	  memset(client, 0, sizeof(*client));
-	  close(sock);
-	}
+    }
+  if (!client->active)
+    {
+      memset(client, 0, sizeof(*client));
+      close(sock);
+      return (0);
     }
   return (0);
 }

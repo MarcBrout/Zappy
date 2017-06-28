@@ -7,25 +7,29 @@
 ** Started on  Tue Jun 27 01:43:58 2017 brout_m
 ** Last update Wed Jun 28 10:37:21 2017 brout_m
 */
+
 #include <string.h>
-#include <unistd.h>
-#include "server/eggs.h"
+#include <server/logic_commands.h>
+#include <server/gui_commands.h>
 #include "server/gui_events.h"
 
-static t_egg *find_egg(t_egg *eggs, ID team)
+static t_egg	*find_egg(t_egg *eggs, ID team)
 {
-  t_egg *egg = eggs;
+  t_egg		*egg = eggs;
 
   while (egg)
     {
-      if (egg->team == team)
+      if (egg->team == team && egg->hatched)
 	return (egg);
       egg = egg->next;
     }
   return (NULL);
 }
 
-static int send_event(t_server *server, t_team *team, ID playerId, t_egg *egg)
+static int	send_event(t_server *server,
+			     t_team *team,
+			     ID playerId,
+			     t_egg *egg)
 {
   log_this("player connected from egg %d\n", egg->id);
   if (event_ebo(server, egg->id) ||
@@ -36,48 +40,50 @@ static int send_event(t_server *server, t_team *team, ID playerId, t_egg *egg)
   return (0);
 }
 
-static int send_position(t_server *server, ID playerId, t_team *team)
+static int	send_position(t_server *server, ID playerId, t_team *team)
 {
   return (send_to_ia(server, playerId, "%d\n",
-		     server->config.max_player - team->memberCount) ||
+		     team->maxCount - team->memberCount) ||
 	  send_to_ia(server, playerId, "%d %d\n", server->game.width,
 		     server->game.height));
 }
 
-static int check_players(t_server *server, t_team *team, ID playerId)
+static int 	check_players(t_server *server, t_team *team, ID playerId)
 {
-  t_egg *egg;
+  t_egg 	*egg;
 
   if (team->memberCount < team->maxCount)
     {
       ++team->memberCount;
-      if (team->maxCount > server->config.max_player &&
-          team->memberCount > server->config.max_player)
+      if ((egg = find_egg(server->game.eggs, team->id)))
 	{
-	  if ((egg = find_egg(server->game.eggs, team->id)) && !egg->hatching)
-	    {
-	      return (send_position(server, playerId, team) ||
-		      send_event(server, team, playerId, egg));
-	    }
+	  initiate_client_egg(server, playerId, team->id, &egg->pos);
+	  return (send_position(server, playerId, team) ||
+		  send_event(server, team, playerId, egg));
 	}
       else
 	{
+	  initiate_client(server, playerId, team->id);
 	  return (send_position(server, playerId, team) ||
 		  event_pnw(server, &server->game.clients[playerId]));
 	}
     }
-  if (send_to_ia(server, playerId, "ko\n") ||
-      close(server->game.clients[playerId].sock))
+  if (send_to_ia(server, playerId, "ko\n"))
     return (1);
   memset(&server->game.clients[playerId], 0, sizeof(t_client));
   return (0);
 }
 
-int player_connecting(t_server *server, ID playerId, char *cmd)
+int		player_connecting(t_server *server, ID playerId, char *cmd)
 {
-  t_team *team;
-  int     j = 0;
+  t_team	*team;
+  int     	j = 0;
 
+  if (!strcmp(cmd, "GRAPHIC"))
+    {
+      gui_welcome(server, playerId, cmd);
+      return (1);
+    }
   while (j < server->config.team_count)
     {
       team = &server->config.teams[j];
@@ -89,5 +95,7 @@ int player_connecting(t_server *server, ID playerId, char *cmd)
 	}
       ++j;
     }
+  if (send_to_ia(server, playerId, "ko\n"))
+    return (1);
   return (0);
 }

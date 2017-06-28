@@ -26,7 +26,9 @@ typedef struct s_position	t_position;
 typedef struct s_game		t_game;
 typedef struct s_store		t_store;
 
-#define FIND_POS(x, y, width) ((x) + (y) * (width))
+# define FIND_POS(x, y, width) ((x) + (y) * (width))
+# define LIFE_UNIT_MAX 126
+# define FOOD_START 10
 
 struct				s_position
 {
@@ -46,6 +48,7 @@ struct				s_egg
   ID				id;
   ID				layer;
   int				hatching;
+  bool				hatched;
   t_position			pos;
 };
 
@@ -56,6 +59,7 @@ struct				s_ia
   Direction			dir;
   t_position			pos;
   int				inventory[OBJ_COUNT];
+  int 				life_unit;
 };
 
 struct s_client
@@ -63,6 +67,7 @@ struct s_client
   ID				id;
   t_ia				ia;
   bool				alive;
+  bool				active;
   Socket			sock;
   t_circular			r;
   t_circular			w;

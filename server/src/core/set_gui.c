@@ -18,7 +18,7 @@ int	set_gui(t_server *server,
   int	max;
 
   max = 0;
-  if (!server->gui.alive)
+  if (!server->gui.active)
     {
       FD_SET(server->gui_sock, fds_read);
       max = server->gui_sock > max ? server->gui_sock : max;

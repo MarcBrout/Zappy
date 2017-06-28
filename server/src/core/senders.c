@@ -17,7 +17,7 @@ int		send_to_gui(t_server *server, char const *fmt, ...)
   char		cmd[MESSAGE_MAX_SIZE];
   va_list	va;
 
-  if (server->gui.alive)
+  if (server->gui.active)
     {
       va_start(va, fmt);
       memset(cmd, 0, MESSAGE_MAX_SIZE);

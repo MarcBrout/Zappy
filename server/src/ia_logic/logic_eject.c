@@ -57,6 +57,7 @@ static bool	check_if_player(t_server *server, t_client *client)
 	{
 	  return (true);
 	}
+      ++cli;
     }
   return (false);
 }

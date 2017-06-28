@@ -28,6 +28,8 @@ IACMD= 			ia_commands/ia_
 
 IALOG=			ia_logic/logic_
 
+GAMELOG=		game_logic/
+
 CORE= 			core/
 
 # Project sources
@@ -37,7 +39,9 @@ SERVER_RAW_SRC=		server.c 			\
 			help.c 				\
 			logger/logger.c 		\
 			timer/timer.c 			\
-			game_logic/resources_generator.c \
+			$(GAMELOG)resources_generator.c	\
+			$(GAMELOG)player_manager.c	\
+			$(GAMELOG)slot_manager.c	\
 			$(ARGS)height.c 		\
 			$(ARGS)name.c 			\
 			$(ARGS)nbclients.c 		\

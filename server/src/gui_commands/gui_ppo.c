@@ -19,7 +19,7 @@ int		send_player_position(t_server *server, ID id)
   log_this("[PPO] GUI asked for Client '%d' position on:"
 	   "\n\tx: %d\n\ty: %d\n\tdir: %d\n ", id,
 	   ia->pos.x, ia->pos.y, ia->dir);
-  return (send_to_gui(server, "ppo #%d %d %d %d\n",
+  return (send_to_gui(server, "ppo %d %d %d %d\n",
 		      id, ia->pos.x, ia->pos.y, ia->dir));
 }
 
@@ -32,8 +32,6 @@ int		gui_ppo(t_server *server, ID ids, char *cmd)
   strtok(cmd, " ");
   if ((idstr = strtok(NULL, " ")) == NULL)
     return (send_to_gui(server, "suc\n"));
-  if (idstr[0] != '#')
-    return (send_to_gui(server, "sbp\n"));
   id = atoi(idstr);
   if (find_ID(server, id, true) < 0)
     return (send_to_gui(server, "sbp\n"));

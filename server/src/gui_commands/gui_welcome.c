@@ -15,18 +15,18 @@
 int gui_welcome(t_server *server, ID id, char *cmd)
 {
   (void)cmd;
-  if (!server->gui.alive)
+  if (!server->gui.active)
     {
       memcpy(&server->gui, &server->game.clients[id], sizeof(t_client));
       set_gui_connected(true, true);
       log_this("Gui connected Correctly\n");
+      memset(&server->game.clients[id], 0, sizeof(t_client));
     }
   else
     {
       send_to_ia(server, id,
 		 "smg GUI already connected, closing off socket\n");
-      close(server->game.clients[id].sock);
+      server->game.clients[id].active = false;
     }
-  memset(&server->game.clients[id], 0, sizeof(t_client));
   return (0);
 }
