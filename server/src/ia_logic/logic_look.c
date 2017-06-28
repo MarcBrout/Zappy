@@ -122,6 +122,6 @@ int		logic_look(t_server *server, ID id, char *cmd)
       forward_pos(server, &pos, client->ia.dir, 1);
       forward_pos(server, &pos, change_dir(client->ia.dir, true), i + i - 1);
     }
-  strncircular(&client->w, "]", strlen("]"));
+  strncircular(&client->w, "]\n", strlen("]\n"));
   return (0);
 }

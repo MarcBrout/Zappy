@@ -11,6 +11,8 @@
 #ifndef LOGIC_COMMANDS_H_
 # define LOGIC_COMMANDS_H_
 
+#include "server.h"
+
 int	logic_unknown(t_server *server, ID id, char *cmd);
 int	logic_forward(t_server *server, ID id, char *cmd);
 int	logic_right(t_server *server, Socket id, char *cmd);
@@ -27,5 +29,7 @@ int	logic_incantation(t_server *server, ID id, char *cmd);
 int	logic_fork_start(t_server *server, ID id, char *cmd);
 int	logic_incantation_start(t_server *server, ID id, char *cmd);
 void	forward_pos(t_server *server, t_position *pos, Direction dir, int nb);
+int	check_incantation(t_server *server, ID id,
+			     t_client *client, t_cell *cell);
 
 #endif /* !LOGIC_COMMANDS_H_ */

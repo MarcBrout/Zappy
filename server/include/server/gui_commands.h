@@ -25,6 +25,7 @@ int gui_pin(t_server *server, ID id, char *cmd);
 int gui_sgt(t_server *server, ID id, char *cmd);
 int gui_sst(t_server *server, ID id, char *cmd);
 bool set_gui_connected(bool value, bool set);
+int send_player_position(t_server *server, ID id);
 int send_player_inventory(t_server *server, ID id);
 int send_player_lvl(t_server *server, ID id);
 int send_informations(t_server *server);

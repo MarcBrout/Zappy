@@ -9,6 +9,7 @@
 */
 
 #include <string.h>
+#include <server/gui_commands.h>
 #include "server/gui_events.h"
 #include "server/direction_manager.h"
 #include "server/logic_commands.h"
@@ -23,7 +24,7 @@ static int	send_eject_to_player(t_server *server, t_client *client)
       if (server->game.clients[cli].alive == true &&
 	  server->game.clients[cli].ia.pos.x == client->ia.pos.x &&
 	  server->game.clients[cli].ia.pos.y == client->ia.pos.y &&
-	  &server->game.clients[cli] != client)
+	  cli != client->id)
 	{
 	  forward_pos(server,
 		      &server->game.clients[cli].ia.pos,
@@ -35,7 +36,7 @@ static int	send_eject_to_player(t_server *server, t_client *client)
 				    &client->ia.pos,
 				    &server->game.clients[cli].ia.pos,
 				    server->game.clients[cli].ia.dir));
-	  //TODO GUI add event ppo
+	  send_player_position(server, cli);
 	}
       ++cli;
     }
