@@ -79,8 +79,8 @@ namespace zappy
     bool takeObj();
 
     void fillJoinState();
-    bool broadcastHelp();
-    bool broadcastStop();
+    bool receivedBroadcastHelp();
+    bool receivedBroadcastStop();
     bool isArrived();
     bool joinToPass();
     bool isDir();

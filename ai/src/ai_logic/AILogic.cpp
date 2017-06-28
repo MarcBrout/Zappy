@@ -320,13 +320,13 @@ namespace zappy
     m_logic[STATE::JOINING] = joinVec;
   }
 
-  bool AILogic::broadcastHelp()
+  bool AILogic::receivedBroadcastHelp()
   {
 
     return false;
   }
 
-  bool AILogic::broadcastStop()
+  bool AILogic::receivedBroadcastStop()
   {
     return false;
   }
