@@ -554,6 +554,9 @@ namespace zappy
     return stop;
   }
 
+  /*
+   *  Fill vector of methods Active State
+   */
   void AILogic::fillActiveState()
   {
     std::vector<std::pair<condPtr, actionPtr>> activeVec;
@@ -561,18 +564,20 @@ namespace zappy
     activeVec.push_back(std::make_pair<condPtr, actionPtr>(
         &zappy::AILogic::missingPlayer, &zappy::AILogic::broadcastHelpActive));
     activeVec.push_back(std::make_pair<condPtr, actionPtr>(
-        &zappy::AILogic::needDrop, &zappy::AILogic::dropObjActive));
-    activeVec.push_back(std::make_pair<condPtr, actionPtr>(
-        &zappy::AILogic::notNeedResource, &zappy::AILogic::incantation));
+        &zappy::AILogic::adjustResources, &zappy::AILogic::incantation));
     m_logic[STATE::ACTIVE_WAITING] = activeVec;
   }
 
+  /*
+   * Check nb Player on the current case
+   */
   bool AILogic::missingPlayer()
   {
     std::size_t nbPlayer(0);
     std::size_t countNbPlayer(0);
 
     look();
+    // Check the nb of player depends of the current lvl
     switch (m_curLvl)
       {
       case 1:
@@ -601,67 +606,80 @@ namespace zappy
     return nbPlayer > countNbPlayer;
   }
 
-  bool AILogic::needDrop()
-  {
-    return false;
-  }
-
+  /*
+   *  Ask help of other AI, and begin to adjust nb obj on the current case
+   */
   bool AILogic::broadcastHelpActive()
   {
+    // Ask HELP
     sendActionAndCheckResponse(ACTION::BROADCAST,
                                std::to_string(m_id) + " " +
                                    std::to_string(m_curLvl) + " HELP",
                                1, {});
-    std::vector<std::uint32_t> nbObjInCase;
-    nbObjInCase.resize(7);
-
-    nbObjInCase[0] = gl_incanation[m_curLvl - 1][0];
-    std::vector<std::string> typeObjInCase;
-    m_splitter.clear();
-    m_splitter.split(m_look[0], " ", false);
-    m_splitter.moveTokensTo(typeObjInCase);
-    for (std::string typeObj : typeObjInCase)
-      {
-	if (typeObj == "linemate")
-	  ++nbObjInCase[OBJECTS::LINEMATE];
-	else if (typeObj == "deraumere")
-	  ++nbObjInCase[OBJECTS::DERAUMERE];
-	else if (typeObj == "sibur")
-	  ++nbObjInCase[OBJECTS::SIBUR];
-	else if (typeObj == "mendiane")
-	  ++nbObjInCase[OBJECTS::MENDIANE];
-	else if (typeObj == "phiras")
-	  ++nbObjInCase[OBJECTS::PHIRAS];
-	else if (typeObj == "thystame")
-	  ++nbObjInCase[OBJECTS::THYSTAME];
-      }
-    if (nbObjInCase == gl_incantations[m_curLvl - 1])
-      {
-	return true;
-      }
-    else
-      {
-	std::string needed;
-      }
-    return false;
+    adjustResources();
   }
 
-  bool AILogic::dropObjActive()
+  /*
+   * Adjust the number element in the case to begin incantation
+   */
+  bool AILogic::adjustResources()
   {
-    return false;
-  }
+      // Compare resource of the current case and what it needs for the incantation
+      std::vector<std::uint32_t> nbObjInCase;
+      nbObjInCase.resize(7, 0);
 
-  bool AILogic::notNeedResource()
-  {
-    return false;
+      nbObjInCase[0] = gl_incantations[m_curLvl - 1][0];
+      std::vector<std::string> typeObjInCase;
+      m_splitter.clear();
+      m_splitter.split(m_look[0], " ", false);
+      m_splitter.moveTokensTo(typeObjInCase);
+
+      // Loop on all obj in the case
+      for (std::string typeObj : typeObjInCase)
+      {
+          std::uint32_t idxType(0);
+          for (std::string type : gl_names)
+          {
+              if (type != "player" && type == typeObj)
+              {
+                  ++nbObjInCase[idxType];
+                  break;
+              }
+              ++idxType;
+          }
+      }
+      if (nbObjInCase == gl_incantations[m_curLvl - 1])
+        return true;
+      else
+      {
+          // Miss or too much obj in the current case. Send a specific command
+          // which adjust nb of obj.
+          std::string   needed("");
+          std::uint32_t nbCommand(0);
+          for (std::uint32_t idx(0); idx < nbObjInCase.size(); ++idx)
+          {
+              if (nbObjInCase[idx] > gl_incantations[m_curLvl - 1][idx])
+              {
+                  if (needed != "")
+                      needed += "\n";
+                  needed += "Take " + gl_names[idx];
+                  ++nbCommand;
+              }
+              else if (nbObjInCase[idx] < gl_incantations[m_curLvl - 1][idx])
+              {
+                  if (needed != "")
+                      needed += "\n";
+                  needed += "Drop " + gl_names[idx];
+                  ++nbCommand;
+              }
+              ++idx;
+          }
+          sendActionAndCheckResponse(ACTION::RAW, needed, nbCommand, {});
+          return false;
+      }
   }
 
   bool AILogic::incantation()
-  {
-    return false;
-  }
-
-  bool AILogic::takeObjActive()
   {
     return false;
   }

@@ -114,12 +114,10 @@ namespace zappy
 
     void fillActiveState();
     bool missingPlayer();
-    bool needDrop();
     bool broadcastHelpActive();
-    bool dropObjActive();
-    bool notNeedResource();
     bool incantation();
-    bool takeObjActive();
+    bool adjustResources();
+
   };
 }
 
