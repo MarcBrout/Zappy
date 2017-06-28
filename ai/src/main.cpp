@@ -16,6 +16,7 @@
 
 int	main(int ac, char **av)
 {
+    std::srand(static_cast<std::uint32_t >(std::time(0) * getpid()));
     try
     {
         zappy::ParseOptions parseOptions;

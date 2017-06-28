@@ -15,11 +15,11 @@ void Splitter::split(std::string const &p_parse,
                      const std::string &p_delimiters,
                      bool p_trim)
 {
-    size_t l_pos {0};
+    long l_pos {0};
     std::string::const_iterator l_found {p_parse.cend()};
     std::string l_word;
 
-    while (l_pos < p_parse.length())
+    while (l_pos < static_cast<long>(p_parse.length()))
     {
         l_found = std::find_first_of(p_parse.cbegin() + l_pos,
                                      p_parse.cend(),
@@ -44,5 +44,10 @@ void Splitter::clear()
 void Splitter::moveTokensTo(std::vector<std::string> &vec)
 {
     vec = std::move(m_tokens);
+}
+
+Splitter::Splitter() : m_tokens()
+{
+
 }
 

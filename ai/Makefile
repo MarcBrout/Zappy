@@ -29,6 +29,7 @@ MAIN_SRC=		main.cpp	\
 
 TOOLS_SRC=		Logger.cpp	\
 			FDManager.cpp	\
+			Splitter.cpp    \
 			ParseOptions.cpp
 
 EXCEPTIONS_SRC=		ClientError.cpp	\

@@ -68,5 +68,5 @@ bool zappy::CoreAI::sendActionAndCheckResponse(
     const std::vector<std::string> &answ)
 {
   sendAction(action, str);
-  return (_core.waitForReponses(count, answ));
+  return (_core.waitForReponses(static_cast<std::int32_t >(count), answ));
 }

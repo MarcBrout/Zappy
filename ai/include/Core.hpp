@@ -5,10 +5,11 @@
 #ifndef CLIENTAI_CORE_HPP_
 #define CLIENTAI_CORE_HPP_
 
-#include "ai_logic/AILogic.hpp"
+#include <bits/unique_ptr.h>
 
 namespace zappy
 {
+  class AILogic;
   class Core
   {
   public:
@@ -24,9 +25,9 @@ namespace zappy
                          std::vector<std::string> const &anwsers);
 
   private:
-    bool         _running;
-    std::int32_t _waitingForResponse;
-    AILogic      _ai;
+    bool                     _running;
+    std::int32_t             _waitingForResponse;
+    std::unique_ptr<AILogic> _ai;
 
     void manageResponse(std::string servMessage);
   };

@@ -7,8 +7,9 @@
 #include "tools/Logger.hpp"
 #include "Core.hpp"
 #include "core_ai/CoreAI.hpp"
+#include "ai_logic/AILogic.hpp"
 
-zappy::Core::Core() : _running(false), _waitingForResponse(0), _ai(*this)
+zappy::Core::Core() : _running(false), _waitingForResponse(0), _ai(std::make_unique<AILogic>(*this))
 {
 }
 
@@ -32,7 +33,7 @@ void zappy::Core::run()
       servMessages.clear();
 
       // TODO PROCESS IA REPLACE WITH FULL IA PROCESS
-      _ai.sendAction(CoreAI::FORWARD);
+      _ai->sendAction(CoreAI::FORWARD);
 
       if (waitForReponses(1, {"ok"}))
       {
@@ -49,7 +50,7 @@ bool zappy::Core::waitForReponses(std::int32_t                    count,
   std::vector<std::string> servMessages;
 
   _waitingForResponse = count;
-  _ai.resetResponse();
+  _ai->resetResponse();
   while (_waitingForResponse > 0 && _running)
     {
       servMessages = network::Client::getInstance().getServerMessages();
@@ -58,7 +59,7 @@ bool zappy::Core::waitForReponses(std::int32_t                    count,
 	manageResponse(*it);
       ::usleep(10);
     }
-  return (anwsers == _ai.getResponse());
+  return (anwsers == _ai->getResponse());
 }
 
 void zappy::Core::manageResponse(std::string servMessage)
@@ -67,11 +68,11 @@ void zappy::Core::manageResponse(std::string servMessage)
   if (servMessage == "dead")
     _running = false;
   else if (servMessage.substr(0, servMessage.find(" ")) == "message")
-    _ai.setMessage(servMessage);
+    _ai->setMessage(servMessage);
   else
     {
       --_waitingForResponse;
-      _ai.addResponse(servMessage);
+      _ai->addResponse(servMessage);
     }
 }
 
@@ -114,9 +115,9 @@ void zappy::Core::auth(std::string teamName)
 	    }
 	  else if (*it != "")
 	    {
-	      _ai.setX(static_cast<size_t>(
+	      _ai->setX(static_cast<size_t>(
 	          std::atoi(it->substr(0, it->find(" ")).c_str())));
-	      _ai.setY(static_cast<size_t>(
+	      _ai->setY(static_cast<size_t>(
 	          std::atoi(it->substr(it->find(" ") + 1).c_str())));
 	      placed = true;
 	    }

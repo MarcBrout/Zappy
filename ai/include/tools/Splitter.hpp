@@ -12,7 +12,7 @@
 class Splitter
 {
 public:
-  Splitter() = default;
+  explicit Splitter();
   ~Splitter() = default;
   void split(std::string const &p_parse, std::string const &p_delimiters = " ",
              bool p_trim = true);

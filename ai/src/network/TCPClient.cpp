@@ -51,7 +51,7 @@ std::vector<std::string> zappy::network::TCPClient::receive(sock_t socket)
             commands = splitReceived();
         }
     }
-    return std::move(commands);
+    return commands;
 }
 
 void zappy::network::TCPClient::send(const std::string &data, zappy::network::sock_t socket)
@@ -135,6 +135,6 @@ std::vector<std::string> zappy::network::TCPClient::splitReceived()
             command += buf[tmpHead % BUFFER_SIZE];
         ++tmpHead;
     }
-    return std::move(listCommands);
+    return listCommands;
 }
 
