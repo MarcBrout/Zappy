@@ -31,17 +31,17 @@ namespace zappy
 
     if (!m_incant)
       {
-        for (it = m_logic[STATE::INITIAL].begin();
-             it != m_logic[STATE::INITIAL].end(); ++it)
-          {
-            if ((this->*(it->first))())
-              {
-                (this->*(it->second))();
-                break;
-              }
-          }
-        if (it == m_logic[STATE::INITIAL].end())
-          m_state = STATE::ACTIVE_WAITING;
+	for (it = m_logic[STATE::INITIAL].begin();
+	     it != m_logic[STATE::INITIAL].end(); ++it)
+	  {
+	    if ((this->*(it->first))())
+	      {
+		(this->*(it->second))();
+		break;
+	      }
+	  }
+	if (it == m_logic[STATE::INITIAL].end())
+	  m_state = STATE::ACTIVE_WAITING;
       }
 
     if (m_state != STATE::INITIAL)
@@ -322,8 +322,8 @@ namespace zappy
 	    m_splitter.clear();
 	    m_splitter.split(text, " ", false);
 	    m_splitter.moveTokensTo(vecInfo);
-	    if (std::stoi(vecInfo[0]) == m_trackId &&
-	        std::stoi(vecInfo[1]) == m_curLvl && vecInfo[2] == "HELP")
+	    if (std::stoul(vecInfo[0]) == m_trackId &&
+	        std::stoul(vecInfo[1]) == m_curLvl && vecInfo[2] == "HELP")
 	      {
 		m_dir = static_cast<std::size_t>(std::stoi(msg.substr(8, 1)));
 		return true;
@@ -352,8 +352,8 @@ namespace zappy
 	    m_splitter.clear();
 	    m_splitter.split(text, " ", false);
 	    m_splitter.moveTokensTo(vecInfo);
-	    if (std::stoi(vecInfo[0]) == m_trackId &&
-	        std::stoi(vecInfo[1]) == m_curLvl && vecInfo[2] == "STOP")
+	    if (std::stoul(vecInfo[0]) == m_trackId &&
+	        std::stoul(vecInfo[1]) == m_curLvl && vecInfo[2] == "STOP")
 	      {
 		return true;
 	      }
@@ -422,15 +422,15 @@ namespace zappy
     if (m_incant)
       {
 	// Searching an eventual ko from the server
-	if (std::for_each(_message.begin(), _message.end(),
-	                  [&ko, this](std::string const &str) {
-	                    if (str == "ko")
-	                      {
-	                        ko = true;
-	                      };
-	                  }));
-        if (ko)
-          m_incant = false;
+	for (std::string const &str : _message)
+	  {
+	    if (str == "ko")
+	      {
+		ko = true;
+	      };
+	  }
+	if (ko)
+	  m_incant = false;
       }
     return ko;
   }
@@ -450,17 +450,15 @@ namespace zappy
     bool levelUp = false;
 
     // Searching for a Current lvl up in the messages
-    if (std::for_each(_message.begin(), _message.end(),
-                      [&levelUp, this](std::string const &str) {
-                        if (str.substr(0, str.find(":")) == "Current level")
-	                  {
-	                    long lvl = std::stol(
-	                        str.substr(str.find(": ") + 1, str.length()));
-	                    if (lvl > this->m_curLvl)
-	                      levelUp = true;
-	                  };
-                      }))
-      ;
+    for (std::string const &str : _message)
+      {
+	if (str.substr(0, str.find(":")) == "Current level")
+	  {
+	    std::uint64_t lvl = std::stoul(str.substr(str.find(": ") + 1, str.length()));
+	    if (lvl > this->m_curLvl)
+	      levelUp = true;
+	  }
+      }
     return levelUp;
   }
 
@@ -569,30 +567,27 @@ namespace zappy
   {
     bool stop = false;
 
-    if (std::for_each(_message.begin(), _message.end(),
-                      [&stop, this](std::string const &str) {
-                        if (str.find("message ") != std::string::npos)
-	                  {
-	                    m_splitter.clear();
-	                    m_splitter.split(str, ",");
-	                    std::vector<std::string> prefix;
+    for (std::string const &str : _message)
+      {
+	if (str.find("message ") != std::string::npos)
+	  {
+	    m_splitter.clear();
+	    m_splitter.split(str, ",");
+	    std::vector<std::string> prefix;
 
-	                    m_splitter.moveTokensTo(prefix);
-	                    int dir = std::stoi(
-	                        prefix[0].substr(prefix[0].find(" ")));
+	    m_splitter.moveTokensTo(prefix);
+	    int dir = std::stoi(prefix[0].substr(prefix[0].find(" ")));
 
-	                    m_splitter.clear();
-	                    m_splitter.split(prefix[1], " ");
-	                    std::vector<std::string> message;
-	                    if (!dir && std::stoi(message[0]) == m_trackId &&
-	                        std::stoi(message[1]) == m_curLvl &&
-	                        message[2] == "STOP")
-	                      {
-	                        stop = true;
-	                      }
-	                  };
-                      }))
-      ;
+	    m_splitter.clear();
+	    m_splitter.split(prefix[1], " ");
+	    std::vector<std::string> message;
+	    if (!dir && std::stoul(message[0]) == m_trackId &&
+	        std::stoul(message[1]) == m_curLvl && message[2] == "STOP")
+	      {
+		stop = true;
+	      }
+	  }
+      }
     return stop;
   }
 
@@ -716,7 +711,6 @@ namespace zappy
 		needed += "Set " + gl_names[idx];
 		++nbCommand;
 	      }
-	    ++idx;
 	  }
 	sendActionAndCheckResponse(ACTION::RAW, needed, nbCommand, {});
 	return false;
@@ -788,7 +782,7 @@ namespace zappy
     inventory_t inventory = getInventory(_response[0]);
     if (inventory[OBJECTS::FOOD] < 3)
       m_needFood = true;
-    else if (m_needFood > 10)
+    else if (inventory[OBJECTS::FOOD] > 10)
       m_needFood = false;
     return (m_needFood);
   }
@@ -838,7 +832,7 @@ namespace zappy
 	    m_splitter.clear();
 	    m_splitter.split(text, " ", false);
 	    m_splitter.moveTokensTo(vecInfo);
-	    if (std::stoi(vecInfo[1]) == m_curLvl && vecInfo[2] == "HELP")
+	    if (std::stoul(vecInfo[1]) == m_curLvl && vecInfo[2] == "HELP")
 	      {
 		m_dir = static_cast<std::size_t>(std::stoi(msg.substr(8, 1)));
 		m_trackId = std::stoul(vecInfo[0]);
@@ -899,8 +893,8 @@ namespace zappy
     return true;
   }
 
-      bool AILogic::isIncantating() const
-      {
-        return m_incant;
-      }
+  bool AILogic::isIncantating() const
+  {
+    return m_incant;
   }
+}
