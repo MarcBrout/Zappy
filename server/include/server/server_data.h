@@ -27,8 +27,6 @@ typedef struct s_game		t_game;
 typedef struct s_store		t_store;
 
 # define FIND_POS(x, y, width) ((x) + (y) * (width))
-# define LIFE_UNIT_MAX 126
-# define FOOD_START 10
 
 struct				s_position
 {

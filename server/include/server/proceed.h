@@ -87,5 +87,7 @@ void decrement_team_count(t_server *server, Team id);
 int count_empty_slot(t_server *server, Team team);
 void initiate_client_egg(t_server *server, ID id, Team team, t_position *pos);
 void initiate_client(t_server *server, ID id, Team team);
+void set_quit(int sig);
+Team check_winner(t_server *server);
 
 #endif /* !PROCEED_H_ */

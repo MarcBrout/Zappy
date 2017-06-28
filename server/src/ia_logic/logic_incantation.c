@@ -24,26 +24,62 @@ static const int incant_tab[MAX_INCANT][OBJ_COUNT] =
   {6, 2, 2, 2, 2, 2, 1}
  };
 
+static void	count_team_lvl(t_server *server, t_team *team)
+{
+  ID 		cli = 0;
+
+  team->lvlcount = 0;
+  while (cli < server->game.max_slot)
+    {
+      if (server->game.clients[cli].ia.team == team->id &&
+	  server->game.clients[cli].ia.level >= team->maxlvl)
+	++team->lvlcount;
+      ++cli;
+    }
+}
+
+static void	incr_lvl_team(t_server *server, Team id, Level lvl)
+{
+  t_team	*team;
+
+  team = &server->config.teams[id];
+  if (team->maxlvl == LEVEL_END)
+    return ;
+  if (team->maxlvl == lvl)
+    {
+      ++team->lvlcount;
+      if (team->lvlcount == server->config.max_player)
+	{
+	  if (team->maxlvl == LEVEL_END)
+	    {
+	      set_quit(0);
+	      return ;
+	    }
+	  ++team->maxlvl;
+	  count_team_lvl(server, team);
+	}
+    }
+}
+
 static int	send_incantation_end(t_server *server,
 				     t_client *client,
 				     int max_player)
 {
-  ID 		cli;
-  int 		nb_player;
+  ID 		cli = 0;
+  int 		nb_player = 1;
 
-  cli = 0;
-  nb_player = 1;
   ++client->ia.level;
+  incr_lvl_team(server, client->ia.team, client->ia.level);
   send_player_lvl(server, client->id);
   send_to_ia(server, client->id, "Current level: %u\n", client->ia.level);
-  while (nb_player < max_player &&
-   	 cli < server->game.max_slot)
+  while (nb_player < max_player && cli < server->game.max_slot)
     {
       if (server->game.clients[cli].alive && cli != client->sock &&
 	  server->game.clients[cli].ia.pos.x == client->ia.pos.x &&
 	  server->game.clients[cli].ia.pos.y == client->ia.pos.y)
 	{
 	  ++server->game.clients[cli].ia.level;
+	  incr_lvl_team(server, client->ia.team, client->ia.level);
 	  send_player_lvl(server, cli);
 	  send_to_ia(server, cli, "Current level: %u\n",
 		     server->game.clients[cli].ia.level);

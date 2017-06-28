@@ -42,6 +42,7 @@ SERVER_RAW_SRC=		server.c 			\
 			$(GAMELOG)resources_generator.c	\
 			$(GAMELOG)player_manager.c	\
 			$(GAMELOG)slot_manager.c	\
+			$(GAMELOG)victory_manager.c	\
 			$(ARGS)height.c 		\
 			$(ARGS)name.c 			\
 			$(ARGS)nbclients.c 		\

@@ -12,6 +12,10 @@
 
 # include <stddef.h>
 
+# define LIFE_UNIT_MAX 126
+# define FOOD_START 10
+# define LEVEL_END 8
+
 typedef int			Socket;
 typedef int			Team;
 typedef enum e_object		Object;

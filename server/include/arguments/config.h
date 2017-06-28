@@ -41,6 +41,8 @@ struct s_team
   ID id;
   uint32_t memberCount;
   uint32_t maxCount;
+  uint32_t maxlvl;
+  uint32_t lvlcount;
 };
 
 struct s_config

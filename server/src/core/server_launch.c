@@ -12,11 +12,12 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <server/gui_events.h>
 #include "server.h"
 
 static bool		gl_stop = false;
 
-static void		set_quit(int sig)
+void	set_quit(int sig)
 {
   (void)sig;
   gl_stop = true;
@@ -56,10 +57,15 @@ static int		running(t_server *server)
   fd_set		reads;
   fd_set		writes;
   Socket		max;
+  bool			end = false;
 
-  log_this("Running server now\n");
-  while (!gl_stop /* TODO add winning end */)
+  while (!end)
     {
+      if (gl_stop)
+	{
+	  event_seg(server, server->config.teams[check_winner(server)].name);
+	  end = true;
+	}
       time.tv_sec = 0;
       time.tv_usec = 10;
       max = set_fds(server, &reads, &writes);
@@ -69,9 +75,7 @@ static int		running(t_server *server)
 	  return (1);
 	}
       else if (proceed(server, &reads, &writes))
-	{
-	  return (1);
-	}
+	return (1);
     }
   return (0);
 }
