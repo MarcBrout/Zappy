@@ -59,6 +59,8 @@ namespace zappy
     std::size_t m_fullTurn;
     std::size_t m_curLvl;
     std::size_t m_id;
+    std::size_t m_trackId;
+    std::size_t m_dir;
 
     bool        needFood();
     inventory_t getInventory(std::string const &inventory);
@@ -81,12 +83,10 @@ namespace zappy
     void fillJoinState();
     bool receivedBroadcastHelp();
     bool receivedBroadcastStop();
+    bool finalForwardJoin();
     bool isArrived();
     bool joinToPass();
-    bool isDir();
     bool endJoin();
-    bool goJoin();
-    bool turnThenGo();
 
     void fillPassiveState();
     bool broadcastSuccess();

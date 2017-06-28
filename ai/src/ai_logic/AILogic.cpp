@@ -11,9 +11,10 @@ namespace zappy
   }
 
   AILogic::AILogic(Core &core)
-      : CoreAI(core), m_state(AILogic::STATE::INITIAL), m_logic(), m_splitter(),
-        m_search(""), m_look(), m_directObj(false), m_fullLine(0),
-        m_fullTurn(0), m_curLvl(1), m_id(static_cast<std::size_t >(std::rand()))
+      : CoreAI(core), m_state(AILogic::STATE::INITIAL), m_logic(),
+        m_splitter(), m_search(""), m_look(), m_directObj(false),
+        m_fullLine(0), m_fullTurn(0), m_curLvl(1),
+        m_id(static_cast<std::size_t>(std::rand())), m_trackId(0), m_dir(1)
   {
     fillSearchState();
     fillJoinState();
@@ -41,7 +42,7 @@ namespace zappy
 	      {
 		if ((this->*(it->first))())
 		  {
-                    (this->*(it->second))();
+		    (this->*(it->second))();
 		    break;
 		  }
 	      }
@@ -56,7 +57,7 @@ namespace zappy
 	  {
 	    if ((this->*(it->first))())
 	      {
-                (this->*(it->second))();
+		(this->*(it->second))();
 		break;
 	      }
 	  }
@@ -70,7 +71,7 @@ namespace zappy
 		finalForward();
 		break;
 	      case STATE::JOINING:
-		turnThenGo();
+		finalForwardJoin();
 		break;
 	      case STATE::ACTIVE_WAITING:
 		takeObjActive();
@@ -121,21 +122,21 @@ namespace zappy
   {
     std::vector<std::pair<condPtr, actionPtr>> searchVec;
 
-    searchVec.push_back(
-        std::make_pair<condPtr, actionPtr>(&zappy::AILogic::objOnCase, &zappy::AILogic::takeObj));
-    searchVec.push_back(
-        std::make_pair<condPtr, actionPtr>(&zappy::AILogic::objOnSight, &zappy::AILogic::goSearch));
-    searchVec.push_back(std::make_pair<condPtr, actionPtr>(&zappy::AILogic::isNotFullTurn,
-                                  &zappy::AILogic::turnSearch));
-    searchVec.push_back(
-        std::make_pair<condPtr, actionPtr>(&zappy::AILogic::isFullLine, &zappy::AILogic::TurnGoTurn));
+    searchVec.push_back(std::make_pair<condPtr, actionPtr>(
+        &zappy::AILogic::objOnCase, &zappy::AILogic::takeObj));
+    searchVec.push_back(std::make_pair<condPtr, actionPtr>(
+        &zappy::AILogic::objOnSight, &zappy::AILogic::goSearch));
+    searchVec.push_back(std::make_pair<condPtr, actionPtr>(
+        &zappy::AILogic::isNotFullTurn, &zappy::AILogic::turnSearch));
+    searchVec.push_back(std::make_pair<condPtr, actionPtr>(
+        &zappy::AILogic::isFullLine, &zappy::AILogic::TurnGoTurn));
     m_logic[STATE::SEARCHING] = searchVec;
   }
 
   bool AILogic::finalForward()
   {
     sendActionAndCheckResponse(ACTION::FORWARD, "Forward", 1, {});
-    m_fullLine++;
+    ++m_fullLine;
     return true;
   }
 
@@ -158,7 +159,7 @@ namespace zappy
     return true;
   }
 
-  static std::pair<std::string, std::size_t> caseFullLine[8] = {
+  static const std::pair<std::string, std::size_t> caseFullLine[8] = {
       {"Left\nForward\nForward\nForward\nRight", 5},
       {"Left\nForward\nForward\nForward\nForward\nForward\nRight", 7},
       {"Left\nForward\nForward\nForward\nForward\nForward\nForward\nForward\nR"
@@ -191,7 +192,7 @@ namespace zappy
   bool AILogic::turnSearch()
   {
     sendActionAndCheckResponse(ACTION::LEFT, "Left", 1, {});
-    m_fullTurn++;
+    ++m_fullTurn;
     return false;
   }
 
@@ -222,13 +223,13 @@ namespace zappy
     if (m_fullTurn == 4)
       {
 	m_fullTurn = 0;
-	m_fullLine++;
+	++m_fullLine;
 	return false;
       }
     return true;
   }
 
-  static std::pair<std::string, std::size_t> caseAction[10] = {
+  static const std::pair<std::string, std::size_t> caseAction[10] = {
       {"", 0},
       {"Forward\nLeft\nForward", 3},
       {"Forward", 1},
@@ -276,7 +277,7 @@ namespace zappy
 	  }
 	objInCase = false;
 	playerInCase = false;
-	caseIdx++;
+	++caseIdx;
       }
     return false;
   }
@@ -309,68 +310,115 @@ namespace zappy
   {
     std::vector<std::pair<condPtr, actionPtr>> joinVec;
 
-    joinVec.push_back(
-        std::make_pair<condPtr, actionPtr>(&zappy::AILogic::receivedBroadcastHelp, &zappy::AILogic::isArrived));
-    joinVec.push_back(
-        std::make_pair<condPtr, actionPtr>(&zappy::AILogic::receivedBroadcastStop, &zappy::AILogic::endJoin));
-    joinVec.push_back(
-        std::make_pair<condPtr, actionPtr>(&zappy::AILogic::isArrived, &zappy::AILogic::joinToPass));
-    joinVec.push_back(
-        std::make_pair<condPtr, actionPtr>(&zappy::AILogic::isDir, &zappy::AILogic::goJoin));
+    joinVec.push_back(std::make_pair<condPtr, actionPtr>(
+        &zappy::AILogic::receivedBroadcastHelp, &zappy::AILogic::isArrived));
+    joinVec.push_back(std::make_pair<condPtr, actionPtr>(
+        &zappy::AILogic::receivedBroadcastStop, &zappy::AILogic::endJoin));
     m_logic[STATE::JOINING] = joinVec;
   }
 
   bool AILogic::receivedBroadcastHelp()
   {
+    std::vector<std::string> vecInfo;
+    std::string              text;
 
+    for (std::string msg : _message)
+      {
+	if (msg.substr(0, 7) == "message")
+	  {
+	    text = msg.substr(msg.find(',') + 1);
+	    m_splitter.clear();
+	    m_splitter.split(text, " ", false);
+	    m_splitter.moveTokensTo(vecInfo);
+	    if (std::stoi(vecInfo[0]) == m_trackId &&
+	        std::stoi(vecInfo[1]) == m_curLvl && vecInfo[2] == "HELP")
+	      {
+		m_dir = static_cast<std::size_t>(std::stoi(msg.substr(8, 1)));
+		return true;
+	      }
+	  }
+      }
     return false;
+  }
+
+  bool AILogic::finalForwardJoin()
+  {
+    sendActionAndCheckResponse(ACTION::FORWARD, "Forward", 1, {});
+    return true;
   }
 
   bool AILogic::receivedBroadcastStop()
   {
+    std::vector<std::string> vecInfo;
+    std::string              text;
+
+    for (std::string msg : _message)
+      {
+	if (msg.substr(0, 7) == "message")
+	  {
+	    text = msg.substr(msg.find(',') + 1);
+	    m_splitter.clear();
+	    m_splitter.split(text, " ", false);
+	    m_splitter.moveTokensTo(vecInfo);
+	    if (std::stoi(vecInfo[0]) == m_trackId &&
+	        std::stoi(vecInfo[1]) == m_curLvl && vecInfo[2] == "STOP")
+	      {
+		return true;
+	      }
+	  }
+      }
     return false;
   }
 
+  static const std::pair<std::string, std::size_t> joinCaseMove[9] = {
+      {"", 0},
+      {"Forward", 1},
+      {"Forward\nLeft\nForward", 3},
+      {"Left\nForward", 2},
+      {"Left\nForward\nLeft\nForward", 4},
+      {"Left\nLeft\nForward", 3},
+      {"Right\nForward\nRight\nForward", 4},
+      {"Right\nForward", 2},
+      {"Forward\nRight\nForward", 3}};
+
   bool AILogic::isArrived()
   {
-    return false;
+    if (m_dir == 0)
+      {
+	joinToPass();
+      }
+    else
+      {
+	sendActionAndCheckResponse(
+	    ACTION::RAW, joinCaseMove[m_dir].first,
+	    static_cast<std::uint32_t>(joinCaseMove[m_dir].second), {});
+      }
+    return true;
   }
 
   bool AILogic::joinToPass()
   {
-    return false;
-  }
-
-  bool AILogic::isDir()
-  {
-    return false;
+    m_state = STATE::PASSIVE_WAITING;
+    return true;
   }
 
   bool AILogic::endJoin()
   {
-    return false;
-  }
-
-  bool AILogic::goJoin()
-  {
-    return false;
-  }
-
-  bool AILogic::turnThenGo()
-  {
-    return false;
+    m_state = STATE::INITIAL;
+    return true;
   }
 
   void AILogic::fillPassiveState()
   {
     std::vector<std::pair<condPtr, actionPtr>> passiveVec;
 
-    passiveVec.push_back(std::make_pair<condPtr, actionPtr>(&zappy::AILogic::broadcastSuccess,
-                                   &zappy::AILogic::updateLvl));
-    passiveVec.push_back(std::make_pair<condPtr, actionPtr>(&zappy::AILogic::broadcastStopPass,
-                                   &zappy::AILogic::passiveToInitial));
+    passiveVec.push_back(std::make_pair<condPtr, actionPtr>(
+        &zappy::AILogic::broadcastSuccess, &zappy::AILogic::updateLvl));
     passiveVec.push_back(
-        std::make_pair<condPtr, actionPtr>(&zappy::AILogic::turnPass, &zappy::AILogic::passEnd));
+        std::make_pair<condPtr, actionPtr>(&zappy::AILogic::broadcastStopPass,
+                                           &zappy::AILogic::passiveToInitial));
+    passiveVec.push_back(std::make_pair<condPtr, actionPtr>(
+        &zappy::AILogic::turnPass, &zappy::AILogic::passEnd));
     m_logic[STATE::PASSIVE_WAITING] = passiveVec;
   }
 
@@ -408,18 +456,47 @@ namespace zappy
   {
     std::vector<std::pair<condPtr, actionPtr>> activeVec;
 
-    activeVec.push_back(
-        std::make_pair<condPtr, actionPtr>(&zappy::AILogic::missingPlayer, &zappy::AILogic::broadcastHelpActive));
-    activeVec.push_back(
-        std::make_pair<condPtr, actionPtr>(&zappy::AILogic::needDrop, &zappy::AILogic::dropObjActive));
-    activeVec.push_back(std::make_pair<condPtr, actionPtr>(&zappy::AILogic::notNeedResource,
-                                  &zappy::AILogic::incantation));
+    activeVec.push_back(std::make_pair<condPtr, actionPtr>(
+        &zappy::AILogic::missingPlayer, &zappy::AILogic::broadcastHelpActive));
+    activeVec.push_back(std::make_pair<condPtr, actionPtr>(
+        &zappy::AILogic::needDrop, &zappy::AILogic::dropObjActive));
+    activeVec.push_back(std::make_pair<condPtr, actionPtr>(
+        &zappy::AILogic::notNeedResource, &zappy::AILogic::incantation));
     m_logic[STATE::ACTIVE_WAITING] = activeVec;
   }
 
   bool AILogic::missingPlayer()
   {
-    return false;
+    std::size_t nbPlayer(0);
+    std::size_t countNbPlayer(0);
+
+    look();
+    switch (m_curLvl)
+      {
+      case 1:
+	nbPlayer = 1;
+	break;
+      case 2:
+      case 3:
+	nbPlayer = 2;
+	break;
+      case 4:
+      case 5:
+	nbPlayer = 4;
+	break;
+      case 6:
+      case 7:
+	nbPlayer = 6;
+	break;
+      default:
+	break;
+      }
+    for (std::string inCase : m_look)
+      {
+	if (inCase == "player")
+	  ++countNbPlayer;
+      }
+    return nbPlayer > countNbPlayer;
   }
 
   bool AILogic::needDrop()
@@ -429,6 +506,41 @@ namespace zappy
 
   bool AILogic::broadcastHelpActive()
   {
+    sendActionAndCheckResponse(ACTION::BROADCAST,
+                               std::to_string(m_id) + " " +
+                                   std::to_string(m_curLvl) + " HELP",
+                               1, {});
+    std::vector<std::uint32_t> nbObjInCase;
+    nbObjInCase.resize(7);
+
+    nbObjInCase[0] = gl_incanation[m_curLvl - 1][0];
+    std::vector<std::string>   typeObjInCase;
+    m_splitter.clear();
+    m_splitter.split(m_look[0], " ", false);
+    m_splitter.moveTokensTo(typeObjInCase);
+    for (std::string typeObj : typeObjInCase)
+    {
+        if (typeObj == "linemate")
+            ++nbObjInCase[OBJECTS::LINEMATE];
+        else if (typeObj == "deraumere")
+            ++nbObjInCase[OBJECTS::DERAUMERE];
+        else if (typeObj == "sibur")
+            ++nbObjInCase[OBJECTS::SIBUR];
+        else if (typeObj == "mendiane")
+            ++nbObjInCase[OBJECTS::MENDIANE];
+        else if (typeObj == "phiras")
+            ++nbObjInCase[OBJECTS::PHIRAS];
+        else if (typeObj == "thystame")
+            ++nbObjInCase[OBJECTS::THYSTAME];
+    }
+      if (nbObjInCase == gl_incantations[m_curLvl - 1])
+      {
+         return true;
+      }
+      else
+      {
+        std::string needed;
+      }
     return false;
   }
 
