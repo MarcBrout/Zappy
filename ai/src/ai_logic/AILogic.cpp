@@ -781,11 +781,31 @@ namespace zappy
 
   bool AILogic::receivedHelp()
   {
+    std::vector<std::string> vecInfo;
+    std::string              text;
+
+    for (std::string msg : _message)
+      {
+        if (msg.substr(0, 7) == "message")
+          {
+            text = msg.substr(msg.find(',') + 1);
+            m_splitter.clear();
+            m_splitter.split(text, " ", false);
+            m_splitter.moveTokensTo(vecInfo);
+            if (std::stoi(vecInfo[1]) == m_curLvl && vecInfo[2] == "HELP")
+              {
+                m_dir = static_cast<std::size_t>(std::stoi(msg.substr(8, 1)));
+                m_trackId = std::stoul(vecInfo[0]);
+                return true;
+              }
+          }
+      }
     return false;
   }
 
   bool AILogic::initJoinningState()
   {
+    m_state = STATE::JOINING;
     return false;
   }
 
