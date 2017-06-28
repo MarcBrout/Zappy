@@ -432,22 +432,26 @@ namespace zappy
   {
     bool levelUp = false;
 
+    // Searching for a Current lvl up in the messages
     if (std::for_each(_message.begin(), _message.end(),
-                      [&levelUp, this](std::string const &str) {
+                      [&levelUp, this](std::string const &str)
+                        {
                         if (str.substr(0, str.find(":")) == "Current level")
 	                  {
 	                    long lvl = std::stol(
 	                        str.substr(str.find(": ") + 1, str.length()));
-	                    levelUp = lvl > this->m_curLvl;
+                            if (lvl > this->m_curLvl)
+	                      levelUp = true;
 	                  };
-                      }))
-      ;
+                      }
+    ));
     return levelUp;
   }
 
   bool AILogic::updateLvl()
   {
     ++m_curLvl;
+    m_state = STATE::INITIAL;
     return true;
   }
 
@@ -464,42 +468,83 @@ namespace zappy
     return true;
   }
 
-      static const std::vector<std::vector<std::uint32_t>> gl_incantations =
-          {
-              {1, 1, 0, 0, 0, 0, 0},
-              {2, 1, 1, 1, 0, 0, 0},
-              {2, 2, 0, 1, 0, 2, 0},
-              {4, 1, 1, 2, 0, 1, 0},
-              {4, 1, 2, 1, 3, 0, 0},
-              {6, 1, 2, 3, 0, 1, 0},
-              {6, 2, 2, 2, 2, 2, 1}
-          };
+  static const std::vector<std::vector<std::uint32_t>> gl_incantations =
+      {
+        {1, 1, 0, 0, 0, 0, 0},
+        {2, 1, 1, 1, 0, 0, 0},
+        {2, 2, 0, 1, 0, 2, 0},
+        {4, 1, 1, 2, 0, 1, 0},
+        {4, 1, 2, 1, 3, 0, 0},
+        {6, 1, 2, 3, 0, 1, 0},
+        {6, 2, 2, 2, 2, 2, 1}
+      };
 
-      static const std::vector<std::string> names =
-          {"player", "linemate", "deraumere", "sibur", "mendiane", "phiras", "thystame"};
+  static const std::vector<std::string> gl_names = {
+      "player",   "linemate", "deraumere", "sibur",
+      "mendiane", "phiras",   "thystame"};
 
-  bool AILogic::checkContent()
+  static std::vector<std::uint32_t> gl_contentDiff;
+
+      bool AILogic::checkContent()
   {
-    bool caseClean = true;
-
     sendActionAndCheckResponse(ACTION::LOOK, "", 0, {});
+
+    // Getting content off cell 0
     m_splitter.clear();
     m_splitter.split(_response[0], "[,]");
-
     std::vector<std::string> cells;
     m_splitter.moveTokensTo(cells);
 
+    // Splitting cell 0 to a vector of object names
     m_splitter.clear();
     m_splitter.split(cells[1], " ");
+    std::vector<std::string> objects;
+    m_splitter.moveTokensTo(objects);
 
+    // Counting objects
+    gl_contentDiff.clear();
+    gl_contentDiff.resize(7, 0);
+    for (std::string const &obj : objects)
+      {
+        for (std::uint32_t i = 0; i < gl_names.size(); ++i)
+          {
+            if (gl_names[i] == obj)
+              {
+                ++gl_contentDiff[i];
+                break;
+              }
+          }
+      }
 
+    // Ignoring "player" difference
+    gl_contentDiff[0] = gl_incantations[m_curLvl - 1][0];
 
-    return caseClean;
+    // Return difference between required and actual content
+    return gl_contentDiff != gl_incantations[m_curLvl - 1];
   }
 
   bool AILogic::pickUpObject()
   {
-    return false;
+    std::uint32_t count = 0;
+    std::string cmd = "";
+
+    // Building take request
+    for (std::uint32_t i = 1; i < gl_contentDiff.size() && count < 10; ++i)
+      {
+        while (gl_contentDiff[i] > gl_incantations[m_curLvl - 1][i] && count < 10)
+          {
+            if (count)
+              cmd += "\n";
+            cmd += "Take " + gl_names[i];
+            ++count;
+            --gl_contentDiff[i];
+          }
+      }
+
+    if (count)
+      sendActionAndCheckResponse(ACTION::RAW, cmd, count, {});
+
+    return true;
   }
 
   bool AILogic::broadcastStopPass()
@@ -522,8 +567,11 @@ namespace zappy
 	                    m_splitter.split(prefix[1], " ");
 	                    std::vector<std::string> message;
 	                    if (!dir && std::stoi(message[0]) == m_trackId &&
-	                        std::stoi(message[1]) == m_curLvl)
-	                      stop = message[2] == "STOP";
+	                        std::stoi(message[1]) == m_curLvl &&
+                                message[2] == "STOP")
+                              {
+                                stop = true;
+                              }
 	                  };
                       }))
       ;
@@ -592,32 +640,32 @@ namespace zappy
     nbObjInCase.resize(7);
 
     nbObjInCase[0] = gl_incanation[m_curLvl - 1][0];
-    std::vector<std::string>   typeObjInCase;
+    std::vector<std::string> typeObjInCase;
     m_splitter.clear();
     m_splitter.split(m_look[0], " ", false);
     m_splitter.moveTokensTo(typeObjInCase);
     for (std::string typeObj : typeObjInCase)
-    {
-        if (typeObj == "linemate")
-            ++nbObjInCase[OBJECTS::LINEMATE];
-        else if (typeObj == "deraumere")
-            ++nbObjInCase[OBJECTS::DERAUMERE];
-        else if (typeObj == "sibur")
-            ++nbObjInCase[OBJECTS::SIBUR];
-        else if (typeObj == "mendiane")
-            ++nbObjInCase[OBJECTS::MENDIANE];
-        else if (typeObj == "phiras")
-            ++nbObjInCase[OBJECTS::PHIRAS];
-        else if (typeObj == "thystame")
-            ++nbObjInCase[OBJECTS::THYSTAME];
-    }
-      if (nbObjInCase == gl_incantations[m_curLvl - 1])
       {
-         return true;
+	if (typeObj == "linemate")
+	  ++nbObjInCase[OBJECTS::LINEMATE];
+	else if (typeObj == "deraumere")
+	  ++nbObjInCase[OBJECTS::DERAUMERE];
+	else if (typeObj == "sibur")
+	  ++nbObjInCase[OBJECTS::SIBUR];
+	else if (typeObj == "mendiane")
+	  ++nbObjInCase[OBJECTS::MENDIANE];
+	else if (typeObj == "phiras")
+	  ++nbObjInCase[OBJECTS::PHIRAS];
+	else if (typeObj == "thystame")
+	  ++nbObjInCase[OBJECTS::THYSTAME];
       }
-      else
+    if (nbObjInCase == gl_incantations[m_curLvl - 1])
       {
-        std::string needed;
+	return true;
+      }
+    else
+      {
+	std::string needed;
       }
     return false;
   }
