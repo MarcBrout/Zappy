@@ -20,14 +20,11 @@ int	set_gui(t_server *server,
   max = 0;
   if (!server->gui.alive)
     {
-      log_this("Setting GUI fd read on sock %d\n", server->gui_sock);
       FD_SET(server->gui_sock, fds_read);
       max = server->gui_sock > max ? server->gui_sock : max;
     }
   else
     {
-      log_this("Setting GUI fd read and write on sock %d\n",
-	       server->gui.sock);
       FD_SET(server->gui.sock, fds_read);
       if (find_command(&server->gui.w))
 	FD_SET(server->gui.sock, fds_write);

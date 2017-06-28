@@ -12,8 +12,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "server/eggs.h"
-#include "argument_processor.h"
+#include "server.h"
 
 static bool		gl_stop = false;
 
@@ -34,10 +33,8 @@ static int		set_fds(t_server *server,
   FD_ZERO(fds_read);
   FD_ZERO(fds_write);
   max = set_gui(server, fds_read, fds_write);
-  log_this("Setting Server fd : %d\n", server->ia_sock);
   FD_SET(server->ia_sock, fds_read);
   max = server->ia_sock > max ? server->ia_sock : max;
-  log_this("Setting Clients fds\n");
   while (ia < server->game.max_slot)
     {
       client = &server->game.clients[ia];
@@ -50,7 +47,6 @@ static int		set_fds(t_server *server,
 	}
       ++ia;
     }
-  log_this("File descriptors set, max fd : %d\n", max + 1);
   return (max + 1);
 }
 
@@ -65,9 +61,8 @@ static int		running(t_server *server)
   while (!gl_stop /* TODO add winning end */)
     {
       time.tv_sec = 0;
-      time.tv_usec = 100;
+      time.tv_usec = 10;
       max = set_fds(server, &reads, &writes);
-      log_this("Server waiting on select ...\n");
       if (select(max, &reads, &writes, NULL, &time) < 0)
 	{
 	  perror("Select error");
@@ -116,17 +111,14 @@ int			launch_server(t_server *server)
   if (sigaction(SIGINT, &action, NULL) == -1 ||
       signal(SIGPIPE, SIG_IGN) == SIG_ERR ||
       init_server(server) ||
-      create_socket(&server->ia_sock, server->config.port, 1000) ||
-      create_socket(&server->gui_sock, 8484, 1))
+      create_socket(&server->ia_sock, server->config.port, 1000))
     return (1);
   log_this("Running Server...\n");
   if (running(server))
     {
-      free(server->game.clients);
-      free_eggs(server);
+      free_resources(server);
       return (1);
     }
-  free(server->game.clients);
-  free_eggs(server);
+  free_resources(server);
   return (0);
 }

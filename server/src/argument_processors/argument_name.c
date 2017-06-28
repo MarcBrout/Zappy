@@ -5,7 +5,7 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sat Jun 24 17:04:37 2017 brout_m
-** Last update Tue Jun 27 01:52:08 2017 brout_m
+** Last update Wed Jun 28 10:32:55 2017 brout_m
 */
 #include <stdio.h>
 #include <string.h>
@@ -36,7 +36,7 @@ static int	is_name_taken(t_config const *config, char const *name)
   return (0);
 }
 
-static int resizing(t_config *config, int *size)
+static int	resizing(t_config *config, int *size)
 {
   if (config->team_count == *size - 1)
     {
@@ -58,7 +58,7 @@ static int	adding_names(t_config *config, int ac, char **argv, int *pos)
   while (*pos < ac && argv[*pos][0] != '-')
     {
       if (resizing(config, &size))
-        return (0);
+	return (0);
       if (is_name_taken(config, argv[*pos]))
 	{
 	  printf("Team name '%s' already taken.\n", argv[*pos]);

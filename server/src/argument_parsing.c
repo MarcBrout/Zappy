@@ -5,7 +5,7 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sat Jun 24 17:00:47 2017 brout_m
-** Last update Sun Jun 25 22:02:59 2017 brout_m
+** Last update Wed Jun 28 10:48:08 2017 brout_m
 */
 #include <stdlib.h>
 #include <string.h>
@@ -66,7 +66,9 @@ static int		arguments_validation(char **args)
   return (0);
 }
 
-int			process_command_line(t_config *config, int ac, char **args)
+int			process_command_line(t_config *config,
+					     int ac,
+					     char **args)
 {
   int			argument;
   t_arg			*it;

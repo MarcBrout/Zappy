@@ -5,7 +5,7 @@
 ** Login   <edouard@epitech.net>
 **
 ** Started on  Tue Jun 27 17:30:41 2017 Edouard
-** Last update Tue Jun 27 17:30:47 2017 Edouard
+** Last update Wed Jun 28 10:46:01 2017 brout_m
 */
 
 #include <string.h>
@@ -34,9 +34,9 @@ static int	count_player(t_server *server,
   while (cli < server->game.max_slot)
     {
       if (server->game.clients[cli].alive && cli != client->sock &&
-       	  server->game.clients[cli].ia.pos.x == client->ia.pos.x &&
-          server->game.clients[cli].ia.pos.y == client->ia.pos.y &&
-          server->game.clients[cli].ia.level == client->ia.level)
+	  server->game.clients[cli].ia.pos.x == client->ia.pos.x &&
+	  server->game.clients[cli].ia.pos.y == client->ia.pos.y &&
+	  server->game.clients[cli].ia.level == client->ia.level)
 	{
 	  ++nb_player;
 	}

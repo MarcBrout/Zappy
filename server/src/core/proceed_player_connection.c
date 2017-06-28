@@ -5,7 +5,7 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Tue Jun 27 01:43:58 2017 brout_m
-** Last update Tue Jun 27 01:47:02 2017 brout_m
+** Last update Wed Jun 28 10:37:21 2017 brout_m
 */
 #include <string.h>
 #include <unistd.h>
@@ -39,9 +39,9 @@ static int send_event(t_server *server, t_team *team, ID playerId, t_egg *egg)
 static int send_position(t_server *server, ID playerId, t_team *team)
 {
   return (send_to_ia(server, playerId, "%d\n",
-                     server->config.max_player - team->memberCount) ||
-          send_to_ia(server, playerId, "%d %d\n", server->game.width,
-                     server->game.height));
+		     server->config.max_player - team->memberCount) ||
+	  send_to_ia(server, playerId, "%d %d\n", server->game.width,
+		     server->game.height));
 }
 
 static int check_players(t_server *server, t_team *team, ID playerId)
@@ -57,13 +57,13 @@ static int check_players(t_server *server, t_team *team, ID playerId)
 	  if ((egg = find_egg(server->game.eggs, team->id)) && !egg->hatching)
 	    {
 	      return (send_position(server, playerId, team) ||
-	              send_event(server, team, playerId, egg));
+		      send_event(server, team, playerId, egg));
 	    }
 	}
       else
 	{
 	  return (send_position(server, playerId, team) ||
-	          event_pnw(server, &server->game.clients[playerId]));
+		  event_pnw(server, &server->game.clients[playerId]));
 	}
     }
   if (send_to_ia(server, playerId, "ko\n") ||

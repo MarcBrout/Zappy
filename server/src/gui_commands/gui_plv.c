@@ -5,13 +5,13 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sun Jun 25 02:19:22 2017 brout_m
-** Last update Sun Jun 25 02:19:48 2017 brout_m
+** Last update Wed Jun 28 10:40:59 2017 brout_m
 */
 #include <string.h>
 #include <stdlib.h>
 #include "server.h"
 
-int	send_player_lvl(t_server *server, ID id)
+int		send_player_lvl(t_server *server, ID id)
 {
   t_ia		*ia;
 

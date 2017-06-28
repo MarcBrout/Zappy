@@ -5,7 +5,7 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sun Jun 25 02:19:55 2017 brout_m
-** Last update Sun Jun 25 02:22:49 2017 brout_m
+** Last update Wed Jun 28 10:41:13 2017 brout_m
 */
 #include <string.h>
 #include <stdlib.h>
@@ -18,9 +18,9 @@ static int	send_player_position(t_server *server, ID id)
   ia = &server->game.clients[id].ia;
   log_this("[PPO] GUI asked for Client '%d' position on:"
 	   "\n\tx: %d\n\ty: %d\n\tdir: %d\n ", id,
-           ia->pos.x, ia->pos.y, ia->dir);
+	   ia->pos.x, ia->pos.y, ia->dir);
   return (send_to_gui(server, "ppo #%d %d %d %d\n",
-                      id, ia->pos.x, ia->pos.y, ia->dir));
+		      id, ia->pos.x, ia->pos.y, ia->dir));
 }
 
 int		gui_ppo(t_server *server, ID ids, char *cmd)

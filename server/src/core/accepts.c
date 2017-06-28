@@ -62,5 +62,5 @@ int			accept_new_client(t_server *server)
   server->game.clients[cli].sock = sock;
   server->game.clients[cli].id = cli;
   log_this("Accepted client ID: %d on sock : %d\n", cli, sock);
-  return (send_to_gui(server, "WELCOME\n"));
+  return (send_to_ia(server, cli, "WELCOME\n"));
 }

@@ -5,7 +5,7 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sun Jun 25 02:15:36 2017 brout_m
-** Last update Sun Jun 25 02:16:20 2017 brout_m
+** Last update Wed Jun 28 10:40:18 2017 brout_m
 */
 #include <string.h>
 #include <stdlib.h>
@@ -24,7 +24,7 @@ int		send_case_content(t_server *server, uint32_t x, uint32_t y)
     {
       send_to_gui(server, "%d", server->game.map[pos].objects[i]);
       if (i < OBJ_COUNT - 1 && send_to_gui(server, " "))
-        return (1);
+	return (1);
       ++i;
     }
   return (send_to_gui(server, "\n"));

@@ -5,22 +5,22 @@
 ** Login   <edouard@epitech.net>
 **
 ** Started on  Tue Jun 27 17:32:35 2017 Edouard
-** Last update Tue Jun 27 17:32:41 2017 Edouard
+** Last update Wed Jun 28 10:46:47 2017 brout_m
 */
 
 #include <string.h>
 #include "server/gui_events.h"
 
 static const char *obj_tab[OBJ_COUNT] =
- {
-  "food",
-  "linemate",
-  "deraumere",
-  "sibur",
-  "mendiane",
-  "phiras",
-  "thystame"
- };
+  {
+    "food",
+    "linemate",
+    "deraumere",
+    "sibur",
+    "mendiane",
+    "phiras",
+    "thystame"
+  };
 
 static Object	object_to_enum(char *obj_str)
 {

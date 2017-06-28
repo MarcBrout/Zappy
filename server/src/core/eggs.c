@@ -5,7 +5,7 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sun Jun 25 02:36:40 2017 brout_m
-** Last update Tue Jun 27 18:19:30 2017 brout_m
+** Last update Wed Jun 28 10:35:56 2017 brout_m
 */
 
 #include <server.h>
@@ -15,7 +15,7 @@
 
 static void	increment_team_count(t_server *server, Team id, int value)
 {
-  int i = 0;
+  int		i = 0;
 
   while (i < server->config.team_count)
   {
@@ -108,8 +108,8 @@ void		check_eggs(t_server *server)
 	  else
 	    prev->next = tmp->next;
 	  tmp = tmp->next;
-          event_edi(server, tmp->id);
-          increment_team_count(server, tmp->team, -1);
+	  event_edi(server, tmp->id);
+	  increment_team_count(server, tmp->team, -1);
 	  free(tmp);
 	}
       else

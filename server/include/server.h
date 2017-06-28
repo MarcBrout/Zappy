@@ -11,6 +11,8 @@
 # define SERVER_H_
 
 # include "server/send.h"
+# include "argument_processor.h"
+# include "server/eggs.h"
 # include "server/store_commands.h"
 # include "server/server_types.h"
 # include "server/server_data.h"

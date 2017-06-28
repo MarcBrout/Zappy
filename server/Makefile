@@ -58,6 +58,7 @@ SERVER_RAW_SRC=		server.c 			\
 			$(CORE)set_gui.c 		\
 			$(CORE)store_commands.c		\
 			$(CORE)proceed_player_connection.c \
+			$(CORE)free_resources.c \
 			$(GUICMD)unknown.c 		\
 			$(GUICMD)bct.c 			\
 			$(GUICMD)mct.c 			\
