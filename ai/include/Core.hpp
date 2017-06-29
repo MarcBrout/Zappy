@@ -5,6 +5,7 @@
 #ifndef CLIENTAI_CORE_HPP_
 #define CLIENTAI_CORE_HPP_
 
+#include <setjmp.h>
 #include <bits/unique_ptr.h>
 
 namespace zappy

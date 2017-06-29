@@ -47,6 +47,7 @@ namespace zappy
     virtual ~AILogic();
     void run();
     bool isIncantating() const;
+    bool startedImcatation() const;
 
   private:
     STATE m_state;
@@ -63,6 +64,9 @@ namespace zappy
     std::size_t m_dir;
     bool        m_needFood;
     bool        m_incant;
+    bool        m_startedIncantation;
+    int         m_timeout;
+    bool        m_dead;
 
     inventory_t getInventory(std::string const &inventory);
     void getLook(std::string const &);
@@ -98,11 +102,12 @@ namespace zappy
     bool takeObj();
 
     void fillJoinState();
+    bool timeOut();
+    bool resetJoiningState();
     bool receivedBroadcastHelp();
     bool receivedBroadcastStop();
     bool finalForwardJoin();
     bool isArrived();
-    bool joinToPass();
     bool endJoin();
 
     void fillPassiveState();
@@ -119,8 +124,8 @@ namespace zappy
     void fillActiveState();
     bool missingPlayer();
     bool broadcastHelpActive();
-    bool incantation();
     bool adjustResources();
+    bool incantation();
   };
 }
 

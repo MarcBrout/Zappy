@@ -18,7 +18,8 @@ namespace zappy
         m_splitter(), m_search(""), m_look(), m_directObj(false),
         m_fullLine(0), m_fullTurn(0), m_curLvl(1),
         m_id(static_cast<std::size_t>(std::rand())), m_trackId(0), m_dir(1),
-        m_needFood(false), m_incant(false)
+        m_needFood(false), m_incant(false), m_startedIncantation(false),
+        m_timeout(rand() % 4 + 2), m_dead(false)
   {
     fillInitialState();
     fillSearchState();
@@ -34,7 +35,7 @@ namespace zappy
     Logger::log(Logger::_DEBUG_, "RUN");
     if (!m_incant)
       {
-	Logger::log(Logger::_DEBUG_, "Initial State");
+	Logger::log(Logger::_DEBUG_, "INITIAL STATE");
 	for (it = m_logic[STATE::INITIAL].begin();
 	     it != m_logic[STATE::INITIAL].end(); ++it)
 	  {
@@ -45,7 +46,10 @@ namespace zappy
 	      }
 	  }
 	if (it == m_logic[STATE::INITIAL].end())
-	  m_state = STATE::ACTIVE_WAITING;
+          {
+            Logger::log(Logger::_DEBUG_, "ACTIVE WAITING");
+            m_state = STATE::ACTIVE_WAITING;
+          }
       }
 
     if (m_state != STATE::INITIAL)
@@ -80,7 +84,6 @@ namespace zappy
 	      }
 	  }
       }
-    _message.clear();
     _response.clear();
   }
 
@@ -89,6 +92,7 @@ namespace zappy
     m_splitter.clear();
     m_splitter.split(look, "[,]", false);
     m_splitter.moveTokensTo(m_look);
+    m_look.erase(m_look.begin());
   }
 
   AILogic::inventory_t AILogic::getInventory(std::string const &inventory)
@@ -99,25 +103,24 @@ namespace zappy
     std::vector<std::string> rawValues;
     m_splitter.moveTokensTo(rawValues);
 
-    std::cout << "Showing inventory" << std::endl;
-    int i = 0;
-    for (std::string const &str : rawValues)
-      {
-        std::cout << "inventory[" << i << "] = " << str << std::endl;
-        ++i;
-      }
+//    std::cout << "Showing inventory" << std::endl;
+//    int i = 0;
+//    for (std::string const &str : rawValues)
+//      {
+//        std::cout << "inventory[" << i << "] = " << str << std::endl;
+//        ++i;
+//      }
 
     inventory_t values;
     for (std::uint32_t i = 0; i < rawValues.size(); ++i)
       {
-	std::uint32_t pos =
-	    static_cast<std::uint32_t>(rawValues[i].find_last_of(' ', 0));
-
-	if (rawValues[i] != "")
+	if (rawValues[i].length() > 4)
 	  {
-            std::cout << "rawValue[" << i << "] = " << rawValues[i].substr(pos + 1) << std::endl;
-	    values[i] = static_cast<std::uint32_t>(
-	        std::stol(rawValues[i].substr(pos + 1)));
+            std::uint32_t pos =
+                static_cast<std::uint32_t>(rawValues[i].find(" ", 1));
+  //          std::cout << "rawValue[" << i << "] = " << pos << " " << rawValues[i].substr(pos + 1) << std::endl;
+	    values.push_back(static_cast<std::uint32_t>(
+	        std::stol(rawValues[i].substr(pos + 1))));
 	  }
       }
     return values;
@@ -141,7 +144,7 @@ namespace zappy
   bool AILogic::finalForward()
   {
     Logger::log(Logger::_DEBUG_, "FINAL FORWARD");
-    sendActionAndCheckResponse(ACTION::FORWARD, "", 0, {});
+    sendActionAndCheckResponse(ACTION::FORWARD, "", 1, {});
     ++m_fullLine;
     return true;
   }
@@ -159,7 +162,7 @@ namespace zappy
     Logger::log(Logger::_DEBUG_, "OBJ on SIGHT");
     if (!m_directObj)
       {
-	sendActionAndCheckResponse(ACTION::FORWARD, "", 0, {});
+	sendActionAndCheckResponse(ACTION::FORWARD, "", 1, {});
       }
     m_fullLine = 0;
     m_fullTurn = 0;
@@ -274,7 +277,8 @@ namespace zappy
 	  }
 	if (objInCase && !playerInCase)
 	  {
-	    if (caseIdx < 9)
+            Logger::log(Logger::_DEBUG_, "Case idx " + std::to_string(caseIdx));
+            if (caseIdx < 9)
 	      {
 		sendActionAndCheckResponse(
 		    ACTION::RAW, caseAction[caseIdx].first,
@@ -293,10 +297,10 @@ namespace zappy
 
   bool AILogic::objOnCase()
   {
-    Logger::log(Logger::_DEBUG_, "SEARCHING STATE");
+    Logger::log(Logger::_DEBUG_, "SEARCHING STATE : " + m_search);
     look();
     m_splitter.clear();
-    m_splitter.split(m_look[1], " ", false);
+    m_splitter.split(m_look[0], " ", false);
     std::vector<std::string> objs;
     m_splitter.moveTokensTo(objs);
     int  playerInCase(0);
@@ -321,29 +325,51 @@ namespace zappy
     std::vector<std::pair<condPtr, actionPtr>> joinVec;
 
     joinVec.push_back(std::make_pair<condPtr, actionPtr>(
+        &zappy::AILogic::timeOut, &zappy::AILogic::resetJoiningState));
+    joinVec.push_back(std::make_pair<condPtr, actionPtr>(
         &zappy::AILogic::receivedBroadcastHelp, &zappy::AILogic::isArrived));
     joinVec.push_back(std::make_pair<condPtr, actionPtr>(
         &zappy::AILogic::receivedBroadcastStop, &zappy::AILogic::endJoin));
     m_logic[STATE::JOINING] = joinVec;
   }
 
-  bool AILogic::receivedBroadcastHelp()
+      bool AILogic::timeOut()
+      {
+        if (!m_timeout)
+          {
+            Logger::log(Logger::_DEBUG_, "TIMEOUT ON DIRECTION, GOING OUT BOYS");
+            return (true);
+          }
+        --m_timeout;
+        return (false);
+      }
+
+      bool AILogic::resetJoiningState()
+      {
+        m_state = STATE::INITIAL;
+        return (false);
+      }
+
+      bool AILogic::receivedBroadcastHelp()
   {
     std::vector<std::string> vecInfo;
     std::string              text;
 
+    Logger::log(Logger::_DEBUG_, "LOOKING FOR DIRECTION CHANGE");
     for (std::string msg : _message)
       {
 	if (msg.substr(0, 7) == "message")
 	  {
 	    text = msg.substr(msg.find(',') + 1);
 	    m_splitter.clear();
-	    m_splitter.split(text, " ", false);
+	    m_splitter.split(text, " ");
 	    m_splitter.moveTokensTo(vecInfo);
+            std::cout << "text == " << text << std::endl;
 	    if (std::stoul(vecInfo[0]) == m_trackId &&
 	        std::stoul(vecInfo[1]) == m_curLvl && vecInfo[2] == "HELP")
 	      {
 		m_dir = static_cast<std::size_t>(std::stoi(msg.substr(8, 1)));
+                _message.clear();
 		return true;
 	      }
 	  }
@@ -354,7 +380,7 @@ namespace zappy
   bool AILogic::finalForwardJoin()
   {
     Logger::log(Logger::_DEBUG_, "Final forward JOIN");
-    sendActionAndCheckResponse(ACTION::FORWARD, "", 0, {});
+    sendActionAndCheckResponse(ACTION::FORWARD, "", 1, {});
     return true;
   }
 
@@ -369,7 +395,7 @@ namespace zappy
 	  {
 	    text = msg.substr(msg.find(',') + 1);
 	    m_splitter.clear();
-	    m_splitter.split(text, " ", false);
+	    m_splitter.split(text, " ");
 	    m_splitter.moveTokensTo(vecInfo);
 	    if (std::stoul(vecInfo[0]) == m_trackId &&
 	        std::stoul(vecInfo[1]) == m_curLvl && vecInfo[2] == "STOP")
@@ -507,7 +533,7 @@ namespace zappy
   {
     Logger::log(Logger::_DEBUG_, "WAIT AND TURN");
     if (!m_incant)
-      sendActionAndCheckResponse(ACTION::LEFT, "", 0, {});
+      sendActionAndCheckResponse(ACTION::LEFT, "", 1, {});
     return true;
   }
 
@@ -526,7 +552,7 @@ namespace zappy
   {
     if (!m_incant)
       {
-	sendActionAndCheckResponse(ACTION::LOOK, "", 0, {});
+	sendActionAndCheckResponse(ACTION::LOOK, "", 1, {});
 
 	// Getting content off cell 0
 	m_splitter.clear();
@@ -663,7 +689,7 @@ namespace zappy
 	break;
       }
     m_splitter.clear();
-    m_splitter.split(m_look[1], " ", false);
+    m_splitter.split(m_look[0], " ", false);
     std::vector<std::string> curCase;
     m_splitter.moveTokensTo(curCase);
     for (std::string inCase : curCase)
@@ -729,6 +755,7 @@ namespace zappy
 	std::uint32_t nbCommand(0);
 	for (std::uint32_t idx(0); idx < nbObjInCase.size(); ++idx)
 	  {
+            std::cout << gl_names[idx] << " count = " << nbObjInCase[idx] << std::endl;
 	    if (nbObjInCase[idx] > gl_incantations[m_curLvl - 1][idx])
 	      {
 		if (needed != "")
@@ -752,20 +779,24 @@ namespace zappy
   bool AILogic::incantation()
   {
     Logger::log(Logger::_DEBUG_, "Start INCANTATION");
+    m_startedIncantation = true;
     if (sendActionAndCheckResponse(ACTION::INCANTATION, "", 1,
                                    {"Elevation underway"}))
       {
-	m_incant = true;
+        Logger::log(Logger::_DEBUG_, "INCANTATION Succeeded");
+        m_incant = true;
 	m_state = STATE::PASSIVE_WAITING;
       }
     else
       {
+        Logger::log(Logger::_DEBUG_, "INCANTATION Failed");
 	m_state = STATE::INITIAL;
 	sendActionAndCheckResponse(ACTION::BROADCAST,
 	                           std::to_string(m_id) + " " +
 	                               std::to_string(m_curLvl) + " STOP",
 	                           1, {});
       }
+    m_startedIncantation = false;
     return true;
   }
 
@@ -809,13 +840,11 @@ namespace zappy
 
   bool AILogic::needFood()
   {
-    if (m_needFood)
-      return (true);
     sendActionAndCheckResponse(ACTION::INVENTORY, "", 1, {});
     inventory_t inventory = getInventory(_response[0]);
-    if (inventory[OBJECTS::FOOD] < 3)
+    if (inventory[OBJECTS::FOOD] < 5)
       m_needFood = true;
-    else if (inventory[OBJECTS::FOOD] > 10)
+    else if (inventory[OBJECTS::FOOD] > 15)
       m_needFood = false;
     return (m_needFood);
   }
@@ -840,7 +869,10 @@ namespace zappy
 
   bool AILogic::goToWaitingState()
   {
-    Logger::log(Logger::_DEBUG_, "Go TO WAITING STATE");
+    if (m_state == STATE::PASSIVE_WAITING)
+      Logger::log(Logger::_DEBUG_, "Go TO PASSIVE STATE");
+    else
+      Logger::log(Logger::_DEBUG_, "Go TO ACTIVE STATE");
     return true;
   }
 
@@ -860,8 +892,10 @@ namespace zappy
     std::vector<std::string> vecInfo;
     std::string              text;
 
+    Logger::log(Logger::_DEBUG_, "CHECKING FOR HELPS");
     for (std::string msg : _message)
       {
+        std::cout << "CHECKING MESSAGE : " << msg << std::endl;
 	if (msg.substr(0, 7) == "message")
 	  {
 	    text = msg.substr(msg.find(',') + 1);
@@ -884,6 +918,7 @@ namespace zappy
   bool AILogic::initJoinningState()
   {
     Logger::log(Logger::_DEBUG_, "Init JOINING state");
+    m_timeout = std::rand() % 4 + 2;
     m_state = STATE::JOINING;
     return false;
   }
@@ -901,21 +936,22 @@ namespace zappy
 
   bool AILogic::canIFork()
   {
-    sendActionAndCheckResponse(ACTION::UNUSED_SLOTS, "", 0, {});
-    return !std::stoi(_response[0]);
+    sendActionAndCheckResponse(ACTION::UNUSED_SLOTS, "", 1, {});
+    std::cout << _response.size() << std::endl;
+    return (!std::stoi(_response[0]));
   }
 
   bool AILogic::goFork()
   {
     Logger::log(Logger::_DEBUG_, "Fork");
-    sendActionAndCheckResponse(ACTION::FORK, "", 0, {});
-    sendActionAndCheckResponse(ACTION::FORWARD, "", 0, {});
+    sendActionAndCheckResponse(ACTION::FORK, "", 1, {});
+    sendActionAndCheckResponse(ACTION::FORWARD, "", 1, {});
     return true;
   }
 
   bool AILogic::missingObject()
   {
-    sendActionAndCheckResponse(ACTION::INVENTORY, "", 0, {});
+    sendActionAndCheckResponse(ACTION::INVENTORY, "", 1, {});
     inventory_t inventory = getInventory(_response[0]);
     for (std::size_t idx(1); idx < gl_incantations[m_curLvl - 1].size(); ++idx)
       {
@@ -939,4 +975,9 @@ namespace zappy
   {
     return m_incant;
   }
-}
+
+      bool AILogic::startedImcatation() const
+      {
+        return m_startedIncantation;
+      }
+  }
