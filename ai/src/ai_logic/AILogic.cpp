@@ -260,6 +260,8 @@ namespace zappy
     bool        playerInCase(false);
     bool        objInCase(false);
 
+    m_nbObj = 0;
+    m_searchings = "";
     for (std::string cas : m_look)
       {
 	m_splitter.clear();
