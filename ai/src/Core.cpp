@@ -35,12 +35,8 @@ void zappy::Core::run()
       servMessages.clear();
 
       // TODO PROCESS IA REPLACE WITH FULL IA PROCESS
-      _ai->sendAction(CoreAI::FORWARD);
 
-      if (waitForReponses(1, {"ok"}))
-	{
-	  Logger::log(Logger::_DEBUG_, "forward ok!");
-	}
+      _ai->run();
 
       ::usleep(10);
     }
