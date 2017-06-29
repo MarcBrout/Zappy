@@ -3,6 +3,7 @@
 //
 
 #include <vector>
+#include <setjmp.h>
 #include "network/Client.hpp"
 #include "tools/Logger.hpp"
 #include "Core.hpp"
@@ -32,9 +33,6 @@ void zappy::Core::run()
       for (std::vector<std::string>::iterator it = servMessages.begin();
            it < servMessages.end(); ++it)
 	manageResponse(*it);
-      servMessages.clear();
-
-      // TODO PROCESS IA REPLACE WITH FULL IA PROCESS
 
       _ai->run();
 
@@ -55,7 +53,7 @@ bool zappy::Core::waitForReponses(std::int32_t                    count,
       for (std::vector<std::string>::iterator it = servMessages.begin();
            it < servMessages.end() && _running; ++it)
 	manageResponse(*it);
-      ::usleep(10);
+      ::usleep(0);
     }
   return (anwsers == _ai->getResponse());
 }
@@ -64,10 +62,10 @@ void zappy::Core::manageResponse(std::string servMessage)
 {
   Logger::log(Logger::_DEBUG_, "command received : " + servMessage);
   if (servMessage == "dead")
-    _running = false;
+    ::exit(0);
   else if (servMessage.substr(0, servMessage.find(" ")) == "message" ||
            servMessage.substr(0, servMessage.find(":")) == "eject" ||
-           servMessage == "Elevation underway" ||
+          (servMessage == "Elevation underway" && !_ai->startedImcatation()) ||
            servMessage.substr(0, servMessage.find(":")) == "Current level" ||
            (_ai->isIncantating() && servMessage == "ko"))
     {
