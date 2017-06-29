@@ -20,7 +20,7 @@ static t_arg		commands[7] =
     {"-y", "height", argument_height, true},
     {"-n", "name", argument_name, false},
     {"-c", "client count", argument_nbclients, true},
-    {"-t", "time", argument_time, true},
+    {"-f", "time", argument_time, true},
     {NULL, NULL, NULL, false}
   };
 
