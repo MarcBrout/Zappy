@@ -115,6 +115,8 @@ static int		proceed_commands(t_server *server)
   {
     while (find_command(&server->game.clients[i].r))
       {
+	if (server->game.clients[i].died)
+	  continue ;
 	strfromcircular(&server->game.clients[i].r, cmd);
         if (server->game.clients[i].active &&
 	    !server->game.clients[i].alive)
@@ -134,16 +136,21 @@ static int		proceed_logic(t_server *server)
 {
   int			i = 0;
   char			*cmd = NULL;
+  t_client		*client;
 
   if (isTick())
     {
       while (i < server->game.max_slot)
 	{
-	  if ((cmd = get_command_from_store(&server->game.clients[i].store)))
+	  client = &server->game.clients[i];
+	  if (client->died == false)
 	    {
-	      if (run(server, &server->game.clients[i], ia_logic, cmd))
-		return (1);
-	      pop_command(&server->game.clients[i].store);
+	      if ((cmd = get_command_from_store(&client->store)))
+		{
+		  if (run(server, client, ia_logic, cmd))
+		    return (1);
+		  pop_command(&client->store);
+		}
 	    }
 	  ++i;
 	}

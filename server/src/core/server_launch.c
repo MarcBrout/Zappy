@@ -20,6 +20,7 @@ static bool		gl_stop = false;
 
 void	set_quit(int sig)
 {
+  //TODO check what happen when sigint
   (void)sig;
   gl_stop = true;
 }
@@ -42,7 +43,8 @@ static int		set_fds(t_server *server,
       client = &server->game.clients[ia];
       if (client->active)
 	{
-	  FD_SET(client->sock, fds_read);
+	  if (!client->died)
+	    FD_SET(client->sock, fds_read);
 	  if (find_command(&client->w))
 	    FD_SET(client->sock, fds_write);
 	  max = client->sock > max ? client->sock : max;

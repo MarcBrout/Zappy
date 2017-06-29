@@ -71,7 +71,7 @@ char			*get_command_from_store(t_store *store)
 {
   t_cmd		*first;
 
-  if (store->command_count)
+  if (store->commands)
     {
       first = store->commands;
       if (first->cooldown == 0)
@@ -90,7 +90,7 @@ void			pop_command(t_store *store)
 {
   t_cmd		*first;
 
-  if (store->command_count)
+  if (store->commands)
     {
       first = store->commands;
       store->commands = first->next;

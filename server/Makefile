@@ -43,6 +43,7 @@ SERVER_RAW_SRC=		server.c 			\
 			logger/logger.c 		\
 			timer/timer.c 			\
 			$(GAMELOG)resources_generator.c	\
+			$(GAMELOG)resources_start.c	\
 			$(GAMELOG)player_manager.c	\
 			$(GAMELOG)slot_manager.c	\
 			$(GAMELOG)victory_manager.c	\

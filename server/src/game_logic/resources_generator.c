@@ -36,7 +36,7 @@ static void	kill_client(t_server *server, t_client *client)
     }
   ia_death(server, client->id, "");
   client->alive = false;
-  client->active = false;
+  client->died = true;
   --server->config.teams[client->ia.team].memberCount;
   decrement_team_count(server, client->ia.team);
 }

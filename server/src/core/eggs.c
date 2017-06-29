@@ -18,7 +18,7 @@ t_egg		*add_egg(t_server *server, t_position *pos, Team id)
   t_egg		*egg;
   t_egg		*tmp;
 
-  if ((egg = malloc(sizeof(egg))) == NULL)
+  if ((egg = malloc(sizeof(*egg))) == NULL)
     return (NULL);
   egg->pos.y = pos->y;
   egg->pos.x = pos->x;

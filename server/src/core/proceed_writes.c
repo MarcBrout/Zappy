@@ -83,7 +83,7 @@ static int		write_client(t_client *client, Socket sock)
       if (send_client(client, sock))
 	return (1);
     }
-  if (!client->active)
+  if (client->died)
     {
       memset(client, 0, sizeof(*client));
       close(sock);

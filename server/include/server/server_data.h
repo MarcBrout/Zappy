@@ -66,6 +66,7 @@ struct s_client
   t_ia				ia;
   bool				alive;
   bool				active;
+  bool				died;
   Socket			sock;
   t_circular			r;
   t_circular			w;

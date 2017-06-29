@@ -13,5 +13,5 @@
 int	ia_fork(t_server *server, ID id, char *cmd)
 {
   (void) cmd;
-  return (store_command(&server->game.clients[id].store, "ForkStart", 42));
+  return (store_command(&server->game.clients[id].store, "ForkStart", 0));
 }
