@@ -69,7 +69,7 @@ static int		send_client(t_client *client, Socket sock)
 	 (strlen(out)) || client->w.remains)
     {
       len = strlen(out);
-      if (write_out(client, sock, out, len && !strncmp("322", out, 3)))
+      if (write_out(client, sock, out, len))
 	return (1);
       memset(out, 0, MESSAGE_MAX_SIZE);
     }

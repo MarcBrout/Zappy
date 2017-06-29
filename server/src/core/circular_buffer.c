@@ -73,6 +73,8 @@ bool		strfromcircular(t_circular *c, char out[MESSAGE_MAX_SIZE])
 
   i = 0;
   memset(out, 0, MESSAGE_MAX_SIZE);
+  if (c->len == 0)
+    return (false);
   while (!end(c, c->pos) && i < MESSAGE_MAX_SIZE - 1)
     {
       out[i] = c->buffer[c->pos];
