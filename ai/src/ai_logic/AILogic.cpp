@@ -4,6 +4,7 @@
 
 #include <algorithm>
 #include "ai_logic/AILogic.hpp"
+#include "tools/Logger.hpp"
 
 namespace zappy
 {
@@ -29,8 +30,10 @@ namespace zappy
   {
     std::vector<std::pair<condPtr, actionPtr>>::iterator it;
 
+    Logger::log(Logger::_DEBUG_, "RUN");
     if (!m_incant)
       {
+	Logger::log(Logger::_DEBUG_, "Initial State");
 	for (it = m_logic[STATE::INITIAL].begin();
 	     it != m_logic[STATE::INITIAL].end(); ++it)
 	  {
@@ -46,6 +49,7 @@ namespace zappy
 
     if (m_state != STATE::INITIAL)
       {
+	Logger::log(Logger::_DEBUG_, "Other State");
 	for (it = m_logic[m_state].begin(); it != m_logic[m_state].end(); ++it)
 	  {
 	    if ((this->*(it->first))())
@@ -126,6 +130,7 @@ namespace zappy
 
   bool AILogic::finalForward()
   {
+    Logger::log(Logger::_DEBUG_, "FINAL FORWARD");
     sendActionAndCheckResponse(ACTION::FORWARD, "", 0, {});
     ++m_fullLine;
     return true;
@@ -133,6 +138,7 @@ namespace zappy
 
   bool AILogic::takeObj()
   {
+    Logger::log(Logger::_DEBUG_, "Take OBJ");
     sendActionAndCheckResponse(ACTION::TAKE, m_search, 1, {});
     m_state = STATE::INITIAL;
     return true;
@@ -140,6 +146,7 @@ namespace zappy
 
   bool AILogic::goSearch()
   {
+    Logger::log(Logger::_DEBUG_, "OBJ on SIGHT");
     if (!m_directObj)
       {
 	sendActionAndCheckResponse(ACTION::FORWARD, "", 0, {});
@@ -174,6 +181,7 @@ namespace zappy
 
   bool AILogic::TurnGoTurn()
   {
+    Logger::log(Logger::_DEBUG_, "Move SomeWhere");
     sendActionAndCheckResponse(
         ACTION::RAW, caseFullLine[m_curLvl].first,
         static_cast<std::uint32_t>(caseFullLine[m_curLvl].second), {});
@@ -182,6 +190,7 @@ namespace zappy
 
   bool AILogic::turnSearch()
   {
+    Logger::log(Logger::_DEBUG_, "Turn");
     sendActionAndCheckResponse(ACTION::LEFT, "Left", 1, {});
     ++m_fullTurn;
     return false;
@@ -274,6 +283,7 @@ namespace zappy
 
   bool AILogic::objOnCase()
   {
+    Logger::log(Logger::_DEBUG_, "SEARCHING STATE");
     look();
     m_splitter.clear();
     m_splitter.split(m_look[1], " ", false);
@@ -333,6 +343,7 @@ namespace zappy
 
   bool AILogic::finalForwardJoin()
   {
+    Logger::log(Logger::_DEBUG_, "Final forward JOIN");
     sendActionAndCheckResponse(ACTION::FORWARD, "", 0, {});
     return true;
   }
@@ -376,12 +387,15 @@ namespace zappy
     // Check if arrived
     if (m_dir == 0)
       {
-          // Switching to passing waiting State
-          m_state = STATE::PASSIVE_WAITING;
+	Logger::log(Logger::_DEBUG_, "Is Arrived !");
+	// Switching to passing waiting State
+	m_state = STATE::PASSIVE_WAITING;
       }
     else
       {
-        // Move to a specific position
+	Logger::log(Logger::_DEBUG_,
+	            "Move to " + std::to_string(m_dir) + " direction");
+	// Move to a specific position
 	sendActionAndCheckResponse(
 	    ACTION::RAW, joinCaseMove[m_dir].first,
 	    static_cast<std::uint32_t>(joinCaseMove[m_dir].second), {});
@@ -391,6 +405,7 @@ namespace zappy
 
   bool AILogic::endJoin()
   {
+    Logger::log(Logger::_DEBUG_, "End JOIN STATE");
     m_state = STATE::INITIAL;
     return true;
   }
@@ -432,6 +447,7 @@ namespace zappy
 
   bool AILogic::sendStop()
   {
+    Logger::log(Logger::_DEBUG_, "Incant failed: BROADCAST STOP");
     sendActionAndCheckResponse(ACTION::BROADCAST,
                                std::to_string(m_id) + " " +
                                    std::to_string(m_curLvl) + " STOP",
@@ -460,6 +476,7 @@ namespace zappy
 
   bool AILogic::updateLvl()
   {
+    Logger::log(Logger::_DEBUG_, "LEVEL UP : Broadcast SUCCESS");
     ++m_curLvl;
     if (m_incant)
       m_incant = false;
@@ -470,6 +487,7 @@ namespace zappy
 
   bool AILogic::passiveToInitial()
   {
+    Logger::log(Logger::_DEBUG_, "PASSIVE TO INITIAL");
     m_trackId = 0;
     m_state = STATE::INITIAL;
     return true;
@@ -477,6 +495,7 @@ namespace zappy
 
   bool AILogic::turnPass()
   {
+    Logger::log(Logger::_DEBUG_, "WAIT AND TURN");
     if (!m_incant)
       sendActionAndCheckResponse(ACTION::LEFT, "", 0, {});
     return true;
@@ -537,6 +556,7 @@ namespace zappy
 
   bool AILogic::pickUpObject()
   {
+    Logger::log(Logger::_DEBUG_, "PICK UP OBJECT");
     std::uint32_t count = 0;
     std::string   cmd = "";
 
@@ -607,8 +627,8 @@ namespace zappy
    */
   bool AILogic::missingPlayer()
   {
-    std::size_t nbPlayer {0};
-    std::size_t countNbPlayer {0};
+    std::size_t nbPlayer{0};
+    std::size_t countNbPlayer{0};
 
     look();
     // Check the nb of player depends of the current lvl
@@ -649,6 +669,7 @@ namespace zappy
    */
   bool AILogic::broadcastHelpActive()
   {
+    Logger::log(Logger::_DEBUG_, "Miss A player");
     // Ask HELP
     sendActionAndCheckResponse(ACTION::BROADCAST,
                                std::to_string(m_id) + " " +
@@ -720,6 +741,7 @@ namespace zappy
 
   bool AILogic::incantation()
   {
+    Logger::log(Logger::_DEBUG_, "Start INCANTATION");
     if (sendActionAndCheckResponse(ACTION::INCANTATION, "", 1,
                                    {"Elevation underway"}))
       {
@@ -790,6 +812,7 @@ namespace zappy
 
   bool AILogic::searchFood()
   {
+    Logger::log(Logger::_DEBUG_, "Go SEARCH food");
     if (wasWaiting())
       {
 	stopBroadcast();
@@ -807,6 +830,7 @@ namespace zappy
 
   bool AILogic::goToWaitingState()
   {
+    Logger::log(Logger::_DEBUG_, "Go TO WAITING STATE");
     return true;
   }
 
@@ -817,6 +841,7 @@ namespace zappy
 
   bool AILogic::goToJoinningState()
   {
+    Logger::log(Logger::_DEBUG_, "Go to JOINING State");
     return true;
   }
 
@@ -833,9 +858,9 @@ namespace zappy
 	    m_splitter.clear();
 	    m_splitter.split(text, " ");
 	    m_splitter.moveTokensTo(vecInfo);
-            std::size_t curId = std::stoul(vecInfo[0]);
-	    if (curId != m_id &&
-	        std::stoul(vecInfo[1]) == m_curLvl && vecInfo[2] == "HELP")
+	    std::size_t curId = std::stoul(vecInfo[0]);
+	    if (curId != m_id && std::stoul(vecInfo[1]) == m_curLvl &&
+	        vecInfo[2] == "HELP")
 	      {
 		m_dir = static_cast<std::size_t>(std::stoi(msg.substr(8, 1)));
 		m_trackId = curId;
@@ -848,6 +873,7 @@ namespace zappy
 
   bool AILogic::initJoinningState()
   {
+    Logger::log(Logger::_DEBUG_, "Init JOINING state");
     m_state = STATE::JOINING;
     return false;
   }
@@ -859,6 +885,7 @@ namespace zappy
 
   bool AILogic::goToSearchingState()
   {
+    Logger::log(Logger::_DEBUG_, "Go to SEARCHING state");
     return true;
   }
 
@@ -870,6 +897,7 @@ namespace zappy
 
   bool AILogic::goFork()
   {
+    Logger::log(Logger::_DEBUG_, "Fork");
     sendActionAndCheckResponse(ACTION::FORK, "", 0, {});
     sendActionAndCheckResponse(ACTION::FORWARD, "", 0, {});
     return true;
@@ -892,6 +920,7 @@ namespace zappy
 
   bool AILogic::searchObject()
   {
+    Logger::log(Logger::_DEBUG_, "Start SEARCH OBJ");
     m_state = STATE::SEARCHING;
     return true;
   }
