@@ -15,11 +15,11 @@ namespace zappy
 
   AILogic::AILogic(Core &core)
       : CoreAI(core), m_state(AILogic::STATE::INITIAL), m_logic(),
-        m_splitter(), m_search(""), m_look(), m_directObj(false),
+        m_splitter(), m_search(), m_look(), m_directObj(false),
         m_fullLine(0), m_fullTurn(0), m_curLvl(1),
         m_id(static_cast<std::size_t>(std::rand())), m_trackId(0), m_dir(1),
         m_needFood(false), m_incant(false), m_startedIncantation(false),
-        m_timeout(rand() % 4 + 2), m_dead(false)
+        m_timeout(rand() % 4 + 2), m_searchings(""), m_nbObj(0)
   {
     fillInitialState();
     fillSearchState();
@@ -152,8 +152,10 @@ namespace zappy
   bool AILogic::takeObj()
   {
     Logger::log(Logger::_DEBUG_, "Take OBJ");
-    sendActionAndCheckResponse(ACTION::TAKE, m_search, 1, {});
+    sendActionAndCheckResponse(ACTION::RAW, m_searchings, 1, {});
     m_state = STATE::INITIAL;
+    m_searchings = "";
+    m_nbObj = 0;
     return true;
   }
 
@@ -266,10 +268,13 @@ namespace zappy
 	m_splitter.moveTokensTo(objs);
 	for (std::string obj : objs)
 	  {
-	    if (obj == m_search)
-	      {
-		objInCase = true;
-	      }
+              for (std::pair<std::string, bool> &inList : m_search)
+              {
+                  if (obj == inList.first)
+                  {
+                      objInCase = true;
+                  }
+              }
 	    if (obj == "player")
 	      {
 		playerInCase = true;
@@ -297,7 +302,7 @@ namespace zappy
 
   bool AILogic::objOnCase()
   {
-    Logger::log(Logger::_DEBUG_, "SEARCHING STATE : " + m_search);
+    Logger::log(Logger::_DEBUG_, "SEARCHING STATE : " + m_search.back().first);
     look();
     m_splitter.clear();
     m_splitter.split(m_look[0], " ", false);
@@ -305,17 +310,29 @@ namespace zappy
     m_splitter.moveTokensTo(objs);
     int  playerInCase(0);
     bool objFind(false);
+    bool isFood = m_search.back().first == "food";
 
     for (std::string obj : objs)
       {
-	if (obj == m_search)
-	  {
-	    objFind = true;
-	  }
-	if (obj == "player")
+        for (std::pair<std::string, bool> &inList : m_search)
+        {
+            if (obj == inList.first && !inList.second)
+            {
+                objFind = true;
+                if (m_nbObj)
+                    m_searchings += "\n";
+                ++m_nbObj;
+                m_searchings += "Take " + inList.first;
+                if (inList.first != "food")
+                    inList.second = true;
+            }
+        }
+        if (obj == "player")
 	  {
 	    ++playerInCase;
 	  }
+        if ((objFind && !isFood && m_nbObj == m_search.size()) || m_nbObj == 10)
+              break;
       }
     return (objFind && playerInCase < 2);
   }
@@ -856,7 +873,8 @@ namespace zappy
       {
 	stopBroadcast();
       }
-    m_search = "food";
+    m_search.clear();
+    m_search.push_back(std::make_pair<std::string, bool>("food", false));
     m_state = SEARCHING;
     return true;
   }
@@ -953,11 +971,12 @@ namespace zappy
   {
     sendActionAndCheckResponse(ACTION::INVENTORY, "", 1, {});
     inventory_t inventory = getInventory(_response[0]);
+    m_search.clear();
     for (std::size_t idx(1); idx < gl_incantations[m_curLvl - 1].size(); ++idx)
       {
 	if (inventory[idx] < gl_incantations[m_curLvl - 1][idx])
 	  {
-	    m_search = gl_names[idx];
+	    m_search.push_back(std::make_pair<std::string, bool>(std::string(gl_names[idx]), false));
 	    return true;
 	  }
       }

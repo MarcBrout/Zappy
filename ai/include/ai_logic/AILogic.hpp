@@ -53,7 +53,7 @@ namespace zappy
     STATE m_state;
     std::map<STATE, std::vector<std::pair<condPtr, actionPtr>>> m_logic;
     Splitter    m_splitter;
-    std::string m_search;
+    std::vector<std::pair<std::string, bool>> m_search;
     look_t      m_look;
     bool        m_directObj;
     std::size_t m_fullLine;
@@ -66,7 +66,8 @@ namespace zappy
     bool        m_incant;
     bool        m_startedIncantation;
     int         m_timeout;
-    bool        m_dead;
+    std::string m_searchings;
+    std::uint32_t m_nbObj;
 
     inventory_t getInventory(std::string const &inventory);
     void getLook(std::string const &);
