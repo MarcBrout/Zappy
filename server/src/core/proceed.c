@@ -77,9 +77,12 @@ static int		run(t_server *server,
   log_this("raw command extracted: %s\n", cmd);
   while (commands[i].cmd)
     {
-      if (!strncmp(commands[i].cmd, cmd, commands[i].len) &&
-	  commands[i].exec(server, client->id, cmd))
-	return (1);
+      if (!strncmp(commands[i].cmd, cmd, commands[i].len))
+	{
+	  if (commands[i].exec(server, client->id, cmd))
+	    return (1);
+	  return (0);
+	}
       ++i;
     }
   if (!commands[i].cmd)
