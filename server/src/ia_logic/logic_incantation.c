@@ -107,6 +107,7 @@ int		logic_incantation(t_server *server, ID id, char *cmd)
   while (obj < OBJ_COUNT)
     {
       cell->objects[obj] -= incant_tab[client->ia.level][obj];
+      server->game.object_tot[obj] -= incant_tab[client->ia.level][obj];
       ++obj;
     }
   send_case_content(server, client->ia.pos.x, client->ia.pos.y);

@@ -82,6 +82,7 @@ int accept_new_gui(t_server *server);
 int accept_new_client(t_server *server);
 int player_connecting(t_server *server, ID playerId, char *cmd);
 int proceed_one_turn(t_server *server);
+void generate_ressources_start(t_server *server);
 void increment_team_count(t_server *server, Team id);
 void decrement_team_count(t_server *server, Team id);
 int count_empty_slot(t_server *server, Team team);

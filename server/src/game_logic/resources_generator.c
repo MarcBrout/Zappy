@@ -5,8 +5,9 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Tue Jun 27 17:12:53 2017 brout_m
-** Last update Tue Jun 27 17:15:24 2017 brout_m
+** Last update Tue Jun 27 17:15:24 2017 puilla_e
 */
+
 #include <unistd.h>
 #include <stdlib.h>
 #include "server/gui_events.h"
@@ -26,6 +27,13 @@ static t_luck		drop_rates[OBJ_COUNT] =
 
 static void	kill_client(t_server *server, t_client *client)
 {
+  Object	obj = 0;
+
+  while (obj < OBJ_COUNT)
+    {
+      server->game.object_tot[obj] -= client->ia.inventory[obj];
+      ++obj;
+    }
   ia_death(server, client->id, "");
   client->alive = false;
   client->active = false;
@@ -69,11 +77,14 @@ static int	generate(t_server *server,
   size_t	x;
   size_t	y;
 
-  if (rand() % 100 < luck->value * (double)alive)
+  if (rand() % 100 < luck->value * 100 * (double)alive /
+		      (double) server->config.max_player *
+		      (double) server->config.team_count)
     {
       x = rand() % server->game.width;
       y = rand() % server->game.height;
       ++server->game.map[x + y * server->game.width].objects[luck->type];
+      ++server->game.object_tot[luck->type];
       return (send_case_content(server, (int)x, (int)y));
     }
   return (0);

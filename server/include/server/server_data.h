@@ -80,6 +80,7 @@ struct				s_game
   size_t			height;
   uint16_t			max_slot;
   t_client			*clients;
+  int				object_tot[OBJ_COUNT];
 };
 
 struct				s_server

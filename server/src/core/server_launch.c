@@ -7,13 +7,14 @@
 ** Started on  Sun Jun 25 02:51:50 2017 brout_m
 ** Last update Tue Jun 27 17:12:13 2017 brout_m
 */
+
 #include <sys/socket.h>
 #include <signal.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <server/gui_events.h>
-#include "server.h"
+#include <time.h>
+#include "server/gui_events.h"
 
 static bool		gl_stop = false;
 
@@ -99,6 +100,8 @@ static int		init_server(t_server *server)
 	   config->max_player * config->team_count,
 	   sizeof(*server->game.clients));
   server->game.max_slot = config->max_player * config->team_count;
+  generate_ressources_start(server);
+  srand(time(NULL));
   set_teams(&server->config);
   return (0);
 }
