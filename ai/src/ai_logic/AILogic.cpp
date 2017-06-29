@@ -566,10 +566,7 @@ namespace zappy
   {
     Logger::log(Logger::_DEBUG_, "WAIT AND TURN");
     if (!m_incant)
-      {
-        ::usleep(100);
-        sendActionAndCheckResponse(ACTION::LEFT, "", 1, {});
-      }
+      sendActionAndCheckResponse(ACTION::LEFT, "", 1, {});
     return true;
   }
 
@@ -890,11 +887,15 @@ namespace zappy
   {
     sendActionAndCheckResponse(ACTION::INVENTORY, "", 1, {});
     inventory_t inventory = getInventory(_response[0]);
-    if (inventory[OBJECTS::FOOD] < 5)
-      m_needFood = true;
-    else if (inventory[OBJECTS::FOOD] > 15)
-      m_needFood = false;
-    return (m_needFood);
+    if (inventory.size())
+      {
+        if (inventory[OBJECTS::FOOD] < 4)
+          m_needFood = true;
+        else if (inventory[OBJECTS::FOOD] > 15 + 3 * m_curLvl - 1)
+          m_needFood = false;
+        return (m_needFood);
+      }
+    return (true);
   }
 
   bool AILogic::searchFood()
