@@ -1,8 +1,8 @@
-#######################################################
-### Some basic C++ definitions for arcade Makefiles ###
-#######################################################
+########################################################
+###    Some basic C/C++ definitions for Makefiles    ###
+########################################################
 
-# MODE
+##### MODE #####
 
 DEBUG	=	NO
 
@@ -12,39 +12,55 @@ DLL	=	NO
 
 SANITIZE =	NO
 
-# NAME
+MODE	=	CPP
+
+##### NAME #####
 
 PROJECT_NAME	=
 
-# Compilation definitions
+##### Compilation definitions #####
 
 CFLAGS		=	-W -Wall -Wextra
+CXXFLAGS	=	-W -Wall -Wextra -Weffc++ -std=c++14 -Wcomment          \
+                -Wmain -Wpointer-arith -Wreturn-type -Wstrict-aliasing  \
+                -Wtrigraphs -Wuninitialized -Wunknown-pragmas           \
+                -Wcomment -Wconversion -Wcast-align                     \
+                -pedantic -pipe -fstack-protector -Wformat-nonliteral   \
+                -Wnon-virtual-dtor -Wreorder -Wenum-compare             \
+                -Winvalid-pch -Woverloaded-virtual -Wabi                \
 
 ifeq ($(RELEASE),yes)
 CFLAGS		+=	-Werror
+CXXFLAGS	+=	-Werror
 else
 ifeq ($(DEBUG),yes)
 CFLAGS		+=	-D DEBUG -g
+CXXFLAGS	+=	-D DEBUG -g
 endif
 endif
 
 ifeq ($(DLL),yes)
-CFLAGS	+=	-fPIC -ldl
+CFLAGS 	 +=	-fPIC -ldl
+CXXFLAGS +=	-fPIC -ldl
 endif
 ifeq ($(STATIC),yes)
-CFLAGS	+=	-fPIC
+CFLAGS	 +=	-fPIC
+CXXFLAGS +=	-fPIC
 endif
 
 ifeq ($(SANITIZE),yes)
-CFLAGS	+=	-fsanitize=memory -fsanitize-memory-track-origins=2 -fomit-frame-pointer
+CFLAGS	 +=	-fsanitize=memory -fsanitize-memory-track-origins=2 -fomit-frame-pointer
+CXXFLAGS +=	-fsanitize=memory -fsanitize-memory-track-origins=2 -fomit-frame-pointer
 endif
 
 CC	=	gcc
+CXX	=	g++
 
 LDFLAGS	=
 
 ifeq ($(DLL),yes)
 CC	+= -shared
+CXX	+= -shared
 endif
 
 ifeq ($(STATIC),yes)

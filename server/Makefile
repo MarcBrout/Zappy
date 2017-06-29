@@ -5,8 +5,9 @@
 ## Login   <pierre@e	pitech.net>
 ##
 ## Started on  Sat Jun 10 21:33:53 2017 PierreBougon
-## Last update Tue Jun 27 11:45:50 2017 Edouard
+## Last update Thu Jun 29 10:06:45 2017 brout_m
 ##
+
 
 include ../mk/colors.mk ../mk/commands.mk ../mk/definitions.mk
 
@@ -31,6 +32,8 @@ IALOG=			ia_logic/logic_
 GAMELOG=		game_logic/
 
 CORE= 			core/
+
+MODE=			C
 
 # Project sources
 
