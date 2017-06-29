@@ -152,7 +152,7 @@ namespace zappy
   bool AILogic::takeObj()
   {
     Logger::log(Logger::_DEBUG_, "Take OBJ");
-    sendActionAndCheckResponse(ACTION::RAW, m_searchings, 1, {});
+    sendActionAndCheckResponse(ACTION::RAW, m_searchings, m_nbObj, {});
     m_state = STATE::INITIAL;
     m_searchings = "";
     m_nbObj = 0;
