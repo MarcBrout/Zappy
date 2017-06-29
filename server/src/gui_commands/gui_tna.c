@@ -21,7 +21,9 @@ int	gui_tna(t_server *server, ID id, char *cmd)
   while (i < server->config.team_count)
     {
       log_this("\n\t%s", server->config.teams[i]);
-      if ((ret = send_to_gui(server, "tna %s\n", server->config.teams[i])))
+      if ((ret = send_to_gui(server,
+			     "tna %s\n",
+			     server->config.teams[i].name)))
 	return (ret);
       ++i;
     }

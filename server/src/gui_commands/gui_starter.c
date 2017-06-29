@@ -19,7 +19,7 @@ bool			set_gui_connected(bool value, bool set)
   if (set)
     {
       gl_guiConnected = value;
-      if (!value)
+      if (value)
 	{
 	  reset = true;
 	}
@@ -40,9 +40,9 @@ static int		send_map_cell(t_server *server, uint32_t *cellId)
 	  return (-1);
 	}
       ++*cellId;
-      return (0);
+      return (1);
     }
-  return (1);
+  return (0);
 }
 
 static int		send_player_informations(t_server *server)
