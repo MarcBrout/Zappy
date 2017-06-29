@@ -214,7 +214,6 @@ namespace zappy
     if (m_fullTurn == 4)
       {
 	m_fullTurn = 0;
-	++m_fullLine;
 	return false;
       }
     return true;
@@ -276,9 +275,8 @@ namespace zappy
   bool AILogic::objOnCase()
   {
     look();
-    std::string objInCase = m_look[1];
     m_splitter.clear();
-    m_splitter.split(objInCase, " ", false);
+    m_splitter.split(m_look[1], " ", false);
     std::vector<std::string> objs;
     m_splitter.moveTokensTo(objs);
     int  playerInCase(0);
@@ -292,7 +290,7 @@ namespace zappy
 	  }
 	if (obj == "player")
 	  {
-	    playerInCase++;
+	    ++playerInCase;
 	  }
       }
     return (objFind && playerInCase < 2);
@@ -375,22 +373,19 @@ namespace zappy
 
   bool AILogic::isArrived()
   {
+    // Check if arrived
     if (m_dir == 0)
       {
-	joinToPass();
+          // Switching to passing waiting State
+          m_state = STATE::PASSIVE_WAITING;
       }
     else
       {
+        // Move to a specific position
 	sendActionAndCheckResponse(
 	    ACTION::RAW, joinCaseMove[m_dir].first,
 	    static_cast<std::uint32_t>(joinCaseMove[m_dir].second), {});
       }
-    return true;
-  }
-
-  bool AILogic::joinToPass()
-  {
-    m_state = STATE::PASSIVE_WAITING;
     return true;
   }
 
@@ -454,7 +449,8 @@ namespace zappy
       {
 	if (str.substr(0, str.find(":")) == "Current level")
 	  {
-	    std::uint64_t lvl = std::stoul(str.substr(str.find(": ") + 1, str.length()));
+	    std::uint64_t lvl =
+	        std::stoul(str.substr(str.find(": ") + 1, str.length()));
 	    if (lvl > this->m_curLvl)
 	      levelUp = true;
 	  }
@@ -468,6 +464,7 @@ namespace zappy
     if (m_incant)
       m_incant = false;
     m_state = STATE::INITIAL;
+    m_trackId = 0;
     return true;
   }
 
@@ -498,7 +495,7 @@ namespace zappy
 
   bool AILogic::checkContent()
   {
-    if (m_incant)
+    if (!m_incant)
       {
 	sendActionAndCheckResponse(ACTION::LOOK, "", 0, {});
 
@@ -510,7 +507,7 @@ namespace zappy
 
 	// Splitting cell 0 to a vector of object names
 	m_splitter.clear();
-	m_splitter.split(cells[1], " ");
+	m_splitter.split(cells[0], " ");
 	std::vector<std::string> objects;
 	m_splitter.moveTokensTo(objects);
 
@@ -610,8 +607,8 @@ namespace zappy
    */
   bool AILogic::missingPlayer()
   {
-    std::size_t nbPlayer(0);
-    std::size_t countNbPlayer(0);
+    std::size_t nbPlayer {0};
+    std::size_t countNbPlayer {0};
 
     look();
     // Check the nb of player depends of the current lvl
@@ -635,7 +632,11 @@ namespace zappy
       default:
 	break;
       }
-    for (std::string inCase : m_look)
+    m_splitter.clear();
+    m_splitter.split(m_look[1], " ", false);
+    std::vector<std::string> curCase;
+    m_splitter.moveTokensTo(curCase);
+    for (std::string inCase : curCase)
       {
 	if (inCase == "player")
 	  ++countNbPlayer;
@@ -747,7 +748,7 @@ namespace zappy
                                std::to_string(m_id) + " " +
                                    std::to_string(m_curLvl) + " STOP",
                                1, {});
-    return false;
+    return true;
   }
 
   void AILogic::fillInitialState()
@@ -830,12 +831,14 @@ namespace zappy
 	  {
 	    text = msg.substr(msg.find(',') + 1);
 	    m_splitter.clear();
-	    m_splitter.split(text, " ", false);
+	    m_splitter.split(text, " ");
 	    m_splitter.moveTokensTo(vecInfo);
-	    if (std::stoul(vecInfo[1]) == m_curLvl && vecInfo[2] == "HELP")
+            std::size_t curId = std::stoul(vecInfo[0]);
+	    if (curId != m_id &&
+	        std::stoul(vecInfo[1]) == m_curLvl && vecInfo[2] == "HELP")
 	      {
 		m_dir = static_cast<std::size_t>(std::stoi(msg.substr(8, 1)));
-		m_trackId = std::stoul(vecInfo[0]);
+		m_trackId = curId;
 		return true;
 	      }
 	  }
@@ -869,7 +872,7 @@ namespace zappy
   {
     sendActionAndCheckResponse(ACTION::FORK, "", 0, {});
     sendActionAndCheckResponse(ACTION::FORWARD, "", 0, {});
-    return false;
+    return true;
   }
 
   bool AILogic::missingObject()
