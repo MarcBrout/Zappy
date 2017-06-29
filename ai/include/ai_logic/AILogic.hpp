@@ -68,6 +68,7 @@ namespace zappy
     int         m_timeout;
     std::string m_searchings;
     std::uint32_t m_nbObj;
+    std::uint32_t m_playerStayedFor;
 
     inventory_t getInventory(std::string const &inventory);
     void getLook(std::string const &);
@@ -106,10 +107,10 @@ namespace zappy
     bool timeOut();
     bool resetJoiningState();
     bool receivedBroadcastHelp();
-    bool receivedBroadcastStop();
-    bool finalForwardJoin();
     bool isArrived();
+    bool receivedBroadcastStop();
     bool endJoin();
+    bool finalForwardJoin();
 
     void fillPassiveState();
     bool incantFailed();

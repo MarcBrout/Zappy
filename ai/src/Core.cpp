@@ -3,7 +3,6 @@
 //
 
 #include <vector>
-#include <setjmp.h>
 #include "network/Client.hpp"
 #include "tools/Logger.hpp"
 #include "Core.hpp"
@@ -36,6 +35,7 @@ void zappy::Core::run()
 
       _ai->run();
 
+      servMessages.clear();
       ::usleep(10);
     }
 }
