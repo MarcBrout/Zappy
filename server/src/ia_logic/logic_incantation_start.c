@@ -34,11 +34,10 @@ static void	send_incantation_start(t_server *server,
   cli = 0;
   nb_player = 1;
   len = strlen("Elevation underway\n");
-  strncircular(&client->w, "Elevation underway\n", len);
   while (nb_player < max_player &&
 	 cli < server->game.max_slot)
     {
-      if (server->game.clients[cli].alive && cli != client->sock &&
+      if (server->game.clients[cli].alive &&
 	  server->game.clients[cli].ia.pos.x == client->ia.pos.x &&
 	  server->game.clients[cli].ia.pos.y == client->ia.pos.y)
 	{
@@ -58,10 +57,10 @@ static int	count_player(t_server *server,
   int 		nb_player;
 
   cli = 0;
-  nb_player = 1;
+  nb_player = 0;
   while (cli < server->game.max_slot)
     {
-      if (server->game.clients[cli].alive && cli != client->sock &&
+      if (server->game.clients[cli].alive &&
 	  server->game.clients[cli].ia.pos.x == client->ia.pos.x &&
 	  server->game.clients[cli].ia.pos.y == client->ia.pos.y)
 	{
@@ -80,7 +79,7 @@ int	check_incantation(t_server *server, ID id,
 {
   Object	obj;
 
-  if (incant_tab[client->ia.level][0] != count_player(server, client))
+  if (incant_tab[client->ia.level - 1][0] != count_player(server, client))
     {
       strncircular(&client->w, "ko\n", strlen("ko\n"));
       return (1);
@@ -88,7 +87,7 @@ int	check_incantation(t_server *server, ID id,
   obj = LINEMATE;
   while (obj < OBJ_COUNT)
     {
-      if (incant_tab[client->ia.level][obj] != cell->objects[obj])
+      if (incant_tab[client->ia.level - 1][obj] != cell->objects[obj])
 	{
 	  strncircular(&server->game.clients[id].w, "ko\n", strlen("ko\n"));
 	  return (1);

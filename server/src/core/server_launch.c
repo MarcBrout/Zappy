@@ -87,8 +87,8 @@ static int		init_server(t_server *server)
   server->game.width = config->width;
   server->game.height = config->height;
   log_this("Setting up Server...\n");
-  if ((server->game.map = malloc(sizeof(*server->game.map) *
-				 config->height * config->width)) == NULL)
+  if ((server->game.map = calloc(config->height * config->width,
+				 sizeof(*server->game.map))) == NULL)
     return (1);
   log_this("Allocated map:\n\tx: %d\n\ty: %d\n",
 	   config->width, config->height);

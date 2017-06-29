@@ -68,13 +68,9 @@ static int	send_incantation_end(t_server *server,
   ID 		cli = 0;
   int 		nb_player = 1;
 
-  ++client->ia.level;
-  incr_lvl_team(server, client->ia.team, client->ia.level);
-  send_player_lvl(server, client->id);
-  send_to_ia(server, client->id, "Current level: %u\n", client->ia.level);
   while (nb_player < max_player && cli < server->game.max_slot)
     {
-      if (server->game.clients[cli].alive && cli != client->sock &&
+      if (server->game.clients[cli].alive &&
 	  server->game.clients[cli].ia.pos.x == client->ia.pos.x &&
 	  server->game.clients[cli].ia.pos.y == client->ia.pos.y)
 	{

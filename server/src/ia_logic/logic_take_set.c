@@ -40,21 +40,21 @@ int		logic_take(t_server *server, ID id, char *cmd)
 {
   Object	obj;
   char 		*obj_str;
+  int 		pos;
 
   strtok(cmd, " ");
+  pos = FIND_POS(server->game.clients[id].ia.pos.x,
+		 server->game.clients[id].ia.pos.y,
+		 server->config.width);
   if ((obj_str = strtok(NULL, " ")) == NULL ||
       (obj = object_to_enum(obj_str)) == OBJ_COUNT)
     {
       strncircular(&server->game.clients[id].w, "ko\n", strlen("ko\n"));
       return (0);
     }
-  if (server->game.map[FIND_POS(server->game.clients[id].ia.pos.x,
-				server->game.clients[id].ia.pos.y,
-				server->config.width)].objects[obj] > 0)
+  if (server->game.map[pos].objects[obj] > 0)
     {
-      --server->game.map->objects[FIND_POS(server->game.clients[id].ia.pos.x,
-					   server->game.clients[id].ia.pos.y,
-					   server->config.width)];
+      --server->game.map[pos].objects[obj];
       ++server->game.clients[id].ia.inventory[obj];
       event_pgt(server, id, obj);
       strncircular(&server->game.clients[id].w, "ok\n", strlen("ok\n"));
