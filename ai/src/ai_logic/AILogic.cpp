@@ -3,6 +3,7 @@
 //
 
 #include <algorithm>
+#include <iostream>
 #include "ai_logic/AILogic.hpp"
 
 namespace zappy
@@ -94,14 +95,23 @@ namespace zappy
     std::vector<std::string> rawValues;
     m_splitter.moveTokensTo(rawValues);
 
+    std::cout << "Showing inventory" << std::endl;
+    int i = 0;
+    for (std::string const &str : rawValues)
+      {
+        std::cout << "inventory[" << i << "] = " << str << std::endl;
+        ++i;
+      }
+
     inventory_t values;
     for (std::uint32_t i = 0; i < rawValues.size(); ++i)
       {
 	std::uint32_t pos =
-	    static_cast<std::uint32_t>(rawValues[i].find(' ', 0));
+	    static_cast<std::uint32_t>(rawValues[i].find_last_of(' ', 0));
 
 	if (rawValues[i] != "")
 	  {
+            std::cout << "rawValue[" << i << "] = " << rawValues[i].substr(pos + 1) << std::endl;
 	    values[i] = static_cast<std::uint32_t>(
 	        std::stol(rawValues[i].substr(pos + 1)));
 	  }
