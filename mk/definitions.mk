@@ -49,8 +49,9 @@ CXXFLAGS +=	-fPIC
 endif
 
 ifeq ($(SANITIZE),yes)
-CFLAGS	 +=	-fsanitize=address -fomit-frame-pointer
-CXXFLAGS	 +=	-fsanitize=address -fomit-frame-pointer
+CFLAGS	 +=	-fsanitize=address -fomit-frame-pointer -fsanitize=undefined -g3
+CXXFLAGS	 +=	-fsanitize=address -fomit-frame-pointer -g3
+LDFLAGS += -lasan
 endif
 
 CC	=	gcc
