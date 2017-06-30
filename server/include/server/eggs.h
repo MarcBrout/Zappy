@@ -5,7 +5,7 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sat Jun 24 16:41:47 2017 brout_m
-** Last update Tue Jun 27 17:22:24 2017 Edouard
+** Last update Fri Jun 30 15:04:37 2017 duhieu_b
 */
 
 #ifndef EGGS_H_
@@ -20,6 +20,5 @@ bool	remove_first_egg(t_server *server, Team id);
 void	free_eggs(t_server *server);
 void	check_eggs(t_server *server);
 void free_resources(t_server *server);
-
 
 #endif /* !EGGS_H_ */
