@@ -24,19 +24,6 @@ static t_luck		drop_rates[OBJ_COUNT] =
   {THYSTAME, 2}
  };
 
-#include <stdio.h>
-void print_max(t_server *server)
-{
-  int i = 0;
-
-  while (i < OBJ_COUNT)
-    {
-      fprintf(stderr, "%d ", server->game.object_tot[i]);
-      ++i;
-    }
-  fprintf(stderr, "\n");
-}
-
 int		push_value(t_server *server, Object type, bool start)
 {
   t_position	pos;
@@ -50,7 +37,6 @@ int		push_value(t_server *server, Object type, bool start)
     }
   ++server->game.map[pos.x + pos.y * server->game.width].objects[type];
   ++server->game.object_tot[type];
-  print_max(server);
   if (!start)
     return (send_case_content(server, pos.x, pos.y));
   return (0);
