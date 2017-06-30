@@ -28,5 +28,6 @@ int	ia_take(t_server *server, ID id, char *cmd);
 int	ia_set(t_server *server, ID id, char *cmd);
 int	ia_incantation(t_server *server, ID id, char *cmd);
 int	ia_death(t_server *server, ID id, char *cmd);
+bool	is_incantation(t_server *server, t_position *pos);
 
 #endif /* !IA_COMMANDS_H_ */
