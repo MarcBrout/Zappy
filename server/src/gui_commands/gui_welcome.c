@@ -26,7 +26,7 @@ int gui_welcome(t_server *server, ID id, char *cmd)
     {
       send_to_ia(server, id,
 		 "smg GUI already connected, closing off socket\n");
-      server->game.clients[id].active = false;
+      server->game.clients[id].died = true;
     }
   return (0);
 }
