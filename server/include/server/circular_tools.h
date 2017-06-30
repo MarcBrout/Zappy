@@ -12,8 +12,8 @@
 
 # include <stdbool.h>
 
-# define MESSAGE_MAX_SIZE 4096
-# define BUFFER_MAX_SIZE 4096
+# define MESSAGE_MAX_SIZE 8192
+# define BUFFER_MAX_SIZE 8192
 # define INCR(x) ((x) = ((x) + 1) % BUFFER_MAX_SIZE)
 
 typedef struct		s_circular t_circular;
