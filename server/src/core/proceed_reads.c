@@ -88,20 +88,22 @@ static int		read_gui(t_client *gui, Socket sock)
 int			proceed_reads(t_server *server, fd_set *fds_read)
 {
   Socket		sock;
+  int 			ret;
 
   sock = 0;
   while (sock < server->game.max_slot)
     {
       if (FD_ISSET(sock, fds_read))
 	{
-	  if ((sock == server->gui_sock && accept_new_gui(server)) ||
-	      (sock == server->ia_sock && accept_new_client(server)) ||
-	      (sock == server->gui.sock && read_gui(&server->gui, sock)) ||
-	      (sock != server->ia_sock && sock != server->gui_sock && sock !=
-	       server->gui.sock &&
-	       read_client(server,
-			   &server->game.clients[find_Socket(server, sock)],
-			   sock)))
+	  if (sock == server->ia_sock)
+	    ret = accept_new_client(server);
+	  else if (sock == server->gui.sock)
+	    ret = read_gui(&server->gui, sock);
+	  else
+	    ret = read_client(server,
+			      &server->game.clients[find_Socket(server, sock)],
+			      sock);
+	  if (ret)
 	    return (1);
 	}
       ++sock;
