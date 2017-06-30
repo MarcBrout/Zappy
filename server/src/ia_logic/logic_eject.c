@@ -30,7 +30,7 @@ static int	send_eject_to_player(t_server *server, t_client *client)
 		      &server->game.clients[cli].ia.pos,
 		      client->ia.dir,
 		      1);
-	  send_to_ia(server, server->game.clients[cli].sock,
+	  send_to_ia(server, cli,
 		     "eject: %d\n",
 		     find_direction(server,
 				    &client->ia.pos,

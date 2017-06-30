@@ -27,7 +27,7 @@ int		logic_broadcast(t_server *server, ID id, char *cmd)
       if (server->game.clients[cli].alive == true &&
 	  &server->game.clients[cli] != client)
 	{
-	  send_to_ia(server, server->game.clients[cli].sock,
+	  send_to_ia(server, cli,
 		     "message %d, %s\n",
 		     find_direction(server,
 				    &client->ia.pos,

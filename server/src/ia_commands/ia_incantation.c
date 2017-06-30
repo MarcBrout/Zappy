@@ -25,6 +25,7 @@ bool		is_incantation(t_server *server, t_position *pos)
 	  client->store.commands != NULL &&
 	  strcmp(client->store.commands->command, "Incantation") == 0)
 	return (true);
+      ++cli;
     }
   return (false);
 }

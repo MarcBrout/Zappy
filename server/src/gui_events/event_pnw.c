@@ -12,7 +12,7 @@
 int event_pnw(t_server *server, t_client const *newClient)
 {
   log_this("[PNW] New client '%d' of team '%s' and level '%d'"
-	   ", facing '%d', connected on:\n\tx: %d\n\ty: %d",
+	   ", facing '%d', connected on:\n\tx: %d\n\ty: %d\n",
 	   newClient->id, server->config.teams[newClient->ia.team].name,
 	   newClient->ia.level, newClient->ia.dir, newClient->ia.pos.x,
 	   newClient->ia.pos.y);
