@@ -20,7 +20,7 @@ namespace zappy
         class ASocket
         {
         public:
-            static constexpr size_t BUFFER_SIZE = 4096;
+            static constexpr size_t BUFFER_SIZE = 16384;
             static constexpr char END_OF_COMMAND = '\n';
 
         public:

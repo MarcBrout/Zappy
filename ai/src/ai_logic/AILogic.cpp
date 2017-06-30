@@ -757,7 +757,7 @@ namespace zappy
   {
     // Players stayed for x turn
     ++m_playerStayedFor;
-    if (m_playerStayedFor < 5 && m_curLvl > 1)
+    if (m_playerStayedFor < 3 && m_curLvl > 1)
       sendActionAndCheckResponse(ACTION::BROADCAST,
                                  std::to_string(m_id) + " " +
                                  std::to_string(m_curLvl) + " HELP",
@@ -789,7 +789,7 @@ namespace zappy
 	  }
       }
     if (nbObjInCase == gl_incantations[m_curLvl - 1])
-      return m_playerStayedFor > 4;
+      return m_playerStayedFor > 2;
     else
       {
 	// Miss or too much obj in the current case. Send a specific command
