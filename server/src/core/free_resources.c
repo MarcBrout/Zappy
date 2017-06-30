@@ -26,6 +26,7 @@ void		free_resources(t_server *server)
     {
       if (server->game.clients[i].active)
 	close(server->game.clients[i].sock);
+      ++i;
     }
   free(server->config.teams);
   free(server->game.clients);
