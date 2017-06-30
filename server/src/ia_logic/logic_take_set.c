@@ -56,6 +56,7 @@ int		logic_take(t_server *server, ID id, char *cmd)
     {
       --server->game.map[pos].objects[obj];
       ++server->game.clients[id].ia.inventory[obj];
+      --server->game.object_tot[obj];
       event_pgt(server, id, obj);
       strncircular(&server->game.clients[id].w, "ok\n", strlen("ok\n"));
     }
@@ -82,6 +83,7 @@ int		logic_set(t_server *server, ID id, char *cmd)
       ++server->game.map[FIND_POS(server->game.clients[id].ia.pos.x,
 				  server->game.clients[id].ia.pos.y,
 				  server->config.width)].objects[obj];
+      ++server->game.object_tot[obj];
       event_pdr(server, id, obj);
       strncircular(&server->game.clients[id].w, "ok\n", strlen("ok\n"));
     }

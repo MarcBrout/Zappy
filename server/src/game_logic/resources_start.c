@@ -9,20 +9,51 @@
 */
 
 #include <stdlib.h>
+#include "server/gui_commands.h"
+#include "server/ia_commands.h"
 #include "server.h"
 
-static void	generate_start(t_server *server, Object type)
-{
-  size_t	x;
-  size_t	y;
+static t_luck		drop_rates[OBJ_COUNT] =
+ {
+  {FOOD, 100},
+  {LINEMATE, 42},
+  {DERAUMERE, 23},
+  {SIBUR, 34},
+  {MENDIANE, 13},
+  {PHIRAS, 21},
+  {THYSTAME, 2}
+ };
 
-  if (rand() % 100 < 60)
+#include <stdio.h>
+void print_max(t_server *server)
+{
+  int i = 0;
+
+  while (i < OBJ_COUNT)
     {
-      x = rand() % server->game.width;
-      y = rand() % server->game.height;
-      ++server->game.map[x + y * server->game.width].objects[type];
-      ++server->game.object_tot[type];
+      fprintf(stderr, "%d ", server->game.object_tot[i]);
+      ++i;
     }
+  fprintf(stderr, "\n");
+}
+
+int		push_value(t_server *server, Object type, bool start)
+{
+  t_position	pos;
+
+  pos.x = rand() % server->game.width;
+  pos.y = rand() % server->game.height;
+  while (!start && type != FOOD && is_incantation(server, &pos))
+    {
+      pos.x = rand() % server->game.width;
+      pos.y = rand() % server->game.height;
+    }
+  ++server->game.map[pos.x + pos.y * server->game.width].objects[type];
+  ++server->game.object_tot[type];
+  print_max(server);
+  if (!start)
+    return (send_case_content(server, pos.x, pos.y));
+  return (0);
 }
 
 void		generate_ressources_start(t_server *server)
@@ -32,18 +63,18 @@ void		generate_ressources_start(t_server *server)
 
   while (i < server->config.team_count * server->config.max_player)
     {
-      generate_start(server, j);
+      push_value(server, j, true);
       ++i;
     }
-  i = 0;
   ++j;
-  while (i < server->config.team_count)
+  while (j < OBJ_COUNT)
     {
-      while (j < OBJ_COUNT)
+      i = 0;
+      while (i < drop_rates[j].value / 2)
 	{
-	  generate_start(server, j);
-	  ++j;
+	  push_value(server, j, true);
+	  ++i;
 	}
-      ++i;
+      ++j;
     }
 }

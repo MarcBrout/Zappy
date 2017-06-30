@@ -16,22 +16,28 @@
 
 static t_luck		drop_rates[OBJ_COUNT] =
   {
-    {FOOD, 0.5},
-    {LINEMATE, 0.36},
-    {DERAUMERE, 0.36},
-    {SIBUR, 0.41},
-    {MENDIANE, 0.5},
-    {PHIRAS, 0.37},
-    {THYSTAME, 0.16}
+    {FOOD, 100},
+    {LINEMATE, 42},
+    {DERAUMERE, 23},
+    {SIBUR, 34},
+    {MENDIANE, 13},
+    {PHIRAS, 21},
+    {THYSTAME, 2}
   };
 
 static void	kill_client(t_server *server, t_client *client)
 {
   Object	obj = 0;
+  int 		i;
 
   while (obj < OBJ_COUNT)
     {
-      server->game.object_tot[obj] -= client->ia.inventory[obj];
+      i = 0;
+      while (i < client->ia.inventory[obj])
+	{
+	  push_value(server, obj, false);
+	  ++i;
+	}
       ++obj;
     }
   ia_death(server, client->id, "");
@@ -72,37 +78,42 @@ static uint32_t		check_deads(t_server *server,
 
 static int	generate(t_server *server,
 			 t_luck const *luck,
-			 uint32_t alive)
+			 uint32_t alive,
+			 size_t max)
 {
-  t_position	pos;
-
-  if (server->game.object_tot[luck->type] <
-      luck->value * server->game.max_slot &&
-      rand() % 100 < luck->value * (double)alive)
+  (void) alive;
+  if (server->game.object_tot[luck->type] < (int) max &&
+      rand() % 100 < luck->value)
     {
-      pos.x = rand() % server->game.width;
-      pos.y = rand() % server->game.height;
-      while (luck->type != FOOD && is_incantation(server, &pos))
-	{
-	  pos.x = rand() % server->game.width;
-	  pos.y = rand() % server->game.height;
-	}
-      ++server->game.map[pos.x + pos.y * server->game.width].objects[luck->type];
-      ++server->game.object_tot[luck->type];
-      return (send_case_content(server, pos.x, pos.y));
+      return (push_value(server, luck->type, false));
     }
   return (0);
 }
 
 static int	generate_resources(t_server *server, uint32_t alive)
 {
-  uint16_t	j = 0;
+  uint16_t	j = 1;
+  ID 		cli = 0;
+  size_t 	max;
+  int 		nb_food = 1;
 
   while (j < OBJ_COUNT)
     {
-      if (generate(server, &drop_rates[j], alive))
-	return (1);
-      ++j;
+      cli = 0;
+      if (j == 0)
+	max = alive * server->game.width * server->game.height;
+      else
+	max = drop_rates[j].value * server->config.team_count * 2 *
+	      (server->config.max_player >= 6 ? server->config.max_player : 6)
+	      / 12;
+      while (cli < (int) alive)
+	{
+	  if (generate(server, &drop_rates[j], alive, max))
+	    return (1);
+	  ++cli;
+	}
+      j = nb_food > 0 ? 0 : j + 1;
+      nb_food = nb_food > 0 ? nb_food - 1 : 0;
     }
   return (0);
 }
