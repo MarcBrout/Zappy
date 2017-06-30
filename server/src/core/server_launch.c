@@ -17,15 +17,12 @@
 #include "server/gui_events.h"
 
 static bool		gl_stop = false;
-static bool		gl_end = false;
 
 void	set_quit(int sig)
 {
+  (void) sig;
   //TODO check what happen when sigint
-  if (sig == SIGINT)
-    gl_stop = true;
-  else
-    gl_end = true;
+  gl_stop = true;
 }
 
 static int		set_fds(t_server *server,
@@ -65,9 +62,9 @@ static int		running(t_server *server)
   Socket		max;
   bool			end = false;
 
-  while (!end && !gl_stop)
+  while (!end)
     {
-      if (gl_end)
+      if (gl_stop)
 	{
 	  event_seg(server, server->config.teams[check_winner(server)].name);
 	  end = true;
@@ -80,7 +77,7 @@ static int		running(t_server *server)
 	  perror("Select error");
 	  return (1);
 	}
-      else if (gl_stop || proceed(server, &reads, &writes))
+      else if (proceed(server, &reads, &writes))
 	return (1);
     }
   return (0);

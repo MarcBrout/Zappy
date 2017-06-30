@@ -23,7 +23,7 @@ void		strncircular(t_circular *c, char *str, int n)
   int		cpos;
 
   i = 0;
-  cpos = c->pos + c->len;
+  cpos = (c->pos + c->len) % BUFFER_MAX_SIZE;
   while (i < n && c->len < BUFFER_MAX_SIZE - 1)
     {
       c->buffer[cpos] = str[i];
