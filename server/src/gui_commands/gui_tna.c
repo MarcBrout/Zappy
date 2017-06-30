@@ -20,7 +20,7 @@ int	gui_tna(t_server *server, ID id, char *cmd)
   log_this("[TNA] GUI asked team names :");
   while (i < server->config.team_count)
     {
-      log_this("\n\t%s", server->config.teams[i]);
+      log_this("\n\t%s", server->config.teams[i].name);
       if ((ret = send_to_gui(server,
 			     "tna %s\n",
 			     server->config.teams[i].name)))
