@@ -74,18 +74,22 @@ static int	generate(t_server *server,
 			 t_luck const *luck,
 			 uint32_t alive)
 {
-  size_t	x;
-  size_t	y;
+  t_position	pos;
 
-  if (rand() % 100 < luck->value * 100 * (double)alive /
-		      (double) server->config.max_player *
-		      (double) server->config.team_count)
+  if (server->game.object_tot[luck->type] <
+      luck->value * server->game.max_slot &&
+      rand() % 100 < luck->value * (double)alive)
     {
-      x = rand() % server->game.width;
-      y = rand() % server->game.height;
-      ++server->game.map[x + y * server->game.width].objects[luck->type];
+      pos.x = rand() % server->game.width;
+      pos.y = rand() % server->game.height;
+      while (luck->type != FOOD && is_incantation(server, &pos))
+	{
+	  pos.x = rand() % server->game.width;
+	  pos.y = rand() % server->game.height;
+	}
+      ++server->game.map[pos.x + pos.y * server->game.width].objects[luck->type];
       ++server->game.object_tot[luck->type];
-      return (send_case_content(server, (int)x, (int)y));
+      return (send_case_content(server, pos.x, pos.y));
     }
   return (0);
 }
