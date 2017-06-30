@@ -2,6 +2,7 @@
 // Created by brout_m on 26/06/17.
 //
 
+#include <unistd.h>
 #include <algorithm>
 #include <iostream>
 #include "ai_logic/AILogic.hpp"
@@ -15,11 +16,12 @@ namespace zappy
 
   AILogic::AILogic(Core &core)
       : CoreAI(core), m_state(AILogic::STATE::INITIAL), m_logic(),
-        m_splitter(), m_search(""), m_look(), m_directObj(false),
-        m_fullLine(0), m_fullTurn(0), m_curLvl(1),
+        m_splitter(), m_search(), m_look(), m_directObj(false), m_fullLine(0),
+        m_fullTurn(0), m_curLvl(1),
         m_id(static_cast<std::size_t>(std::rand())), m_trackId(0), m_dir(1),
         m_needFood(false), m_incant(false), m_startedIncantation(false),
-        m_timeout(rand() % 4 + 2), m_dead(false)
+        m_timeout(rand() % 4 + 2), m_searchings(""), m_nbObj(0),
+        m_playerStayedFor(0)
   {
     fillInitialState();
     fillSearchState();
@@ -32,7 +34,7 @@ namespace zappy
   {
     std::vector<std::pair<condPtr, actionPtr>>::iterator it;
 
-    Logger::log(Logger::_DEBUG_, "RUN");
+    Logger::log(Logger::_DEBUG_, "     ======= RUN LEVEL : " + std::to_string(m_curLvl) + " =======");
     if (!m_incant)
       {
 	Logger::log(Logger::_DEBUG_, "INITIAL STATE");
@@ -46,15 +48,14 @@ namespace zappy
 	      }
 	  }
 	if (it == m_logic[STATE::INITIAL].end())
-          {
-            Logger::log(Logger::_DEBUG_, "ACTIVE WAITING");
-            m_state = STATE::ACTIVE_WAITING;
-          }
+	  {
+	    Logger::log(Logger::_DEBUG_, "ACTIVE WAITING");
+	    m_state = STATE::ACTIVE_WAITING;
+	  }
       }
 
     if (m_state != STATE::INITIAL)
       {
-	Logger::log(Logger::_DEBUG_, "Other State");
 	for (it = m_logic[m_state].begin(); it != m_logic[m_state].end(); ++it)
 	  {
 	    if ((this->*(it->first))())
@@ -103,22 +104,23 @@ namespace zappy
     std::vector<std::string> rawValues;
     m_splitter.moveTokensTo(rawValues);
 
-//    std::cout << "Showing inventory" << std::endl;
-//    int i = 0;
-//    for (std::string const &str : rawValues)
-//      {
-//        std::cout << "inventory[" << i << "] = " << str << std::endl;
-//        ++i;
-//      }
+    //    std::cout << "Showing inventory" << std::endl;
+    //    int i = 0;
+    //    for (std::string const &str : rawValues)
+    //      {
+    //        std::cout << "inventory[" << i << "] = " << str << std::endl;
+    //        ++i;
+    //      }
 
     inventory_t values;
     for (std::uint32_t i = 0; i < rawValues.size(); ++i)
       {
 	if (rawValues[i].length() > 4)
 	  {
-            std::uint32_t pos =
-                static_cast<std::uint32_t>(rawValues[i].find(" ", 1));
-  //          std::cout << "rawValue[" << i << "] = " << pos << " " << rawValues[i].substr(pos + 1) << std::endl;
+	    std::uint32_t pos =
+	        static_cast<std::uint32_t>(rawValues[i].find(" ", 1));
+	    //          std::cout << "rawValue[" << i << "] = " << pos << " "
+	    //          << rawValues[i].substr(pos + 1) << std::endl;
 	    values.push_back(static_cast<std::uint32_t>(
 	        std::stol(rawValues[i].substr(pos + 1))));
 	  }
@@ -152,8 +154,10 @@ namespace zappy
   bool AILogic::takeObj()
   {
     Logger::log(Logger::_DEBUG_, "Take OBJ");
-    sendActionAndCheckResponse(ACTION::TAKE, m_search, 1, {});
+    sendActionAndCheckResponse(ACTION::RAW, m_searchings, m_nbObj, {});
     m_state = STATE::INITIAL;
+    m_searchings = "";
+    m_nbObj = 0;
     return true;
   }
 
@@ -258,6 +262,8 @@ namespace zappy
     bool        playerInCase(false);
     bool        objInCase(false);
 
+    m_nbObj = 0;
+    m_searchings = "";
     for (std::string cas : m_look)
       {
 	m_splitter.clear();
@@ -266,9 +272,12 @@ namespace zappy
 	m_splitter.moveTokensTo(objs);
 	for (std::string obj : objs)
 	  {
-	    if (obj == m_search)
+	    for (std::pair<std::string, bool> &inList : m_search)
 	      {
-		objInCase = true;
+		if (obj == inList.first)
+		  {
+		    objInCase = true;
+		  }
 	      }
 	    if (obj == "player")
 	      {
@@ -277,8 +286,9 @@ namespace zappy
 	  }
 	if (objInCase && !playerInCase)
 	  {
-            Logger::log(Logger::_DEBUG_, "Case idx " + std::to_string(caseIdx));
-            if (caseIdx < 9)
+	    Logger::log(Logger::_DEBUG_,
+	                "Case idx " + std::to_string(caseIdx));
+	    if (caseIdx < 9)
 	      {
 		sendActionAndCheckResponse(
 		    ACTION::RAW, caseAction[caseIdx].first,
@@ -297,7 +307,7 @@ namespace zappy
 
   bool AILogic::objOnCase()
   {
-    Logger::log(Logger::_DEBUG_, "SEARCHING STATE : " + m_search);
+    Logger::log(Logger::_DEBUG_, "SEARCHING STATE : " + m_search.back().first);
     look();
     m_splitter.clear();
     m_splitter.split(m_look[0], " ", false);
@@ -305,17 +315,30 @@ namespace zappy
     m_splitter.moveTokensTo(objs);
     int  playerInCase(0);
     bool objFind(false);
+    bool isFood = m_search.back().first == "food";
 
     for (std::string obj : objs)
       {
-	if (obj == m_search)
+	for (std::pair<std::string, bool> &inList : m_search)
 	  {
-	    objFind = true;
+	    if (obj == inList.first && !inList.second)
+	      {
+		objFind = true;
+		if (m_nbObj)
+		  m_searchings += "\n";
+		++m_nbObj;
+		m_searchings += "Take " + inList.first;
+		if (inList.first != "food")
+		  inList.second = true;
+	      }
 	  }
 	if (obj == "player")
 	  {
 	    ++playerInCase;
 	  }
+	if ((objFind && !isFood && m_nbObj == m_search.size()) ||
+	    m_nbObj == 10)
+	  break;
       }
     return (objFind && playerInCase < 2);
   }
@@ -333,42 +356,51 @@ namespace zappy
     m_logic[STATE::JOINING] = joinVec;
   }
 
-      bool AILogic::timeOut()
+  bool AILogic::timeOut()
+  {
+    if (!m_timeout)
       {
-        if (!m_timeout)
-          {
-            Logger::log(Logger::_DEBUG_, "TIMEOUT ON DIRECTION, GOING OUT BOYS");
-            return (true);
-          }
-        --m_timeout;
-        return (false);
+	Logger::log(Logger::_DEBUG_, "TIMEOUT ON DIRECTION, GOING OUT BOYS");
+	return (true);
       }
+    --m_timeout;
+    return (false);
+  }
 
-      bool AILogic::resetJoiningState()
-      {
-        m_state = STATE::INITIAL;
-        return (false);
-      }
+  bool AILogic::resetJoiningState()
+  {
+    m_state = STATE::INITIAL;
+    return (false);
+  }
 
-      bool AILogic::receivedBroadcastHelp()
+  bool AILogic::receivedBroadcastHelp()
   {
     std::vector<std::string> vecInfo;
     std::string              text;
+    std::uint32_t            timeout = 20;
 
     Logger::log(Logger::_DEBUG_, "LOOKING FOR DIRECTION CHANGE");
-    for (std::string msg : _message)
+
+    _message.clear();
+    while (_message.empty() && timeout)
       {
-	if (msg.substr(0, 7) == "message")
+        sendActionAndCheckResponse(ACTION::INVENTORY, "", 1, {});
+        --timeout;
+      }
+
+    for (int i = static_cast<int>(_message.size()) - 1; i >= 0; --i)
+      {
+	if (_message[i].substr(0, 7) == "message")
 	  {
-	    text = msg.substr(msg.find(',') + 1);
+	    text = _message[i].substr(_message[i].find(',') + 1);
 	    m_splitter.clear();
 	    m_splitter.split(text, " ");
 	    m_splitter.moveTokensTo(vecInfo);
-            std::cout << "text == " << text << std::endl;
 	    if (std::stoul(vecInfo[0]) == m_trackId &&
 	        std::stoul(vecInfo[1]) == m_curLvl && vecInfo[2] == "HELP")
 	      {
-		m_dir = static_cast<std::size_t>(std::stoi(msg.substr(8, 1)));
+		m_dir = static_cast<std::size_t>(std::stoi(_message[i].substr(8, 1)));
+                std::cout << "text == " << text <<  " + " << m_dir << std::endl;
                 _message.clear();
 		return true;
 	      }
@@ -488,6 +520,7 @@ namespace zappy
                                std::to_string(m_id) + " " +
                                    std::to_string(m_curLvl) + " STOP",
                                1, {});
+    _message.clear();
     m_state = STATE::INITIAL;
     return false;
   }
@@ -634,6 +667,7 @@ namespace zappy
 	    m_splitter.clear();
 	    m_splitter.split(prefix[1], " ");
 	    std::vector<std::string> message;
+            m_splitter.moveTokensTo(message);
 	    if (!dir && std::stoul(message[0]) == m_trackId &&
 	        std::stoul(message[1]) == m_curLvl && message[2] == "STOP")
 	      {
@@ -711,6 +745,7 @@ namespace zappy
                                std::to_string(m_id) + " " +
                                    std::to_string(m_curLvl) + " HELP",
                                1, {});
+    m_playerStayedFor = 0;
     adjustResources();
     return true;
   }
@@ -720,6 +755,14 @@ namespace zappy
    */
   bool AILogic::adjustResources()
   {
+    // Players stayed for x turn
+    ++m_playerStayedFor;
+    if (m_playerStayedFor < 5 && m_curLvl > 1)
+      sendActionAndCheckResponse(ACTION::BROADCAST,
+                                 std::to_string(m_id) + " " +
+                                 std::to_string(m_curLvl) + " HELP",
+                                 1, {});
+
     // Compare resource of the current case and what it needs for the
     // incantation
     std::vector<std::uint32_t> nbObjInCase;
@@ -746,7 +789,7 @@ namespace zappy
 	  }
       }
     if (nbObjInCase == gl_incantations[m_curLvl - 1])
-      return true;
+      return m_playerStayedFor > 4;
     else
       {
 	// Miss or too much obj in the current case. Send a specific command
@@ -755,7 +798,8 @@ namespace zappy
 	std::uint32_t nbCommand(0);
 	for (std::uint32_t idx(0); idx < nbObjInCase.size(); ++idx)
 	  {
-            std::cout << gl_names[idx] << " count = " << nbObjInCase[idx] << std::endl;
+	    std::cout << gl_names[idx] << " count = " << nbObjInCase[idx]
+	              << std::endl;
 	    if (nbObjInCase[idx] > gl_incantations[m_curLvl - 1][idx])
 	      {
 		if (needed != "")
@@ -783,13 +827,13 @@ namespace zappy
     if (sendActionAndCheckResponse(ACTION::INCANTATION, "", 1,
                                    {"Elevation underway"}))
       {
-        Logger::log(Logger::_DEBUG_, "INCANTATION Succeeded");
-        m_incant = true;
+	Logger::log(Logger::_DEBUG_, "INCANTATION Succeeded");
+	m_incant = true;
 	m_state = STATE::PASSIVE_WAITING;
       }
     else
       {
-        Logger::log(Logger::_DEBUG_, "INCANTATION Failed");
+	Logger::log(Logger::_DEBUG_, "INCANTATION Failed");
 	m_state = STATE::INITIAL;
 	sendActionAndCheckResponse(ACTION::BROADCAST,
 	                           std::to_string(m_id) + " " +
@@ -797,6 +841,7 @@ namespace zappy
 	                           1, {});
       }
     m_startedIncantation = false;
+    m_playerStayedFor = 0;
     return true;
   }
 
@@ -842,11 +887,15 @@ namespace zappy
   {
     sendActionAndCheckResponse(ACTION::INVENTORY, "", 1, {});
     inventory_t inventory = getInventory(_response[0]);
-    if (inventory[OBJECTS::FOOD] < 5)
-      m_needFood = true;
-    else if (inventory[OBJECTS::FOOD] > 15)
-      m_needFood = false;
-    return (m_needFood);
+    if (inventory.size())
+      {
+        if (inventory[OBJECTS::FOOD] < 4)
+          m_needFood = true;
+        else if (inventory[OBJECTS::FOOD] > 15 + 3 * m_curLvl - 1)
+          m_needFood = false;
+        return (m_needFood);
+      }
+    return (true);
   }
 
   bool AILogic::searchFood()
@@ -855,8 +904,10 @@ namespace zappy
     if (wasWaiting())
       {
 	stopBroadcast();
+        _message.clear();
       }
-    m_search = "food";
+    m_search.clear();
+    m_search.push_back(std::make_pair<std::string, bool>("food", false));
     m_state = SEARCHING;
     return true;
   }
@@ -895,7 +946,7 @@ namespace zappy
     Logger::log(Logger::_DEBUG_, "CHECKING FOR HELPS");
     for (std::string msg : _message)
       {
-        std::cout << "CHECKING MESSAGE : " << msg << std::endl;
+	std::cout << "CHECKING MESSAGE : " << msg << std::endl;
 	if (msg.substr(0, 7) == "message")
 	  {
 	    text = msg.substr(msg.find(',') + 1);
@@ -953,11 +1004,13 @@ namespace zappy
   {
     sendActionAndCheckResponse(ACTION::INVENTORY, "", 1, {});
     inventory_t inventory = getInventory(_response[0]);
+    m_search.clear();
     for (std::size_t idx(1); idx < gl_incantations[m_curLvl - 1].size(); ++idx)
       {
 	if (inventory[idx] < gl_incantations[m_curLvl - 1][idx])
 	  {
-	    m_search = gl_names[idx];
+	    m_search.push_back(std::make_pair<std::string, bool>(
+	        std::string(gl_names[idx]), false));
 	    return true;
 	  }
       }
@@ -976,8 +1029,8 @@ namespace zappy
     return m_incant;
   }
 
-      bool AILogic::startedImcatation() const
-      {
-        return m_startedIncantation;
-      }
+  bool AILogic::startedImcatation() const
+  {
+    return m_startedIncantation;
   }
+}

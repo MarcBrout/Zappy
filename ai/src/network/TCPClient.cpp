@@ -30,21 +30,18 @@ std::vector<std::string> zappy::network::TCPClient::receive(sock_t socket)
     {
       first = false;
       ret = ::recv(socket, buffer, BUFFER_SIZE, 0);
-      if (ret == -1 && errno == EINTR)
+      if (ret < 0)
 	{
 	  // Stopping Client
+          perror("Receive error");
 	  disconnect();
-	  return commands;
-	}
-      else if (ret == -1)
-	{
-	  disconnect();
-	  return commands;
+	  ::exit(84);
 	}
       else if (ret == 0)
 	{
-	  disconnect();
-	  return commands;
+          std::cerr << "Server disconnected." << std::endl;
+          disconnect();
+	  ::exit(84);
 	}
       else
 	{
