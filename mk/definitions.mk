@@ -49,8 +49,8 @@ CXXFLAGS +=	-fPIC
 endif
 
 ifeq ($(SANITIZE),yes)
-CFLAGS	 +=	-fsanitize=memory -fsanitize-memory-track-origins=2 -fomit-frame-pointer
-CXXFLAGS +=	-fsanitize=memory -fsanitize-memory-track-origins=2 -fomit-frame-pointer
+CFLAGS	 +=	-fsanitize=address -fomit-frame-pointer
+CXXFLAGS	 +=	-fsanitize=address -fomit-frame-pointer
 endif
 
 CC	=	gcc
