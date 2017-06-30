@@ -34,7 +34,8 @@ namespace zappy
   {
     std::vector<std::pair<condPtr, actionPtr>>::iterator it;
 
-    Logger::log(Logger::_DEBUG_, "     ======= RUN LEVEL : " + std::to_string(m_curLvl) + " =======");
+    Logger::log(Logger::_DEBUG_, "     ======= RUN LEVEL : " +
+                                     std::to_string(m_curLvl) + " =======");
     if (!m_incant)
       {
 	Logger::log(Logger::_DEBUG_, "INITIAL STATE");
@@ -91,9 +92,17 @@ namespace zappy
   void AILogic::getLook(std::string const &look)
   {
     m_splitter.clear();
-    m_splitter.split(look, "[,]", false);
-    m_splitter.moveTokensTo(m_look);
-    m_look.erase(m_look.begin());
+    if (look.size())
+      {
+	m_splitter.split(look, "[,]", false);
+	m_splitter.moveTokensTo(m_look);
+	if (m_look.size())
+	  m_look.erase(m_look.begin());
+      }
+    else
+      {
+	m_look = {};
+      }
   }
 
   AILogic::inventory_t AILogic::getInventory(std::string const &inventory)
@@ -104,25 +113,17 @@ namespace zappy
     std::vector<std::string> rawValues;
     m_splitter.moveTokensTo(rawValues);
 
-    //    std::cout << "Showing inventory" << std::endl;
-    //    int i = 0;
-    //    for (std::string const &str : rawValues)
-    //      {
-    //        std::cout << "inventory[" << i << "] = " << str << std::endl;
-    //        ++i;
-    //      }
-
     inventory_t values;
     for (std::uint32_t i = 0; i < rawValues.size(); ++i)
       {
 	if (rawValues[i].length() > 4)
 	  {
-	    std::uint32_t pos =
-	        static_cast<std::uint32_t>(rawValues[i].find(" ", 1));
-	    //          std::cout << "rawValue[" << i << "] = " << pos << " "
-	    //          << rawValues[i].substr(pos + 1) << std::endl;
-	    values.push_back(static_cast<std::uint32_t>(
-	        std::stol(rawValues[i].substr(pos + 1))));
+	    std::string::size_type pos = rawValues[i].find(" ", 1);
+	    if (pos != std::string::npos)
+	      {
+		values.push_back(static_cast<std::uint32_t>(
+		    std::stol(rawValues[i].substr(pos + 1))));
+	      }
 	  }
       }
     return values;
@@ -216,7 +217,8 @@ namespace zappy
   bool AILogic::look()
   {
     sendActionAndCheckResponse(ACTION::LOOK, "", 1, {});
-    getLook(_response[0]);
+    if (!_response.empty())
+      getLook(_response[0]);
     return true;
   }
 
@@ -309,38 +311,42 @@ namespace zappy
   {
     Logger::log(Logger::_DEBUG_, "SEARCHING STATE : " + m_search.back().first);
     look();
-    m_splitter.clear();
-    m_splitter.split(m_look[0], " ", false);
-    std::vector<std::string> objs;
-    m_splitter.moveTokensTo(objs);
-    int  playerInCase(0);
-    bool objFind(false);
-    bool isFood = m_search.back().first == "food";
-
-    for (std::string obj : objs)
+    if (!m_look.empty())
       {
-	for (std::pair<std::string, bool> &inList : m_search)
+	m_splitter.clear();
+	m_splitter.split(m_look[0], " ", false);
+	std::vector<std::string> objs;
+	m_splitter.moveTokensTo(objs);
+	int  playerInCase(0);
+	bool objFind(false);
+	bool isFood = m_search.back().first == "food";
+
+	for (std::string obj : objs)
 	  {
-	    if (obj == inList.first && !inList.second)
+	    for (std::pair<std::string, bool> &inList : m_search)
 	      {
-		objFind = true;
-		if (m_nbObj)
-		  m_searchings += "\n";
-		++m_nbObj;
-		m_searchings += "Take " + inList.first;
-		if (inList.first != "food")
-		  inList.second = true;
+		if (obj == inList.first && !inList.second)
+		  {
+		    objFind = true;
+		    if (m_nbObj)
+		      m_searchings += "\n";
+		    ++m_nbObj;
+		    m_searchings += "Take " + inList.first;
+		    if (inList.first != "food")
+		      inList.second = true;
+		  }
 	      }
+	    if (obj == "player")
+	      {
+		++playerInCase;
+	      }
+	    if ((objFind && !isFood && m_nbObj == m_search.size()) ||
+	        m_nbObj == 10)
+	      break;
 	  }
-	if (obj == "player")
-	  {
-	    ++playerInCase;
-	  }
-	if ((objFind && !isFood && m_nbObj == m_search.size()) ||
-	    m_nbObj == 10)
-	  break;
+	return (objFind && playerInCase < 2);
       }
-    return (objFind && playerInCase < 2);
+    return (false);
   }
 
   void AILogic::fillJoinState()
@@ -384,8 +390,8 @@ namespace zappy
     _message.clear();
     while (_message.empty() && timeout)
       {
-        sendActionAndCheckResponse(ACTION::INVENTORY, "", 1, {});
-        --timeout;
+	sendActionAndCheckResponse(ACTION::INVENTORY, "", 1, {});
+	--timeout;
       }
 
     for (int i = static_cast<int>(_message.size()) - 1; i >= 0; --i)
@@ -396,13 +402,16 @@ namespace zappy
 	    m_splitter.clear();
 	    m_splitter.split(text, " ");
 	    m_splitter.moveTokensTo(vecInfo);
-	    if (std::stoul(vecInfo[0]) == m_trackId &&
-	        std::stoul(vecInfo[1]) == m_curLvl && vecInfo[2] == "HELP")
+	    if (vecInfo.size() >= 3)
 	      {
-		m_dir = static_cast<std::size_t>(std::stoi(_message[i].substr(8, 1)));
-                std::cout << "text == " << text <<  " + " << m_dir << std::endl;
-                _message.clear();
-		return true;
+		if (std::stoul(vecInfo[0]) == m_trackId &&
+		    std::stoul(vecInfo[1]) == m_curLvl && vecInfo[2] == "HELP")
+		  {
+		    m_dir = static_cast<std::size_t>(
+		        std::stoi(_message[i].substr(8, 1)));
+		    _message.clear();
+		    return true;
+		  }
 	      }
 	  }
       }
@@ -429,10 +438,13 @@ namespace zappy
 	    m_splitter.clear();
 	    m_splitter.split(text, " ");
 	    m_splitter.moveTokensTo(vecInfo);
-	    if (std::stoul(vecInfo[0]) == m_trackId &&
-	        std::stoul(vecInfo[1]) == m_curLvl && vecInfo[2] == "STOP")
+	    if (vecInfo.size() >= 3)
 	      {
-		return true;
+		if (std::stoul(vecInfo[0]) == m_trackId &&
+		    std::stoul(vecInfo[1]) == m_curLvl && vecInfo[2] == "STOP")
+		  {
+		    return true;
+		  }
 	      }
 	  }
       }
@@ -587,38 +599,47 @@ namespace zappy
       {
 	sendActionAndCheckResponse(ACTION::LOOK, "", 1, {});
 
-	// Getting content off cell 0
-	m_splitter.clear();
-	m_splitter.split(_response[0], "[,]");
-	std::vector<std::string> cells;
-	m_splitter.moveTokensTo(cells);
-
-	// Splitting cell 0 to a vector of object names
-	m_splitter.clear();
-	m_splitter.split(cells[0], " ");
-	std::vector<std::string> objects;
-	m_splitter.moveTokensTo(objects);
-
-	// Counting objects
-	gl_contentDiff.clear();
-	gl_contentDiff.resize(7, 0);
-	for (std::string const &obj : objects)
+	if (!_response.empty())
 	  {
-	    for (std::uint32_t i = 0; i < gl_names.size(); ++i)
+	    // Getting content off cell 0
+	    m_splitter.clear();
+	    m_splitter.split(_response[0], "[,]");
+	    std::vector<std::string> cells;
+	    m_splitter.moveTokensTo(cells);
+
+	    if (!cells.empty())
 	      {
-		if (gl_names[i] == obj)
+		// Splitting cell 0 to a vector of object names
+		m_splitter.clear();
+		m_splitter.split(cells[0], " ");
+		std::vector<std::string> objects;
+		m_splitter.moveTokensTo(objects);
+
+		if (objects.size() >= 7)
 		  {
-		    ++gl_contentDiff[i];
-		    break;
+		    // Counting objects
+		    gl_contentDiff.clear();
+		    gl_contentDiff.resize(7, 0);
+		    for (std::string const &obj : objects)
+		      {
+			for (std::uint32_t i = 0; i < gl_names.size(); ++i)
+			  {
+			    if (gl_names[i] == obj)
+			      {
+				++gl_contentDiff[i];
+				break;
+			      }
+			  }
+		      }
+
+		    // Ignoring "player" difference
+		    gl_contentDiff[0] = gl_incantations[m_curLvl - 1][0];
+
+		    // Return difference between required and actual content
+		    return gl_contentDiff != gl_incantations[m_curLvl - 1];
 		  }
 	      }
 	  }
-
-	// Ignoring "player" difference
-	gl_contentDiff[0] = gl_incantations[m_curLvl - 1][0];
-
-	// Return difference between required and actual content
-	return gl_contentDiff != gl_incantations[m_curLvl - 1];
       }
     return false;
   }
@@ -660,18 +681,26 @@ namespace zappy
 	    m_splitter.clear();
 	    m_splitter.split(str, ",");
 	    std::vector<std::string> prefix;
-
 	    m_splitter.moveTokensTo(prefix);
-	    int dir = std::stoi(prefix[0].substr(prefix[0].find(" ")));
 
-	    m_splitter.clear();
-	    m_splitter.split(prefix[1], " ");
-	    std::vector<std::string> message;
-            m_splitter.moveTokensTo(message);
-	    if (!dir && std::stoul(message[0]) == m_trackId &&
-	        std::stoul(message[1]) == m_curLvl && message[2] == "STOP")
+	    if (!prefix.empty())
 	      {
-		stop = true;
+		int dir = std::stoi(prefix[0].substr(prefix[0].find(" ")));
+
+		m_splitter.clear();
+		m_splitter.split(prefix[1], " ");
+		std::vector<std::string> message;
+		m_splitter.moveTokensTo(message);
+
+		if (message.size() >= 3)
+		  {
+		    if (!dir && std::stoul(message[0]) == m_trackId &&
+		        std::stoul(message[1]) == m_curLvl &&
+		        message[2] == "STOP")
+		      {
+			stop = true;
+		      }
+		  }
 	      }
 	  }
       }
@@ -722,16 +751,20 @@ namespace zappy
       default:
 	break;
       }
-    m_splitter.clear();
-    m_splitter.split(m_look[0], " ", false);
-    std::vector<std::string> curCase;
-    m_splitter.moveTokensTo(curCase);
-    for (std::string inCase : curCase)
+    if (!m_look.empty())
       {
-	if (inCase == "player")
-	  ++countNbPlayer;
+        m_splitter.clear();
+        m_splitter.split(m_look[0], " ", false);
+        std::vector<std::string> curCase;
+        m_splitter.moveTokensTo(curCase);
+        for (std::string inCase : curCase)
+          {
+            if (inCase == "player")
+              ++countNbPlayer;
+          }
+        return nbPlayer > countNbPlayer;
       }
-    return nbPlayer > countNbPlayer;
+    return true;
   }
 
   /*
@@ -739,12 +772,22 @@ namespace zappy
    */
   bool AILogic::broadcastHelpActive()
   {
+    static bool shouldBroadCast(true);
+
     Logger::log(Logger::_DEBUG_, "Miss A player");
     // Ask HELP
-    sendActionAndCheckResponse(ACTION::BROADCAST,
-                               std::to_string(m_id) + " " +
+    if (shouldBroadCast)
+      {
+        sendActionAndCheckResponse(ACTION::BROADCAST,
+                                   std::to_string(m_id) + " " +
                                    std::to_string(m_curLvl) + " HELP",
-                               1, {});
+                                   1, {});
+      }
+    else
+      {
+        sendActionAndCheckResponse(ACTION::LEFT, "", 1, {});
+      }
+    shouldBroadCast = !shouldBroadCast;
     m_playerStayedFor = 0;
     adjustResources();
     return true;
@@ -755,13 +798,23 @@ namespace zappy
    */
   bool AILogic::adjustResources()
   {
+    static bool shouldBroadCast(true);
     // Players stayed for x turn
     ++m_playerStayedFor;
     if (m_playerStayedFor < 3 && m_curLvl > 1)
-      sendActionAndCheckResponse(ACTION::BROADCAST,
-                                 std::to_string(m_id) + " " +
-                                 std::to_string(m_curLvl) + " HELP",
-                                 1, {});
+      {
+        if (shouldBroadCast)
+          {
+            sendActionAndCheckResponse(ACTION::BROADCAST,
+                                       std::to_string(m_id) + " " +
+                                       std::to_string(m_curLvl) + " HELP",
+                                       1, {});
+          } else
+          {
+            sendActionAndCheckResponse(ACTION::LEFT, "", 1, {});
+          }
+        shouldBroadCast = !shouldBroadCast;
+      }
 
     // Compare resource of the current case and what it needs for the
     // incantation
@@ -770,54 +823,67 @@ namespace zappy
 
     nbObjInCase[0] = gl_incantations[m_curLvl - 1][0];
     std::vector<std::string> typeObjInCase;
-    m_splitter.clear();
-    m_splitter.split(m_look[0], " ", false);
-    m_splitter.moveTokensTo(typeObjInCase);
 
-    // Loop on all obj in the case
-    for (std::string typeObj : typeObjInCase)
+    if (!m_look.empty())
       {
-	std::uint32_t idxType(0);
-	for (std::string type : gl_names)
-	  {
-	    if (type != "player" && type == typeObj)
-	      {
-		++nbObjInCase[idxType];
-		break;
-	      }
-	    ++idxType;
-	  }
+        m_splitter.clear();
+        m_splitter.split(m_look[0], " ", false);
+        m_splitter.moveTokensTo(typeObjInCase);
+
+        // Loop on all obj in the case
+        for (std::string typeObj : typeObjInCase)
+          {
+            std::uint32_t idxType(0);
+            for (std::string type : gl_names)
+              {
+                if (type != "player" && type == typeObj)
+                  {
+                    ++nbObjInCase[idxType];
+                    break;
+                  }
+                ++idxType;
+              }
+          }
+
+
+        if (nbObjInCase == gl_incantations[m_curLvl - 1])
+          {
+            // Object on case correspond to incantation requirement
+            return m_playerStayedFor > 2;
+          }
+        else
+          {
+            // Miss or too much obj in the current case. Send a specific command
+            // which adjust nb of obj.
+            std::string needed("");
+            std::uint32_t nbCommand(0);
+            for (std::uint32_t idx(0); idx < nbObjInCase.size(); ++idx)
+              {
+                std::cout << gl_names[idx] << " count = " << nbObjInCase[idx]
+                          << std::endl;
+                if (nbObjInCase[idx] > gl_incantations[m_curLvl - 1][idx])
+                  {
+                    if (needed != "")
+                      needed += "\n";
+                    needed += "Take " + gl_names[idx];
+                    ++nbCommand;
+                  } else if (nbObjInCase[idx] <
+                             gl_incantations[m_curLvl - 1][idx])
+                  {
+                    if (needed != "")
+                      needed += "\n";
+                    needed += "Set " + gl_names[idx];
+                    ++nbCommand;
+                  }
+              }
+            if (nbCommand)
+              {
+                sendActionAndCheckResponse(ACTION::RAW, needed, nbCommand, {});
+              }
+            return false;
+          }
       }
-    if (nbObjInCase == gl_incantations[m_curLvl - 1])
-      return m_playerStayedFor > 2;
-    else
-      {
-	// Miss or too much obj in the current case. Send a specific command
-	// which adjust nb of obj.
-	std::string   needed("");
-	std::uint32_t nbCommand(0);
-	for (std::uint32_t idx(0); idx < nbObjInCase.size(); ++idx)
-	  {
-	    std::cout << gl_names[idx] << " count = " << nbObjInCase[idx]
-	              << std::endl;
-	    if (nbObjInCase[idx] > gl_incantations[m_curLvl - 1][idx])
-	      {
-		if (needed != "")
-		  needed += "\n";
-		needed += "Take " + gl_names[idx];
-		++nbCommand;
-	      }
-	    else if (nbObjInCase[idx] < gl_incantations[m_curLvl - 1][idx])
-	      {
-		if (needed != "")
-		  needed += "\n";
-		needed += "Set " + gl_names[idx];
-		++nbCommand;
-	      }
-	  }
-	sendActionAndCheckResponse(ACTION::RAW, needed, nbCommand, {});
-	return false;
-      }
+    return false;
   }
 
   bool AILogic::incantation()
@@ -889,11 +955,11 @@ namespace zappy
     inventory_t inventory = getInventory(_response[0]);
     if (inventory.size())
       {
-        if (inventory[OBJECTS::FOOD] < 4)
-          m_needFood = true;
-        else if (inventory[OBJECTS::FOOD] > 15 + 3 * m_curLvl - 1)
-          m_needFood = false;
-        return (m_needFood);
+	if (inventory[OBJECTS::FOOD] < 4)
+	  m_needFood = true;
+	else if (inventory[OBJECTS::FOOD] > 15 + 3 * m_curLvl - 1)
+	  m_needFood = false;
+	return (m_needFood);
       }
     return (true);
   }
@@ -904,7 +970,7 @@ namespace zappy
     if (wasWaiting())
       {
 	stopBroadcast();
-        _message.clear();
+	_message.clear();
       }
     m_search.clear();
     m_search.push_back(std::make_pair<std::string, bool>("food", false));
@@ -953,14 +1019,18 @@ namespace zappy
 	    m_splitter.clear();
 	    m_splitter.split(text, " ");
 	    m_splitter.moveTokensTo(vecInfo);
-	    std::size_t curId = std::stoul(vecInfo[0]);
-	    if (curId != m_id && std::stoul(vecInfo[1]) == m_curLvl &&
-	        vecInfo[2] == "HELP")
-	      {
-		m_dir = static_cast<std::size_t>(std::stoi(msg.substr(8, 1)));
-		m_trackId = curId;
-		return true;
-	      }
+            if (vecInfo.size() >= 3)
+              {
+                std::size_t curId = std::stoul(vecInfo[0]);
+                if (curId != m_id && std::stoul(vecInfo[1]) == m_curLvl &&
+                    vecInfo[2] == "HELP")
+                  {
+                    m_dir = static_cast<std::size_t>(std::stoi(
+                        msg.substr(8, 1)));
+                    m_trackId = curId;
+                    return true;
+                  }
+              }
 	  }
       }
     return false;
@@ -988,7 +1058,8 @@ namespace zappy
   bool AILogic::canIFork()
   {
     sendActionAndCheckResponse(ACTION::UNUSED_SLOTS, "", 1, {});
-    std::cout << _response.size() << std::endl;
+    if (_response.empty())
+      return false;
     return (!std::stoi(_response[0]));
   }
 
@@ -1003,18 +1074,27 @@ namespace zappy
   bool AILogic::missingObject()
   {
     sendActionAndCheckResponse(ACTION::INVENTORY, "", 1, {});
-    inventory_t inventory = getInventory(_response[0]);
-    m_search.clear();
-    for (std::size_t idx(1); idx < gl_incantations[m_curLvl - 1].size(); ++idx)
+    if (!_response.empty())
       {
-	if (inventory[idx] < gl_incantations[m_curLvl - 1][idx])
-	  {
-	    m_search.push_back(std::make_pair<std::string, bool>(
-	        std::string(gl_names[idx]), false));
-	    return true;
-	  }
+        inventory_t inventory = getInventory(_response[0]);
+        m_search.clear();
+        if (!inventory.empty())
+          {
+            for (std::size_t idx(1);
+                 idx < gl_incantations[m_curLvl - 1].size(); ++idx)
+              {
+                if (inventory[idx] < gl_incantations[m_curLvl - 1][idx])
+                  {
+                    m_search.push_back(std::make_pair<std::string, bool>(
+                        std::string(gl_names[idx]), false));
+                    return true;
+                  }
+              }
+            return false;
+          }
       }
-    return false;
+    m_search.push_back(std::make_pair<std::string, bool>("food", false));
+    return true;
   }
 
   bool AILogic::searchObject()
