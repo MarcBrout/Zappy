@@ -65,6 +65,7 @@ static uint32_t		check_deads(t_server *server,
 	    {
 	      client->ia.life_unit = LIFE_UNIT_MAX;
 	      --client->ia.inventory[FOOD];
+	      send_player_inventory(server, client->id);
 	    }
 	  --client->ia.life_unit;
 	  if (client->ia.inventory[FOOD] == 0 && client->ia.life_unit == 0)

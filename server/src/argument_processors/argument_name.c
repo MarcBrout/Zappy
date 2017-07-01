@@ -69,6 +69,7 @@ static int	adding_names(t_config *config, int ac, char **argv, int *pos)
       if (!(config->teams[config->team_count].name = strdup(argv[*pos])))
 	return (1);
       config->teams[config->team_count].id = config->team_count;
+      config->teams[config->team_count].maxlvl = 2;
       ++config->team_count;
       ++*pos;
     }
