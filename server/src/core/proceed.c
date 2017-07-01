@@ -94,6 +94,8 @@ static int		proceed_gui(t_server *server)
 {
   char			cmd[MESSAGE_MAX_SIZE];
 
+  if (set_gui_connected(true, false) && send_informations(server))
+    return (1);
   while (find_command(&server->gui.r))
     {
       strfromcircular(&server->gui.r, cmd);

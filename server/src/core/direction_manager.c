@@ -113,7 +113,7 @@ int				find_direction(t_server *server,
     {
       if (direction_tab[i].x_r == x_prev && direction_tab[i].y_r == y_prev)
 	return (direction_tab[i].id);
-
+      ++i;
     }
   return (0);
 }

@@ -80,18 +80,23 @@ static int send_eggs_informations(t_server *server)
   return (0);
 }
 
-int send_informations(t_server *server)
+int			send_informations(t_server *server)
 {
-  static uint32_t cellId = 0;
+  static uint32_t	cellId = 0;
+  int			ret;
 
-  cellId = 0;
-  send_to_gui(server, "msz %d %d\n", server->config.width,
-              server->config.height);
-  send_to_gui(server, "sgt %d\n", server->config.time);
-  reset = false;
-
-  while (send_map_cell(server, &cellId) == 1)
-    ;
+  if (reset)
+    {
+      cellId = 0;
+      send_to_gui(server, "msz %d %d\n", server->config.width,
+		  server->config.height);
+      send_to_gui(server, "sgt %d\n", server->config.time);
+      reset = false;
+    }
+  if ((ret = send_map_cell(server, &cellId)) == 1)
+    return (0);
+  else if (ret == -1)
+    return (1);
   if (gui_tna(server, 0, NULL) || send_player_informations(server) ||
       send_eggs_informations(server))
     return (1);
