@@ -50,7 +50,7 @@ static int			find_value_prev_y(int len_x, int len_y)
   double			val;
 
   if (len_x == 0)
-    return (1);
+    return (len_y == 0 ? 0 : 1);
   val = atan((double) len_y / (double) len_x);
   if (ABS(val) > DIR_PI_6)
     return (1);
@@ -81,8 +81,8 @@ static void	change_dir(Direction dir, int *pos_x, int *pos_y)
   else if (dir != EAST)
     {
       tmp = *pos_x;
-      *pos_x = dir == NORTH ? *pos_y : *pos_y * -1;
-      *pos_y = dir == NORTH ? tmp * -1 : tmp;
+      *pos_x = dir == NORTH ? *pos_y * -1 : *pos_y;
+      *pos_y = dir == NORTH ? tmp : tmp * -1;
     }
 }
 
@@ -113,7 +113,7 @@ int				find_direction(t_server *server,
     {
       if (direction_tab[i].x_r == x_prev && direction_tab[i].y_r == y_prev)
 	return (direction_tab[i].id);
-      ++i;
+
     }
   return (0);
 }
