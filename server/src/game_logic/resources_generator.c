@@ -16,7 +16,7 @@
 
 static t_luck		drop_rates[OBJ_COUNT] =
   {
-    {FOOD, 100},
+    {FOOD, 80},
     {LINEMATE, 42},
     {DERAUMERE, 23},
     {SIBUR, 34},
@@ -94,28 +94,24 @@ static int	generate(t_server *server,
 
 static int	generate_resources(t_server *server, uint32_t alive)
 {
-  uint16_t	j = 1;
+  uint16_t	j = 0;
   ID 		cli = 0;
   size_t 	max;
-  int 		nb_food = 1;
 
   while (j < OBJ_COUNT)
     {
       cli = 0;
       if (j == 0)
-	max = alive * server->game.width * server->game.height;
+	max = alive * server->game.width * server->game.height / 2;
       else
-	max = drop_rates[j].value * server->config.team_count * 2 *
-	      (server->config.max_player >= 6 ? server->config.max_player : 6)
-	      / 12;
+	max = drop_rates[j].value * server->config.team_count;
       while (cli < (int) alive)
 	{
 	  if (generate(server, &drop_rates[j], alive, max))
 	    return (1);
 	  ++cli;
 	}
-      j = nb_food > 0 ? 0 : j + 1;
-      nb_food = nb_food > 0 ? nb_food - 1 : 0;
+      j = j + 1;
     }
   return (0);
 }

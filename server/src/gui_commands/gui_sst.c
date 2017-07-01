@@ -26,5 +26,6 @@ int		gui_sst(t_server *server, ID id, char *cmd)
   log_this("[SST] GUI modified Time unit : %d to %d\n",
 	   server->config.time, time);
   server->config.time = (uint16_t)time;
+  set_new_timer(server->config.time);
   return (send_to_gui(server, "sgt %d\n", time));
 }

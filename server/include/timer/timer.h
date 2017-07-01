@@ -21,9 +21,11 @@ struct			s_timer
   struct timeval	start;
   struct timeval	now;
   uint64_t		freq;
+  uint64_t		new_freq;
 };
 
 int init_timer(uint16_t freq);
 bool isTick();
+void set_new_timer(uint16_t freq);
 
 #endif /* !TIMER_H_ */
