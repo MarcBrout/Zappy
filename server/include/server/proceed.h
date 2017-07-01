@@ -76,6 +76,7 @@ typedef struct		s_command
 int proceed(t_server *server, fd_set *fds_read, fd_set *fds_write);
 int proceed_writes(t_server *server, fd_set *fds_write);
 int proceed_reads(t_server *server, fd_set *fds_read);
+int proceed_server(t_server *server, fd_set *fds_read);
 int launch_server(t_server *server);
 int set_gui(t_server *server, fd_set *fds_read, fd_set *fds_write);
 int accept_new_gui(t_server *server);
@@ -90,5 +91,9 @@ void initiate_client_egg(t_server *server, ID id, Team team, t_position *pos);
 void initiate_client(t_server *server, ID id, Team team);
 void set_quit(int sig);
 Team check_winner(t_server *server);
+int write_client(t_client *client, Socket sock);
+int proceed_gui_writes(t_server *server, fd_set *fds_write);
+int read_gui(t_client *gui, Socket sock);
+int proceed_gui_reads(t_server *server, fd_set *fds_read);
 
 #endif /* !PROCEED_H_ */

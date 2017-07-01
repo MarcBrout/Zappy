@@ -106,7 +106,7 @@ void zappy::Core::auth(std::string teamName)
 	  if (!accepted && *it != "")
 	    {
 	      nb = std::atoi(it->c_str());
-	      if (nb >= 1)
+	      if (nb >= 0)
 		accepted = true;
 	      else
 		{

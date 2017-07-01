@@ -9,8 +9,8 @@
 */
 #ifndef CONFIG_H_
 # define CONFIG_H_
-# define MAX_WIDTH 255
-# define MAX_HEIGHT 255
+# define MAX_WIDTH 31
+# define MAX_HEIGHT 31
 # define MAX_CLIENT 21
 # define MAX_TIME 65535
 

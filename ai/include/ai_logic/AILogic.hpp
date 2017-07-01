@@ -117,11 +117,11 @@ namespace zappy
     bool sendStop();
     bool broadcastSuccess();
     bool updateLvl();
-    bool passiveToInitial();
-    bool turnPass();
     bool broadcastStopPass();
+    bool passiveToInitial();
     bool checkContent();
     bool pickUpObject();
+    bool turnPass();
 
     void fillActiveState();
     bool missingPlayer();

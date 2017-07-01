@@ -16,9 +16,9 @@
 #include <server/gui_events.h>
 #include "server.h"
 
-int			find_ID(t_server *server, ID client, bool active)
+int find_ID(t_server *server, ID client, bool active)
 {
-  ID			cli;
+  ID cli;
 
   cli = 0;
   while (cli < server->game.max_slot)
@@ -32,14 +32,12 @@ int			find_ID(t_server *server, ID client, bool active)
   return (-1);
 }
 
-static char const	ctrl_c[5] = {0xff, 0xf4, 0xff, 0xfd, 0x06};
+static char const ctrl_c[5] = {0xff, 0xf4, 0xff, 0xfd, 0x06};
 
-static int		read_client(t_server *server,
-				    t_client *client,
-				    Socket sock)
+static int read_client(t_server *server, t_client *client, Socket sock)
 {
-  char			buff[MESSAGE_MAX_SIZE];
-  ssize_t		len;
+  char    buff[MESSAGE_MAX_SIZE];
+  ssize_t len;
 
   log_this("Received command from CLIENT : %d\n", client->id);
   memset(buff, 0, MESSAGE_MAX_SIZE);
@@ -61,10 +59,10 @@ static int		read_client(t_server *server,
   return (0);
 }
 
-static int		read_gui(t_client *gui, Socket sock)
+int read_gui(t_client *gui, Socket sock)
 {
-  char			buff[MESSAGE_MAX_SIZE];
-  ssize_t		len;
+  char    buff[MESSAGE_MAX_SIZE];
+  ssize_t len;
 
   log_this("Received command from GUI\n");
   memset(buff, 0, MESSAGE_MAX_SIZE);
@@ -76,6 +74,7 @@ static int		read_gui(t_client *gui, Socket sock)
   if (!len || strchr(buff, 4) ||
       (len == sizeof(ctrl_c) && !memcmp(buff, ctrl_c, sizeof(ctrl_c))))
     {
+      log_this("GUI KILLED");
       close(sock);
       memset(gui, 0, sizeof(t_client));
       return (0);
@@ -85,28 +84,36 @@ static int		read_gui(t_client *gui, Socket sock)
   return (0);
 }
 
-int			proceed_reads(t_server *server, fd_set *fds_read)
-{
-  Socket		sock;
-  int 			ret;
+int proceed_server(t_server *server, fd_set *fds_read)
 
-  sock = 0;
-  while (sock < server->game.max_slot)
+{
+  if (FD_ISSET(server->ia_sock, fds_read))
+    return (accept_new_client(server));
+  return (0);
+}
+
+int proceed_reads(t_server *server, fd_set *fds_read)
+{
+  ID     id;
+  Socket sock;
+  int    ret;
+
+  id = 0;
+  while (id < server->game.max_slot)
     {
-      if (FD_ISSET(sock, fds_read))
+      if (server->game.clients[id].active)
 	{
-	  if (sock == server->ia_sock)
-	    ret = accept_new_client(server);
-	  else if (sock == server->gui.sock)
-	    ret = read_gui(&server->gui, sock);
-	  else
-	    ret = read_client(server,
-			      &server->game.clients[find_Socket(server, sock)],
-			      sock);
-	  if (ret)
-	    return (1);
+	  sock = server->game.clients[id].sock;
+	  if (FD_ISSET(sock, fds_read))
+	    {
+	      ret = read_client(
+	          server, &server->game.clients[find_Socket(server, sock)],
+	          sock);
+	      if (ret)
+		return (1);
+	    }
 	}
-      ++sock;
+      ++id;
     }
   return (0);
 }

@@ -19,6 +19,7 @@ int gui_welcome(t_server *server, ID id, char *cmd)
     {
       memcpy(&server->gui, &server->game.clients[id], sizeof(t_client));
       set_gui_connected(true, true);
+      send_informations(server);
       log_this("Gui connected Correctly\n");
       memset(&server->game.clients[id], 0, sizeof(t_client));
     }

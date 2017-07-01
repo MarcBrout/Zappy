@@ -94,13 +94,11 @@ static int		proceed_gui(t_server *server)
 {
   char			cmd[MESSAGE_MAX_SIZE];
 
-  if (set_gui_connected(true, false) && send_informations(server))
-    return (1);
   while (find_command(&server->gui.r))
     {
       strfromcircular(&server->gui.r, cmd);
       if (run(server, &server->gui, gui_commands, cmd))
-	return (1);
+        return (1);
     }
   return (0);
 }
@@ -162,9 +160,12 @@ static int		proceed_logic(t_server *server)
 int			proceed(t_server *server,
 				fd_set *fds_read, fd_set *fds_write)
 {
-  return (proceed_reads(server, fds_read) ||
+  return (proceed_server(server, fds_read) ||
+          proceed_gui_reads(server, fds_read) ||
+          proceed_reads(server, fds_read) ||
 	  proceed_gui(server) ||
 	  proceed_commands(server) ||
 	  proceed_logic(server) ||
+          proceed_gui_writes(server, fds_write) ||
 	  proceed_writes(server, fds_write));
 }
