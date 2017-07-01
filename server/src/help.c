@@ -10,7 +10,7 @@
 #include <stdio.h>
 
 static const char	*usage =
-  "USAGE: %s -p port -x width -y height -n name1 name2 -c nbClients -t time\n"
+  "USAGE: %s -p port -x width -y height -n name1 name2 -c nbClients -f time\n"
   "\tport\t\tis the port number\t\t\t\tdefault : 4242\n"
   "\twidth\t\tis the width of the world\t\t\tdefault : 30\n"
   "\theight\t\tis the height of the world\t\t\tdefault : 30\n"
