@@ -111,6 +111,7 @@ int		logic_incantation_start(t_server *server, ID id, char *cmd)
   if (check_incantation(server, id, client, cell) == 1)
     return (0);
   event_pic(server, client);
+  server->game.clients[id].ia.incanting = true;
   send_incantation_start(server, client, incant_tab[client->ia.level][0]);
   ret = store_command_sequel(&server->game.clients[id].store,
 			     "Incantation",

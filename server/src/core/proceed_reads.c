@@ -69,7 +69,8 @@ int read_gui(t_client *gui, Socket sock)
   if ((len = read(sock, buff, MESSAGE_MAX_SIZE - 1)) < 0)
     {
       perror("Read from client error");
-      return (1);
+      memset(gui, 0, sizeof(t_client));
+      return (0);
     }
   if (!len || strchr(buff, 4) ||
       (len == sizeof(ctrl_c) && !memcmp(buff, ctrl_c, sizeof(ctrl_c))))

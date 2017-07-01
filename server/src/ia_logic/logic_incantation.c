@@ -97,6 +97,7 @@ int		logic_incantation(t_server *server, ID id, char *cmd)
   cell = &server->game.map[FIND_POS(client->ia.pos.x,
 				    client->ia.pos.y,
 				    server->config.width)];
+  server->game.clients[id].ia.incanting = false;
   if (check_incantation(server, id, client, cell) == 1)
     {
       event_pie(server, &client->ia.pos, 0);

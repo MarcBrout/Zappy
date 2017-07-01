@@ -58,6 +58,7 @@ struct				s_ia
   t_position			pos;
   int				inventory[OBJ_COUNT];
   int 				life_unit;
+  bool incanting;
 };
 
 struct s_client
