@@ -74,7 +74,7 @@ int read_gui(t_client *gui, Socket sock)
   if (!len || strchr(buff, 4) ||
       (len == sizeof(ctrl_c) && !memcmp(buff, ctrl_c, sizeof(ctrl_c))))
     {
-      log_this("GUI KILLED");
+      log_this("GUI KILLED\n");
       close(sock);
       memset(gui, 0, sizeof(t_client));
       return (0);

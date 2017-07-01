@@ -16,6 +16,7 @@ int		send_case_content(t_server *server, uint32_t x, uint32_t y)
   int		i;
   uint32_t	pos;
 
+  log_this("[BCT] send content of cell:\n\tx: %d\n\ty: %d\n", x, y);
   if (send_to_gui(server, "bct %d %d ", x, y))
     return (1);
   i = 0;
@@ -43,7 +44,6 @@ int		gui_bct(t_server *server, ID id, char *cmd)
     return (send_to_gui(server, "suc\n"));
   x = atoi(xstr);
   y = atoi(ystr);
-  log_this("[BCT] GUI asked content of cell:\n\tx: %d\n\ty: %d\n", x, y);
   if (x < 0 || x > server->config.width - 1 ||
       y < 0 || y > server->config.height - 1)
     return (send_to_gui(server, "sbp\n"));
