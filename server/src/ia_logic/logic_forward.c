@@ -39,7 +39,7 @@ int	logic_forward(t_server *server, ID id, char *cmd)
   (void)cmd;
   forward_pos(server,
 	      &server->game.clients[id].ia.pos,
-	      server->game.clients->ia.dir,
+	      server->game.clients[id].ia.dir,
 	      1);
   send_player_position(server, id);
   strncircular(&server->game.clients[id].w, "ok\n", strlen("ok\n"));

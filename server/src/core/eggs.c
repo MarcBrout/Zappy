@@ -24,6 +24,7 @@ t_egg		*add_egg(t_server *server, t_position *pos, Team id)
   egg->pos.x = pos->x;
   egg->team = id;
   egg->hatching = HATCHING;
+  egg->hatched = false;
   egg->next = NULL;
   egg->layer = id;
   tmp = server->game.eggs;
@@ -87,7 +88,6 @@ void		check_eggs(t_server *server)
       if (tmp->hatching == 0 && tmp->hatched == false)
 	{
 	  event_eht(server, tmp->id);
-	  tmp->hatching = 0;
 	  tmp->hatched = true;
 	  increment_team_count(server, tmp->team);
 	}
