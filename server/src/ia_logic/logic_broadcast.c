@@ -30,22 +30,20 @@ int		logic_broadcast(t_server *server, ID id, char *cmd)
   ID		cli = 0;
   t_client	*client;
   int 		pos;
+  t_client	*tmp;
 
   pos = pos_text(cmd);
   client = &server->game.clients[id];
   event_pbc(server, id, pos == 0 ? "" : cmd + pos);
   while (cli < server->game.max_slot)
     {
-      if (server->game.clients[cli].alive == true &&
-          server->game.clients[cli].ia.incanting == false &&
-	  &server->game.clients[cli] != client)
+      tmp = &server->game.clients[cli];
+      if (tmp->alive == true && tmp->ia.incanting == false && tmp != client)
 	{
 	  send_to_ia(server, cli,
 		     "message %d, %s\n",
-		     find_direction(server,
-				    &client->ia.pos,
-				    &server->game.clients[cli].ia.pos,
-				    server->game.clients[cli].ia.dir),
+		     find_direction(server, &client->ia.pos,
+				    &tmp->ia.pos, tmp->ia.dir),
 		                    pos == 0 ? "" : cmd + pos);
 	}
       ++cli;
