@@ -5,7 +5,7 @@
 ** Login   <edouard@epitech.net>
 **
 ** Started on  Tue Jun 27 17:35:08 2017 Edouard
-** Last update Tue Jun 27 17:39:07 2017 Edouard
+** Last update Sat Jul  1 16:02:26 2017 duhieu_b
 */
 
 #include <string.h>
@@ -29,7 +29,6 @@ bool		is_incantation(t_server *server, t_position *pos)
     }
   return (false);
 }
-
 
 int	ia_incantation(t_server *server, ID id, char *cmd)
 {

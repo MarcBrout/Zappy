@@ -5,7 +5,7 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Tue Jun 27 17:12:53 2017 brout_m
-** Last update Tue Jun 27 17:15:24 2017 puilla_e
+** Last update Sat Jul  1 15:57:36 2017 duhieu_b
 */
 
 #include <unistd.h>
@@ -87,7 +87,8 @@ static int	generate(t_server *server,
 	  pos.x = rand() % server->game.width;
 	  pos.y = rand() % server->game.height;
 	}
-      ++server->game.map[pos.x + pos.y * server->game.width].objects[luck->type];
+      ++server->game.map[pos.x + pos.y *
+			 server->game.width].objects[luck->type];
       ++server->game.object_tot[luck->type];
       return (send_case_content(server, pos.x, pos.y));
     }

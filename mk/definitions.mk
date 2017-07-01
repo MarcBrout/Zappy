@@ -4,13 +4,13 @@
 
 ##### MODE #####
 
-DEBUG	=	NO
+DEBUG	=	no
 
-RELEASE	=	NO
+RELEASE	=	no
 
-DLL	=	NO
+DLL	=	no
 
-SANITIZE =	NO
+SANITIZE =	no
 
 MODE	=	CPP
 

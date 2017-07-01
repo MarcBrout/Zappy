@@ -5,7 +5,7 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Tue Jun 27 01:34:53 2017 brout_m
-** Last update Tue Jun 27 01:38:40 2017 brout_m
+** Last update Sat Jul  1 15:58:14 2017 duhieu_b
 */
 #include <stdbool.h>
 #include "server/gui_events.h"
@@ -89,7 +89,6 @@ int send_informations(t_server *server)
               server->config.height);
   send_to_gui(server, "sgt %d\n", server->config.time);
   reset = false;
-
   while (send_map_cell(server, &cellId) == 1)
     ;
   if (gui_tna(server, 0, NULL) || send_player_informations(server) ||
