@@ -5,7 +5,7 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sun Jun 25 02:47:51 2017 brout_m
-** Last update Tue Jun 27 17:02:24 2017 brout_m
+** Last update Sat Jul  1 16:01:50 2017 duhieu_b
 */
 
 #include <string.h>
@@ -114,7 +114,7 @@ static int		proceed_commands(t_server *server)
     while (find_command(&server->game.clients[i].r))
       {
 	if (server->game.clients[i].died)
-	  continue ;
+	  continue;
 	strfromcircular(&server->game.clients[i].r, cmd);
         if (server->game.clients[i].active &&
 	    !server->game.clients[i].alive)
