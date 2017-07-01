@@ -36,6 +36,7 @@ static void	kill_client(t_server *server, t_client *client)
       while (i < client->ia.inventory[obj])
 	{
 	  push_value(server, obj, false);
+	  --server->game.object_tot[obj];
 	  ++i;
 	}
       ++obj;

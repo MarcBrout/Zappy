@@ -26,7 +26,7 @@ int		send_player_inventory(t_server *server, ID id)
 	send_to_gui(server, " ");
       ++i;
     }
-  return (send_to_gui(server, "plv %d %d\n", id, ia->level));
+  return (send_to_gui(server, "\nplv %d %d\n", id, ia->level));
 }
 
 int		gui_pin(t_server *server, ID ids, char *cmd)

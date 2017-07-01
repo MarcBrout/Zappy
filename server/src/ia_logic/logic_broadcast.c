@@ -12,16 +12,35 @@
 #include "server/gui_events.h"
 #include "server/direction_manager.h"
 
+static void	extract_text(char *cmd, char *buf)
+{
+  int 		len;
+  int 		i;
+
+  memset(buf, 0, BUFFER_MAX_SIZE);
+  len = (int) strlen("Broadcast");
+  if (cmd[len] != ' ')
+    return ;
+  if (cmd[len] == '\0')
+    return ;
+  len = len + 1;
+  i = 0;
+  while (cmd[i + len] != '\0')
+    {
+      buf[i] = cmd[len + i];
+      ++i;
+    }
+}
+
 int		logic_broadcast(t_server *server, ID id, char *cmd)
 {
-  char 		*text;
   ID		cli = 0;
   t_client	*client;
+  char		buf[BUFFER_MAX_SIZE];
 
-  strtok(cmd, " ");
+  extract_text(cmd, buf);
   client = &server->game.clients[id];
-  text = strtok(NULL, " ");
-  event_pbc(server, id, text);
+  event_pbc(server, id, buf);
   while (cli < server->game.max_slot)
     {
       if (server->game.clients[cli].alive == true &&
@@ -32,8 +51,7 @@ int		logic_broadcast(t_server *server, ID id, char *cmd)
 		     find_direction(server,
 				    &client->ia.pos,
 				    &server->game.clients[cli].ia.pos,
-				    server->game.clients[cli].ia.dir),
-		     text == NULL ? "" : text);
+				    server->game.clients[cli].ia.dir), buf);
 	}
       ++cli;
     }

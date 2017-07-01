@@ -56,7 +56,7 @@ void		generate_ressources_start(t_server *server)
   while (j < OBJ_COUNT)
     {
       i = 0;
-      while (i < drop_rates[j].value / 2)
+      while (i < drop_rates[j].value / 4)
 	{
 	  push_value(server, j, true);
 	  ++i;
