@@ -43,12 +43,10 @@ static void	incr_lvl_team(t_server *server, Team id, Level lvl)
   t_team	*team;
 
   team = &server->config.teams[id];
-  if (team->maxlvl == LEVEL_END)
-    return ;
   if (team->maxlvl == lvl)
     {
       ++team->lvlcount;
-      if (team->lvlcount == server->config.max_player)
+      if (team->lvlcount == 6)
 	{
 	  if (team->maxlvl == LEVEL_END)
 	    {

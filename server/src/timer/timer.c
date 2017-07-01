@@ -27,9 +27,15 @@ int			init_timer(uint16_t freq)
       return (1);
     }
   timer.freq = (uint64_t)((unit / (double)freq) * 1000000.0);
+  timer.new_freq = timer.freq;
   log_this("Timer correctly set at : \n\tstart: %s\tfreq: %u\n",
 	   ctime(&timer.start.tv_sec), timer.freq);
   return (0);
+}
+
+void	set_new_timer(uint16_t freq)
+{
+  timer.new_freq = (uint64_t)((1.0 / (double)freq) * 1000000.0);
 }
 
 bool			isTick()
@@ -42,6 +48,8 @@ bool			isTick()
     timer.freq;
   if (diff > last)
     {
+      if (timer.new_freq != timer.freq)
+	timer.freq = timer.new_freq;
       log_this("\t======= TICK REACHED =======\n");
       last = diff;
       return (true);

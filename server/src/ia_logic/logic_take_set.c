@@ -9,6 +9,7 @@
 */
 
 #include <string.h>
+#include "server/gui_commands.h"
 #include "server/gui_events.h"
 
 static const char *obj_tab[OBJ_COUNT] =
@@ -36,6 +37,17 @@ static Object	object_to_enum(char *obj_str)
   return (OBJ_COUNT);
 }
 
+static void	update_cell(t_server *server, ID id, Object obj, bool take)
+{
+  if (take)
+    event_pgt(server, id, obj);
+  else
+    event_pdr(server, id, obj);
+  send_player_inventory(server, id);
+  send_case_content(server, server->game.clients[id].ia.pos.x,
+		    server->game.clients[id].ia.pos.y);
+}
+
 int		logic_take(t_server *server, ID id, char *cmd)
 {
   Object	obj;
@@ -57,7 +69,7 @@ int		logic_take(t_server *server, ID id, char *cmd)
       --server->game.map[pos].objects[obj];
       ++server->game.clients[id].ia.inventory[obj];
       server->game.object_tot[obj] -= obj == FOOD ? 1 : 0;
-      event_pgt(server, id, obj);
+      update_cell(server, id, obj, true);
       strncircular(&server->game.clients[id].w, "ok\n", strlen("ok\n"));
     }
   else
@@ -84,7 +96,7 @@ int		logic_set(t_server *server, ID id, char *cmd)
 				  server->game.clients[id].ia.pos.y,
 				  server->config.width)].objects[obj];
       server->game.object_tot[obj] += obj == FOOD ? 1 : 0;
-      event_pdr(server, id, obj);
+      update_cell(server, id, obj, false);
       strncircular(&server->game.clients[id].w, "ok\n", strlen("ok\n"));
     }
   else
