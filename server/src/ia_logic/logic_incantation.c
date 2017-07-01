@@ -66,7 +66,7 @@ static int	send_incantation_end(t_server *server,
 				     int max_player)
 {
   ID 		cli = 0;
-  int 		nb_player = 1;
+  int 		nb_player = 0;
 
   while (nb_player < max_player && cli < server->game.max_slot)
     {

@@ -24,14 +24,17 @@ void		strncircular(t_circular *c, char *str, int n)
 
   i = 0;
   cpos = (c->pos + c->len) % BUFFER_MAX_SIZE;
-  while (i < n && c->len < BUFFER_MAX_SIZE - 1)
+  while (i < n && c->len < BUFFER_MAX_SIZE - 2)
     {
       c->buffer[cpos] = str[i];
       INCR(cpos);
       ++i;
       ++c->len;
     }
-  c->buffer[INCR(cpos)] = 0;
+  if (i < n)
+    {
+      c->buffer[cpos] = '\n';
+    }
 }
 
 static bool	end(t_circular *c, int pos)

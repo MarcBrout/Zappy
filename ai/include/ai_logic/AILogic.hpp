@@ -78,6 +78,8 @@ namespace zappy
     void fillInitialState();
     bool needFood();
     bool searchFood();
+    bool wasEndLevel();
+    bool goTurn();
     bool wasOnWaitingState();
     bool goToWaitingState();
     bool wasOnJoinningState();
@@ -128,6 +130,7 @@ namespace zappy
     bool broadcastHelpActive();
     bool adjustResources();
     bool incantation();
+
   };
 }
 

@@ -32,7 +32,7 @@ static void	send_incantation_start(t_server *server,
   int 		len;
 
   cli = 0;
-  nb_player = 1;
+  nb_player = 0;
   len = strlen("Elevation underway\n");
   while (nb_player < max_player &&
 	 cli < server->game.max_slot)
