@@ -9,6 +9,7 @@
 */
 
 #include <string.h>
+#include <server/ia_commands.h>
 #include "server/gui_events.h"
 #include "server/direction_manager.h"
 
@@ -44,6 +45,7 @@ int		logic_broadcast(t_server *server, ID id, char *cmd)
   while (cli < server->game.max_slot)
     {
       if (server->game.clients[cli].alive == true &&
+          server->game.clients[cli].ia.incanting == false &&
 	  &server->game.clients[cli] != client)
 	{
 	  send_to_ia(server, cli,
