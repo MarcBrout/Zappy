@@ -5,11 +5,12 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sun Jun 25 02:31:43 2017 brout_m
-** Last update Wed Jun 28 10:43:03 2017 brout_m
+** Last update Sun Jul  2 15:54:00 2017 Edouard
 */
+
 #include "server.h"
 
-int event_pnw(t_server *server, t_client const *newClient)
+int	event_pnw(t_server *server, t_client const *newClient)
 {
   log_this("[PNW] New client '%d' of team '%s' and level '%d'"
 	   ", facing '%d', connected on:\n\tx: %d\n\ty: %d\n",

@@ -5,12 +5,11 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Tue Jun 27 01:43:58 2017 brout_m
-** Last update Wed Jun 28 10:37:21 2017 brout_m
+** Last update Sun Jul  2 15:51:21 2017 brout_m
 */
-
 #include <string.h>
-#include <server/logic_commands.h>
-#include <server/gui_commands.h>
+#include "server/logic_commands.h"
+#include "server/gui_commands.h"
 #include "server/gui_events.h"
 
 static t_egg	*find_egg(t_egg *eggs, ID team)

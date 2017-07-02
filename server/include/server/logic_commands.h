@@ -5,7 +5,7 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sat Jun 24 16:44:11 2017 brout_m
-** Last update Tue Jun 27 17:14:48 2017 Edouard
+** Last update Sun Jul  2 14:29:25 2017 Edouard
 */
 
 #ifndef LOGIC_COMMANDS_H_
@@ -28,8 +28,13 @@ int	logic_set(t_server *server, ID id, char *cmd);
 int	logic_incantation(t_server *server, ID id, char *cmd);
 int	logic_fork_start(t_server *server, ID id, char *cmd);
 int	logic_incantation_start(t_server *server, ID id, char *cmd);
-void	forward_pos(t_server *server, t_position *pos, Direction dir, int nb);
-int	check_incantation(t_server *server, ID id,
-			     t_client *client, t_cell *cell);
+void	forward_pos(t_server *server,
+		    t_position *pos,
+		    Direction dir,
+		    int nb);
+int	check_incantation(t_server *server,
+			  ID id,
+			  t_client *client,
+			  t_cell *cell);
 
 #endif /* !LOGIC_COMMANDS_H_ */

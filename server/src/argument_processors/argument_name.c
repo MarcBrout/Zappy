@@ -5,16 +5,17 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sat Jun 24 17:04:37 2017 brout_m
-** Last update Wed Jun 28 10:32:55 2017 brout_m
+** Last update Sun Jul  2 15:33:50 2017 Edouard
 */
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include "arguments/config.h"
 
-void		set_teams(t_config *config)
+void	set_teams(t_config *config)
 {
-  int		i = 0;
+  int	i = 0;
 
   while (i < config->team_count)
     {
@@ -69,13 +70,14 @@ static int	adding_names(t_config *config, int ac, char **argv, int *pos)
       if (!(config->teams[config->team_count].name = strdup(argv[*pos])))
 	return (1);
       config->teams[config->team_count].id = config->team_count;
+      config->teams[config->team_count].maxlvl = 2;
       ++config->team_count;
       ++*pos;
     }
   return (0);
 }
 
-int		argument_name(t_config *config, int ac, char **argv, int *pos)
+int	argument_name(t_config *config, int ac, char **argv, int *pos)
 {
   if (*pos > ac - 3)
     return (1);

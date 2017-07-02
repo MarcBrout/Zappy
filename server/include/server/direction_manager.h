@@ -5,7 +5,7 @@
 ** Login   <edouard@epitech.net>
 **
 ** Started on  Tue Jun 27 17:22:52 2017 Edouard
-** Last update Tue Jun 27 17:23:02 2017 Edouard
+** Last update Sun Jul  2 14:10:08 2017 Edouard
 */
 
 #ifndef DIRECTION_MANAGER_H_
@@ -26,9 +26,9 @@ typedef struct	s_direction
   int		id;
 }		t_direction;
 
-int		find_direction(t_server *server,
-			       t_position *src,
-			       t_position *dest,
-			       Direction dir_dest);
+int	find_direction(t_server *server,
+		       t_position *src,
+		       t_position *dest,
+		       Direction dir_dest);
 
 #endif /* !DIRECTION_MANAGER_H_ */

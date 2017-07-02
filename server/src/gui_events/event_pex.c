@@ -5,11 +5,12 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sun Jun 25 02:29:06 2017 brout_m
-** Last update Sun Jun 25 02:29:29 2017 brout_m
+** Last update Sun Jul  2 15:51:25 2017 Edouard
 */
+
 #include "server.h"
 
-int event_pex(t_server *server, ID id)
+int	event_pex(t_server *server, ID id)
 {
   log_this("[PEX] Client '%d' ejecting\n", id);
   return (send_to_gui(server, "pex %d\n", id));

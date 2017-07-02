@@ -5,15 +5,16 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sun Jun 25 02:19:55 2017 brout_m
-** Last update Wed Jun 28 10:41:13 2017 brout_m
+** Last update Sun Jul  2 15:44:59 2017 Edouard
 */
+
 #include <string.h>
 #include <stdlib.h>
 #include "server.h"
 
-int		send_player_position(t_server *server, ID id)
+int	send_player_position(t_server *server, ID id)
 {
-  t_ia		*ia;
+  t_ia	*ia;
 
   ia = &server->game.clients[id].ia;
   log_this("[PPO] GUI asked for Client '%d' position on:"
@@ -23,10 +24,10 @@ int		send_player_position(t_server *server, ID id)
 		      id, ia->pos.x, ia->pos.y, ia->dir));
 }
 
-int		gui_ppo(t_server *server, ID ids, char *cmd)
+int	gui_ppo(t_server *server, ID ids, char *cmd)
 {
-  char		*idstr;
-  int		id;
+  char	*idstr;
+  int	id;
 
   (void)ids;
   strtok(cmd, " ");

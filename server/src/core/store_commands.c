@@ -5,13 +5,13 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sun Jun 25 02:54:50 2017 brout_m
-** Last update Sun Jun 25 02:54:57 2017 brout_m
+** Last update Sun Jul  2 16:01:48 2017 brout_m
 */
 #include <string.h>
 #include <stdlib.h>
 #include "server/store_commands.h"
 
-static int		add_command(t_cmd **first,
+static int	add_command(t_cmd **first,
 				    const char *cmd,
 				    uint64_t cooldown)
 {
@@ -55,7 +55,7 @@ int 		store_command_sequel(t_store *store,
   return (0);
 }
 
-int			store_command(t_store *store,
+int		store_command(t_store *store,
 				      const char *cmd,
 				      uint64_t cooldown)
 {
@@ -67,7 +67,7 @@ int			store_command(t_store *store,
   return (0);
 }
 
-char			*get_command_from_store(t_store *store)
+char		*get_command_from_store(t_store *store)
 {
   t_cmd		*first;
 
@@ -86,7 +86,7 @@ char			*get_command_from_store(t_store *store)
   return (NULL);
 }
 
-void			pop_command(t_store *store)
+void		pop_command(t_store *store)
 {
   t_cmd		*first;
 

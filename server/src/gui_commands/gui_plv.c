@@ -5,24 +5,25 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sun Jun 25 02:19:22 2017 brout_m
-** Last update Wed Jun 28 10:40:59 2017 brout_m
+** Last update Sun Jul  2 15:44:30 2017 Edouard
 */
+
 #include <string.h>
 #include <stdlib.h>
 #include "server.h"
 
-int		send_player_lvl(t_server *server, ID id)
+int	send_player_lvl(t_server *server, ID id)
 {
-  t_ia		*ia;
+  t_ia	*ia;
 
   ia = &server->game.clients[id].ia;
   return (send_to_gui(server, "plv %d %d\n", id, ia->level));
 }
 
-int		gui_plv(t_server *server, ID ids, char *cmd)
+int	gui_plv(t_server *server, ID ids, char *cmd)
 {
-  char		*idstr;
-  int		id;
+  char	*idstr;
+  int	id;
 
   (void)ids;
   strtok(cmd, " ");

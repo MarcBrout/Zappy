@@ -1,11 +1,11 @@
 /*
-** ressources_start.c.c for zappy in /home/login_p/delivery/zappy/ressources_start.c.c
+** ressources_start.c for zappy in zappy/ressources_start.c
 **
 ** Made by Prenom Nom
 ** Login   <prenom.nom@epitech.eu>
 **
 ** Started on  jeu. juin 29 16:44:01 2017 Prenom Nom
-** Last update jeu. juin 29 16:44:01 2017 Prenom Nom
+** Last update Sun Jul  2 15:39:30 2017 Edouard
 */
 
 #include <stdlib.h>
@@ -13,7 +13,7 @@
 #include "server/ia_commands.h"
 #include "server.h"
 
-static t_luck		drop_rates[OBJ_COUNT] =
+static t_luck   drop_rates[OBJ_COUNT] =
  {
   {FOOD, 100},
   {LINEMATE, 42},
@@ -56,7 +56,7 @@ void		generate_ressources_start(t_server *server)
   while (j < OBJ_COUNT)
     {
       i = 0;
-      while (i < drop_rates[j].value / 2)
+      while (i < drop_rates[j].value / 4)
 	{
 	  push_value(server, j, true);
 	  ++i;

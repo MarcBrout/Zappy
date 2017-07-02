@@ -5,15 +5,16 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sat Jun 24 17:03:49 2017 brout_m
-** Last update Sat Jun 24 17:04:32 2017 brout_m
+** Last update Sun Jul  2 15:32:45 2017 Edouard
 */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "arguments/config.h"
 
-int		argument_height(t_config *config, int ac, char **argv, int *pos)
+int	argument_height(t_config *config, int ac, char **argv, int *pos)
 {
-  int		height;
+  int	height;
 
   if (*pos > ac - 2)
     return (1);

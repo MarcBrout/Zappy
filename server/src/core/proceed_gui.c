@@ -1,13 +1,12 @@
 /*
-** proceed_gui.c for proceed_gui in /home/duhieu_b/PSU/PSU_2016_zappy
+** proceed_gui.c for zappy  in server/src/core
 **
-** Made by duhieu_b
-** Login   <benjamin.duhieu@epitech.eu>
+** Made by brout_m
+** Login   <marc.brout@epitech.eu>
 **
-** Started on  Sat Jul  1 16:01:10 2017 duhieu_b
-** Last update Sat Jul  1 16:01:31 2017 duhieu_b
+** Started on  Sun Jul  2 15:50:29 2017 brout_m
+** Last update Sun Jul  2 16:17:59 2017 brout_m
 */
-
 #include "server.h"
 
 int proceed_gui_reads(t_server *server, fd_set *fds_read)

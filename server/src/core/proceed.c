@@ -5,7 +5,7 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sun Jun 25 02:47:51 2017 brout_m
-** Last update Sat Jul  1 16:01:50 2017 duhieu_b
+** Last update Sun Jul  2 16:18:59 2017 brout_m
 */
 
 #include <string.h>
@@ -48,23 +48,23 @@ static const t_command	ia_commands[IA_END + 1] =
   };
 
 static const t_command	ia_logic[LOGIC_END + 1] =
- {
-  {"Forward", 7, logic_forward},
-  {"Right", 5, logic_right},
-  {"Left", 4, logic_left},
-  {"Look", 4, logic_look},
-  {"Inventory", 9, logic_inventory},
-  {"Broadcast", 9, logic_broadcast},
-  {"Connect_nbr", 11, logic_connect_nbr},
-  {"ForkStart", 9, logic_fork_start},
-  {"Fork", 4, logic_fork},
-  {"Eject", 5, logic_eject},
-  {"Take", 4, logic_take},
-  {"Set", 3, logic_set},
-  {"IncantationStart", 16, logic_incantation_start},
-  {"Incantation", 11, logic_incantation},
-  {NULL, 0, logic_unknown}
- };
+  {
+    {"Forward", 7, logic_forward},
+    {"Right", 5, logic_right},
+    {"Left", 4, logic_left},
+    {"Look", 4, logic_look},
+    {"Inventory", 9, logic_inventory},
+    {"Broadcast", 9, logic_broadcast},
+    {"Connect_nbr", 11, logic_connect_nbr},
+    {"ForkStart", 9, logic_fork_start},
+    {"Fork", 4, logic_fork},
+    {"Eject", 5, logic_eject},
+    {"Take", 4, logic_take},
+    {"Set", 3, logic_set},
+    {"IncantationStart", 16, logic_incantation_start},
+    {"Incantation", 11, logic_incantation},
+    {NULL, 0, logic_unknown}
+  };
 
 static int		run(t_server *server,
 			    t_client *client,
@@ -94,11 +94,13 @@ static int		proceed_gui(t_server *server)
 {
   char			cmd[MESSAGE_MAX_SIZE];
 
+  if (set_gui_connected(true, false) && send_informations(server))
+    return (1);
   while (find_command(&server->gui.r))
     {
       strfromcircular(&server->gui.r, cmd);
       if (run(server, &server->gui, gui_commands, cmd))
-        return (1);
+	return (1);
     }
   return (0);
 }
@@ -116,13 +118,13 @@ static int		proceed_commands(t_server *server)
 	if (server->game.clients[i].died)
 	  continue;
 	strfromcircular(&server->game.clients[i].r, cmd);
-        if (server->game.clients[i].active &&
+	if (server->game.clients[i].active &&
 	    !server->game.clients[i].alive)
 	  {
-	    player_connecting(server, i, cmd); // TODO check if -1
+	    player_connecting(server, i, cmd);
 	    continue;
 	  }
-        if (run(server, &server->game.clients[i], ia_commands, cmd))
+	if (run(server, &server->game.clients[i], ia_commands, cmd))
 	  return (1);
       }
     ++i;
@@ -161,11 +163,11 @@ int			proceed(t_server *server,
 				fd_set *fds_read, fd_set *fds_write)
 {
   return (proceed_server(server, fds_read) ||
-          proceed_gui_reads(server, fds_read) ||
-          proceed_reads(server, fds_read) ||
+	  proceed_gui_reads(server, fds_read) ||
+	  proceed_reads(server, fds_read) ||
 	  proceed_gui(server) ||
 	  proceed_commands(server) ||
 	  proceed_logic(server) ||
-          proceed_gui_writes(server, fds_write) ||
+	  proceed_gui_writes(server, fds_write) ||
 	  proceed_writes(server, fds_write));
 }

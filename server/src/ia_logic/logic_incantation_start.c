@@ -5,7 +5,7 @@
 ** Login   <edouard@epitech.net>
 **
 ** Started on  Tue Jun 27 17:30:59 2017 Edouard
-** Last update Tue Jun 27 17:31:04 2017 Edouard
+** Last update Sun Jul  2 16:06:33 2017 brout_m
 */
 
 #include <string.h>
@@ -27,12 +27,12 @@ static void	send_incantation_start(t_server *server,
 				       t_client *client,
 				       int max_player)
 {
-  ID 		cli;
-  int 		nb_player;
-  int 		len;
+  ID		cli;
+  int		nb_player;
+  int		len;
 
   cli = 0;
-  nb_player = 1;
+  nb_player = 0;
   len = strlen("Elevation underway\n");
   while (nb_player < max_player &&
 	 cli < server->game.max_slot)
@@ -53,8 +53,8 @@ static void	send_incantation_start(t_server *server,
 static int	count_player(t_server *server,
 			       t_client *client)
 {
-  ID 		cli;
-  int 		nb_player;
+  ID		cli;
+  int		nb_player;
 
   cli = 0;
   nb_player = 0;
@@ -101,7 +101,7 @@ int		logic_incantation_start(t_server *server, ID id, char *cmd)
 {
   t_client	*client;
   t_cell	*cell;
-  int 		ret;
+  int		ret;
 
   (void)cmd;
   client = &server->game.clients[id];
@@ -111,6 +111,7 @@ int		logic_incantation_start(t_server *server, ID id, char *cmd)
   if (check_incantation(server, id, client, cell) == 1)
     return (0);
   event_pic(server, client);
+  server->game.clients[id].ia.incanting = true;
   send_incantation_start(server, client, incant_tab[client->ia.level][0]);
   ret = store_command_sequel(&server->game.clients[id].store,
 			     "Incantation",

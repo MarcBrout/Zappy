@@ -5,7 +5,7 @@
 ** Login   <edouard@epitech.net>
 **
 ** Started on  Tue Jun 27 17:30:41 2017 Edouard
-** Last update Wed Jun 28 10:46:01 2017 brout_m
+** Last update Sun Jul  2 16:12:02 2017 brout_m
 */
 
 #include "server/gui_commands.h"
@@ -26,7 +26,7 @@ static const int incant_tab[MAX_INCANT][OBJ_COUNT] =
 
 static void	count_team_lvl(t_server *server, t_team *team)
 {
-  ID 		cli = 0;
+  ID		cli = 0;
 
   team->lvlcount = 0;
   while (cli < server->game.max_slot)
@@ -43,12 +43,10 @@ static void	incr_lvl_team(t_server *server, Team id, Level lvl)
   t_team	*team;
 
   team = &server->config.teams[id];
-  if (team->maxlvl == LEVEL_END)
-    return ;
   if (team->maxlvl == lvl)
     {
       ++team->lvlcount;
-      if (team->lvlcount == server->config.max_player)
+      if (team->lvlcount >= 6)
 	{
 	  if (team->maxlvl == LEVEL_END)
 	    {
@@ -65,8 +63,8 @@ static int	send_incantation_end(t_server *server,
 				     t_client *client,
 				     int max_player)
 {
-  ID 		cli = 0;
-  int 		nb_player = 1;
+  ID		cli = 0;
+  int		nb_player = 0;
 
   while (nb_player < max_player && cli < server->game.max_slot)
     {
@@ -75,7 +73,8 @@ static int	send_incantation_end(t_server *server,
 	  server->game.clients[cli].ia.pos.y == client->ia.pos.y)
 	{
 	  ++server->game.clients[cli].ia.level;
-	  incr_lvl_team(server, client->ia.team, client->ia.level);
+	  incr_lvl_team(server, server->game.clients[cli].ia.team,
+			server->game.clients[cli].ia.level);
 	  send_player_lvl(server, cli);
 	  send_to_ia(server, cli, "Current level: %u\n",
 		     server->game.clients[cli].ia.level);
@@ -90,27 +89,26 @@ int		logic_incantation(t_server *server, ID id, char *cmd)
 {
   t_client	*client;
   t_cell	*cell;
-  Object	obj;
+  Object	obj = LINEMATE;
 
   (void)cmd;
   client = &server->game.clients[id];
-  cell = &server->game.map[FIND_POS(client->ia.pos.x,
-				    client->ia.pos.y,
+  cell = &server->game.map[FIND_POS(client->ia.pos.x, client->ia.pos.y,
 				    server->config.width)];
+  server->game.clients[id].ia.incanting = false;
   if (check_incantation(server, id, client, cell) == 1)
     {
       event_pie(server, &client->ia.pos, 0);
       return (0);
     }
   event_pie(server, &client->ia.pos, 1);
-  obj = LINEMATE;
   while (obj < OBJ_COUNT)
     {
-      cell->objects[obj] -= incant_tab[client->ia.level][obj];
-      server->game.object_tot[obj] -= incant_tab[client->ia.level][obj];
+      cell->objects[obj] -= incant_tab[client->ia.level - 1][obj];
+      server->game.object_tot[obj] -= incant_tab[client->ia.level - 1][obj];
       ++obj;
     }
   send_case_content(server, client->ia.pos.x, client->ia.pos.y);
   return (send_incantation_end(server, client,
-			       incant_tab[client->ia.level][0]));
+			       incant_tab[client->ia.level - 1][0]));
 }

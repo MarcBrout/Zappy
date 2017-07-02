@@ -5,23 +5,27 @@
 ** Login   <prenom.nom@epitech.eu>
 **
 ** Started on  mer. juin 28 21:30:46 2017 Prenom Nom
-** Last update mer. juin 28 21:30:46 2017 Prenom Nom
+** Last update Sun Jul  2 15:40:46 2017 Edouard
 */
 
 #include "server.h"
 
-Team	check_winner(t_server *server)
+Team		check_winner(t_server *server)
 {
-  Team 	team = 0;
-  Level max = 0;
-  Team 	max_team = 0;
+  Team		team = 0;
+  Level		max = 0;
+  Team		max_team = 0;
+  size_t	nb_player = 0;
 
   while (team < server->config.team_count)
     {
-      if (server->config.teams[team].maxlvl - 1 > max)
+      if (server->config.teams[team].maxlvl > max ||
+	  (server->config.teams[team].maxlvl == max &&
+	   nb_player < server->config.teams[team].lvlcount))
 	{
-	  max = server->config.teams[team].maxlvl - 1;
+	  max = server->config.teams[team].maxlvl;
 	  max_team = team;
+	  nb_player = server->config.teams[team].lvlcount;
 	}
       ++team;
     }

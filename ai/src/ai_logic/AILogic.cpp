@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <algorithm>
 #include <iostream>
+#include "tools/Singleton.hpp"
 #include "ai_logic/AILogic.hpp"
 #include "tools/Logger.hpp"
 
@@ -326,7 +327,6 @@ namespace zappy
 	m_splitter.moveTokensTo(objs);
 	int  playerInCase(0);
 	bool objFind(false);
-	bool isFood = m_search.back().first == "food";
 
 	for (std::string obj : objs)
 	  {
@@ -339,19 +339,17 @@ namespace zappy
 		      m_searchings += "\n";
 		    ++m_nbObj;
 		    m_searchings += "Take " + inList.first;
-		    if (inList.first != "food")
-		      inList.second = true;
+                    inList.second = true;
 		  }
 	      }
 	    if (obj == "player")
 	      {
 		++playerInCase;
 	      }
-	    if ((objFind && !isFood && m_nbObj == m_search.size()) ||
-	        m_nbObj == 10)
-	      break;
 	  }
-	return (objFind && playerInCase < 2);
+        Logger::log(Logger::_DEBUG_, "[IA] MAY I SEARCH : " + m_searchings);
+	return ((objFind && playerInCase < 2) ||
+            m_searchings == "Take food");
       }
     return (false);
   }
@@ -795,18 +793,18 @@ namespace zappy
 
     if (shouldBroadCast)
       {
-        Logger::log(Logger::_DEBUG_,
-                    "[AI] Missing some players, calling help");
-        sendActionAndCheckResponse(ACTION::BROADCAST,
-                                   std::to_string(m_id) + " " +
-                                   std::to_string(m_curLvl) + " HELP",
-                                   1, {});
+	Logger::log(Logger::_DEBUG_,
+	            "[AI] Missing some players, calling help");
+	sendActionAndCheckResponse(ACTION::BROADCAST,
+	                           std::to_string(m_id) + " " +
+	                               std::to_string(m_curLvl) + " HELP",
+	                           1, {});
       }
     else
       {
-        Logger::log(Logger::_DEBUG_,
-                    "[AI] Missing some players, waiting them");
-        sendActionAndCheckResponse(ACTION::LEFT, "", 1, {});
+	Logger::log(Logger::_DEBUG_,
+	            "[AI] Missing some players, waiting them");
+	sendActionAndCheckResponse(ACTION::LEFT, "", 1, {});
       }
     shouldBroadCast = !shouldBroadCast;
 
@@ -955,6 +953,8 @@ namespace zappy
 
     initialVec.push_back(std::make_pair<condPtr, actionPtr>(
         &zappy::AILogic::needFood, &zappy::AILogic::searchFood));
+    initialVec.push_back(std::make_pair<condPtr, actionPtr>(
+        &zappy::AILogic::wasEndLevel, &zappy::AILogic::goTurn));
     initialVec.push_back(
         std::make_pair<condPtr, actionPtr>(&zappy::AILogic::wasOnWaitingState,
                                            &zappy::AILogic::goToWaitingState));
@@ -981,7 +981,7 @@ namespace zappy
       {
 	if (inventory[OBJECTS::FOOD] < 4)
 	  m_needFood = true;
-	else if (inventory[OBJECTS::FOOD] > 15 + 3 * m_curLvl - 1)
+	else if (inventory[OBJECTS::FOOD] > 15 + std::rand() % (m_curLvl * 3) + 1)
 	  m_needFood = false;
 	return (m_needFood);
       }
@@ -999,6 +999,17 @@ namespace zappy
     m_search.clear();
     m_search.push_back(std::make_pair<std::string, bool>("food", false));
     m_state = SEARCHING;
+    return true;
+  }
+
+  bool AILogic::wasEndLevel()
+  {
+    return m_curLvl == 8;
+  }
+
+  bool AILogic::goTurn()
+  {
+    sendActionAndCheckResponse(ACTION::LEFT, "", 1, {});
     return true;
   }
 
@@ -1033,6 +1044,7 @@ namespace zappy
     std::vector<std::string> vecInfo;
     std::string              text;
 
+    Logger::log(Logger::_DEBUG_, "[AI] Did I was asked fo help ?");
     for (std::string msg : _message)
       {
 	if (msg.substr(0, 7) == "message")
@@ -1047,6 +1059,7 @@ namespace zappy
 		if (curId != m_id && std::stoul(vecInfo[1]) == m_curLvl &&
 		    vecInfo[2] == "HELP")
 		  {
+		    Logger::log(Logger::_DEBUG_, "[AI] Yes !");
 		    m_dir =
 		        static_cast<std::size_t>(std::stoi(msg.substr(8, 1)));
 		    m_trackId = curId;
@@ -1055,6 +1068,7 @@ namespace zappy
 	      }
 	  }
       }
+    Logger::log(Logger::_DEBUG_, "[AI] No !");
     return false;
   }
 
@@ -1110,6 +1124,8 @@ namespace zappy
 
   bool AILogic::missingObject()
   {
+    static int cooldown = std::rand() % 4 + 2;
+
     sendActionAndCheckResponse(ACTION::INVENTORY, "", 1, {});
     if (!_response.empty())
       {
@@ -1124,9 +1140,21 @@ namespace zappy
 		  {
 		    m_search.push_back(std::make_pair<std::string, bool>(
 		        std::string(gl_names[idx]), false));
-		    return true;
 		  }
 	      }
+	  }
+
+	if (m_search.empty())
+	  {
+	    if (cooldown)
+	      {
+		Logger::log(Logger::_DEBUG_, "[AI] CANT GO ACTIVE YET : " +
+		                                 std::to_string(cooldown - 1));
+		--cooldown;
+		return true;
+	      }
+	    Logger::log(Logger::_DEBUG_, "[AI] GOING ACTIVE");
+	    cooldown = std::rand() % 11 + 1;
 	    return false;
 	  }
       }
@@ -1137,7 +1165,10 @@ namespace zappy
   bool AILogic::searchObject()
   {
     Logger::log(Logger::_DEBUG_, "[AI] Missing some object to level up");
-    m_state = STATE::SEARCHING;
+    if (!m_search.empty())
+      m_state = STATE::SEARCHING;
+    else
+      m_state = STATE::INITIAL;
     return true;
   }
 
