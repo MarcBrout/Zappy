@@ -107,11 +107,12 @@ void zappy::Core::auth(std::string teamName)
 	  if (!accepted && *it != "")
 	    {
 	      nb = std::atoi(it->c_str());
-	      if (nb >= 0)
+	      if (nb >= 0 && *it != "ko")
 		accepted = true;
 	      else
 		{
-		  std::cout << "Team Full, quitting...";
+		  std::cout << "Team Full or wrong name, quitting..."
+                            << std::endl;
 		  ::exit(0);
 		}
 	    }
