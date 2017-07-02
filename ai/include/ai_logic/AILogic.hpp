@@ -52,21 +52,21 @@ namespace zappy
   private:
     STATE m_state;
     std::map<STATE, std::vector<std::pair<condPtr, actionPtr>>> m_logic;
-    Splitter    m_splitter;
+    Splitter m_splitter;
     std::vector<std::pair<std::string, bool>> m_search;
-    look_t      m_look;
-    bool        m_directObj;
-    std::size_t m_fullLine;
-    std::size_t m_fullTurn;
-    std::size_t m_curLvl;
-    std::size_t m_id;
-    std::size_t m_trackId;
-    std::size_t m_dir;
-    bool        m_needFood;
-    bool        m_incant;
-    bool        m_startedIncantation;
-    int         m_timeout;
-    std::string m_searchings;
+    look_t        m_look;
+    bool          m_directObj;
+    std::size_t   m_fullLine;
+    std::size_t   m_fullTurn;
+    std::size_t   m_curLvl;
+    std::size_t   m_id;
+    std::size_t   m_trackId;
+    std::size_t   m_dir;
+    bool          m_needFood;
+    bool          m_incant;
+    bool          m_startedIncantation;
+    int           m_timeout;
+    std::string   m_searchings;
     std::uint32_t m_nbObj;
     std::uint32_t m_playerStayedFor;
 

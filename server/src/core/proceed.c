@@ -5,7 +5,7 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sun Jun 25 02:47:51 2017 brout_m
-** Last update Sun Jul  2 16:09:54 2017 brout_m
+** Last update Sun Jul  2 16:18:59 2017 brout_m
 */
 
 #include <string.h>
@@ -48,23 +48,23 @@ static const t_command	ia_commands[IA_END + 1] =
   };
 
 static const t_command	ia_logic[LOGIC_END + 1] =
- {
-  {"Forward", 7, logic_forward},
-  {"Right", 5, logic_right},
-  {"Left", 4, logic_left},
-  {"Look", 4, logic_look},
-  {"Inventory", 9, logic_inventory},
-  {"Broadcast", 9, logic_broadcast},
-  {"Connect_nbr", 11, logic_connect_nbr},
-  {"ForkStart", 9, logic_fork_start},
-  {"Fork", 4, logic_fork},
-  {"Eject", 5, logic_eject},
-  {"Take", 4, logic_take},
-  {"Set", 3, logic_set},
-  {"IncantationStart", 16, logic_incantation_start},
-  {"Incantation", 11, logic_incantation},
-  {NULL, 0, logic_unknown}
- };
+  {
+    {"Forward", 7, logic_forward},
+    {"Right", 5, logic_right},
+    {"Left", 4, logic_left},
+    {"Look", 4, logic_look},
+    {"Inventory", 9, logic_inventory},
+    {"Broadcast", 9, logic_broadcast},
+    {"Connect_nbr", 11, logic_connect_nbr},
+    {"ForkStart", 9, logic_fork_start},
+    {"Fork", 4, logic_fork},
+    {"Eject", 5, logic_eject},
+    {"Take", 4, logic_take},
+    {"Set", 3, logic_set},
+    {"IncantationStart", 16, logic_incantation_start},
+    {"Incantation", 11, logic_incantation},
+    {NULL, 0, logic_unknown}
+  };
 
 static int		run(t_server *server,
 			    t_client *client,

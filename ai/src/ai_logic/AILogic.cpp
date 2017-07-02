@@ -923,6 +923,7 @@ namespace zappy
     else
       {
 	m_state = STATE::INITIAL;
+        m_incant = false;
 	sendActionAndCheckResponse(ACTION::BROADCAST,
 	                           std::to_string(m_id) + " " +
 	                               std::to_string(m_curLvl) + " STOP",
@@ -1093,10 +1094,25 @@ namespace zappy
 
   bool AILogic::canIFork()
   {
-    sendActionAndCheckResponse(ACTION::UNUSED_SLOTS, "", 1, {});
-    if (_response.empty())
-      return false;
-    return (!std::stoi(_response[0]));
+    static uint32_t cooldown = 0;
+
+    if (cooldown == 0)
+      {
+        sendActionAndCheckResponse(ACTION::UNUSED_SLOTS, "", 1, {});
+        if (_response.empty())
+          return false;
+        if (!std::stoi(_response[0]))
+          {
+            cooldown = 650;
+            return (true);
+          }
+        return (false);
+      }
+    else
+      {
+        --cooldown;
+      }
+    return (false);
   }
 
   bool AILogic::goFork()
