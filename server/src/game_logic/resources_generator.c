@@ -5,7 +5,7 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Tue Jun 27 17:12:53 2017 brout_m
-** Last update Sun Jul  2 16:17:05 2017 brout_m
+** Last update Sun Jul  2 19:00:13 2017 Edouard
 */
 
 #include <unistd.h>
@@ -22,13 +22,13 @@ static t_luck	drop_rates[OBJ_COUNT] =
     {SIBUR, 34},
     {MENDIANE, 13},
     {PHIRAS, 21},
-    {THYSTAME, 4}
+    {THYSTAME, 13}
   };
 
 static void	kill_client(t_server *server, t_client *client)
 {
   Object	obj = 0;
-  int 		i;
+  int		i;
 
   while (obj < OBJ_COUNT)
     {
@@ -92,8 +92,8 @@ static int	generate(t_server *server,
 
 static int	generate_resources(t_server *server, uint32_t alive)
 {
-  ID 		cli = 0;
-  size_t 	max;
+  ID		cli = 0;
+  size_t	max;
   Object	obj;
 
   while (cli < (int) alive)

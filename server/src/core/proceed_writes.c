@@ -5,7 +5,7 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sun Jun 25 02:55:25 2017 brout_m
-** Last update Sun Jul  2 15:59:36 2017 brout_m
+** Last update Sun Jul  2 19:19:18 2017 Edouard
 */
 #include <sys/socket.h>
 #include <stdio.h>
@@ -56,11 +56,6 @@ static int		write_out(t_client *client,
   return (0);
 }
 
-/*
-** If we need to send multiple commands to a client, we must modify
-** this function loop to not stop when reading certain commands:
-** use strncmp to check whether to stop or not
-**/
 static int		send_client(t_client *client, Socket sock)
 {
   size_t		len;

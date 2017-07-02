@@ -5,7 +5,7 @@
 ** Login   <edouard@epitech.net>
 **
 ** Started on  Tue Jun 27 17:31:57 2017 Edouard
-** Last update Sun Jul  2 16:07:23 2017 brout_m
+** Last update Sun Jul  2 19:14:40 2017 Edouard
 */
 
 #include <string.h>
@@ -93,7 +93,7 @@ static	void	look_print_line(t_server *server,
 				t_position *pos,
 				int len_line)
 {
-  int 		j;
+  int		j;
 
   j = 0;
   while (j < 2 * len_line + 1)

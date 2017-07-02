@@ -5,7 +5,7 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Tue Jun 27 01:43:58 2017 brout_m
-** Last update Sun Jul  2 15:51:21 2017 brout_m
+** Last update Sun Jul  2 19:18:28 2017 Edouard
 */
 #include <string.h>
 #include "server/logic_commands.h"
@@ -47,9 +47,9 @@ static int	send_position(t_server *server, ID playerId, t_team *team)
 		     server->game.height));
 }
 
-static int 	check_players(t_server *server, t_team *team, ID playerId)
+static int	check_players(t_server *server, t_team *team, ID playerId)
 {
-  t_egg 	*egg;
+  t_egg	*egg;
 
   if (team->memberCount < team->maxCount)
     {
@@ -76,7 +76,7 @@ static int 	check_players(t_server *server, t_team *team, ID playerId)
 int		player_connecting(t_server *server, ID playerId, char *cmd)
 {
   t_team	*team;
-  int     	j = 0;
+  int		j = 0;
 
   if (!strcmp(cmd, "GRAPHIC"))
     {

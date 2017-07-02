@@ -5,7 +5,7 @@
 ** Login   <edouard@epitech.net>
 **
 ** Started on  Tue Jun 27 17:35:08 2017 Edouard
-** Last update Sat Jul  1 16:02:26 2017 duhieu_b
+** Last update Sun Jul  2 19:10:27 2017 Edouard
 */
 
 #include <string.h>
@@ -14,7 +14,7 @@
 bool		is_incantation(t_server *server, t_position *pos)
 {
   t_client	*client;
-  int 		cli = 0;
+  int		cli = 0;
 
   while (cli < server->game.max_slot)
     {

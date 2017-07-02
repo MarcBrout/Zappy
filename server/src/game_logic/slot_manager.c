@@ -5,15 +5,15 @@
 ** Login   <edouard.puillandre@epitech.eu>
 **
 ** Started on  mer. juin 28 17:16:11 2017 Edouard
-** Last update Sun Jul  2 15:40:14 2017 Edouard
+** Last update Sun Jul  2 19:01:24 2017 Edouard
 */
 
 #include "server.h"
 
 static size_t	count_eggs(t_server *server, Team team)
 {
-  t_egg		*egg;
-  size_t 	nb_eggs;
+  t_egg	*egg;
+  size_t        nb_eggs;
 
   egg = server->game.eggs;
   nb_eggs = 0;
@@ -37,7 +37,7 @@ int		count_empty_slot(t_server *server, Team id)
 void		increment_team_count(t_server *server, Team id)
 {
   t_team	*team;
-  size_t 	nb_egg;
+  size_t	nb_egg;
 
   nb_egg = count_eggs(server, id);
   team = &server->config.teams[id];

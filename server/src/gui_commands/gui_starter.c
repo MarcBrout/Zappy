@@ -5,7 +5,7 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Tue Jun 27 01:34:53 2017 brout_m
-** Last update Sun Jul  2 16:16:37 2017 brout_m
+** Last update Sun Jul  2 19:04:05 2017 Edouard
 */
 
 #include <stdbool.h>
@@ -74,7 +74,7 @@ static int	send_player_informations(t_server *server)
 
 static int	send_eggs_informations(t_server *server)
 {
-  t_egg		*egg;
+  t_egg         *egg;
 
   egg = server->game.eggs;
   while (egg)

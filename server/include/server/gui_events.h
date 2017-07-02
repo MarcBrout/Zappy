@@ -1,11 +1,11 @@
 /*
-** gui_events.h for zappy in /home/brout_m/rendu/system/PSU_2016_zappy/server/include
+** gui_events.h for zappy in /home/rendu/system/PSU_2016_zappy
 **
 ** Made by brout_m
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sat Jun 24 16:42:54 2017 brout_m
-** Last update Sat Jun 24 16:43:37 2017 brout_m
+** Last update Sun Jul  2 18:53:59 2017 Edouard
 */
 #ifndef GUI_EVENTS_H_
 # define GUI_EVENTS_H_

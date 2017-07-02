@@ -5,7 +5,7 @@
 ** Login   <edouard@epitech.net>
 **
 ** Started on  Tue Jun 27 17:29:56 2017 Edouard
-** Last update Tue Jun 27 17:30:02 2017 Edouard
+** Last update Sun Jul  2 19:13:11 2017 Edouard
 */
 
 #include <string.h>
@@ -13,7 +13,7 @@
 
 void	forward_pos(t_server *server, t_position *pos, Direction dir, int nb)
 {
-  int 	i;
+  int	i;
 
   i = 0;
   while (i < nb)

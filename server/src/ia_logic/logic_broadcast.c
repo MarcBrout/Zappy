@@ -5,7 +5,7 @@
 ** Login   <edouard@epitech.net>
 **
 ** Started on  Tue Jun 27 17:27:50 2017 Edouard
-** Last update Sun Jul  2 16:04:11 2017 brout_m
+** Last update Sun Jul  2 19:11:52 2017 Edouard
 */
 
 #include <string.h>
@@ -15,7 +15,7 @@
 
 static int	pos_text(char *cmd)
 {
-  int 		len;
+  int		len;
 
   len = (int)strlen("Broadcast");
   if (cmd[len] != ' ')
@@ -29,7 +29,7 @@ int		logic_broadcast(t_server *server, ID id, char *cmd)
 {
   ID		cli = 0;
   t_client	*client;
-  int 		pos;
+  int		pos;
   t_client	*tmp;
 
   pos = pos_text(cmd);

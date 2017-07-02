@@ -5,7 +5,7 @@
 ** Login   <prenom.nom@epitech.eu>
 **
 ** Started on  jeu. juin 29 16:44:01 2017 Prenom Nom
-** Last update Sun Jul  2 15:39:30 2017 Edouard
+** Last update Sun Jul  2 19:00:40 2017 Edouard
 */
 
 #include <stdlib.h>
@@ -45,7 +45,7 @@ int		push_value(t_server *server, Object type, bool start)
 void		generate_ressources_start(t_server *server)
 {
   Object	j = 0;
-  int 		i = 0;
+  int		i = 0;
 
   while (i < server->config.team_count * server->config.max_player)
     {
