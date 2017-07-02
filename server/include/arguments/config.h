@@ -5,8 +5,9 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sat Jun 24 16:38:06 2017 brout_m
-** Last update Sat Jun 24 16:40:17 2017 brout_m
+** Last update Sun Jul  2 13:35:25 2017 Edouard
 */
+
 #ifndef CONFIG_H_
 # define CONFIG_H_
 # define MAX_WIDTH 31
@@ -20,12 +21,12 @@
 
 typedef int ID;
 typedef struct s_team t_team;
-typedef struct s_arg		t_arg;
+typedef struct s_arg t_arg;
 typedef struct s_config	t_config;
-typedef int			(*arg_process_t)(t_config *config,
-						 int ac,
-						 char **argv,
-						 int *pos);
+typedef int (*arg_process_t)(t_config *config,
+			     int ac,
+			     char **argv,
+			     int *pos);
 
 struct				s_arg
 {
@@ -35,25 +36,25 @@ struct				s_arg
   bool				ok;
 };
 
-struct s_team
+struct		s_team
 {
-  char *name;
-  ID id;
-  uint32_t memberCount;
-  uint32_t maxCount;
-  uint32_t maxlvl;
-  uint32_t lvlcount;
+  char		*name;
+  ID		id;
+  uint32_t	memberCount;
+  uint32_t	maxCount;
+  uint32_t	maxlvl;
+  uint32_t	lvlcount;
 };
 
-struct s_config
+struct		s_config
 {
-  uint16_t			port;
-  uint8_t			width;
-  uint8_t			height;
-  t_team			*teams;
-  uint8_t			team_count;
-  uint8_t			max_player;
-  uint16_t			time;
+  uint16_t	port;
+  uint8_t	width;
+  uint8_t	height;
+  t_team	*teams;
+  uint8_t	team_count;
+  uint8_t	max_player;
+  uint16_t	time;
 };
 
 #endif /* !CONFIG_H_ */

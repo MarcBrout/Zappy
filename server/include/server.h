@@ -5,8 +5,9 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sat Jun 24 16:36:50 2017 brout_m
-** Last update Sat Jun 24 16:37:06 2017 brout_m
+** Last update Sun Jul  2 13:31:26 2017 Edouard
 */
+
 #ifndef SERVER_H_
 # define SERVER_H_
 
