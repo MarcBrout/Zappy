@@ -1,11 +1,11 @@
 ##
 ## Makefile for GlobalMakefile in /home/pierre/rendu/TEK2/PSU_2016_zappy
-## 
+##
 ## Made by PierreBougon
 ## Login   <pierre@epitech.net>
-## 
+##
 ## Started on  Sat Jun 10 20:35:47 2017 PierreBougon
-## Last update Sat Jun 10 22:31:59 2017 PierreBougon
+## Last update Sun Jul  2 16:26:02 2017 brout_m
 ##
 
 include mk/colors.mk mk/commands.mk mk/definitions.mk
@@ -22,14 +22,14 @@ server:
 	@$(ECHO) "|         $(BOLD_WHITE)SERVER$(BLUE)         |"
 	@$(ECHO) "\========================/ $(WHITE)"
 	@$(ECHO)
-	@make -s -C $(SERVER) RELEASE=yes
+	@make -s -C $(SERVER)
 
 ai:
 	@$(ECHO) "$(BLUE)/========================\\"
 	@$(ECHO) "|         $(BOLD_WHITE)  AI  $(BLUE)         |"
 	@$(ECHO) "\========================/ $(WHITE)"
 	@$(ECHO)
-	@make -s -C $(CLIENT_AI) RELEASE=yes
+	@make -s -C $(CLIENT_AI)
 
 fclean:
 	@make -s -C $(SERVER) fclean

@@ -923,6 +923,7 @@ namespace zappy
     else
       {
 	m_state = STATE::INITIAL;
+        m_incant = false;
 	sendActionAndCheckResponse(ACTION::BROADCAST,
 	                           std::to_string(m_id) + " " +
 	                               std::to_string(m_curLvl) + " STOP",
