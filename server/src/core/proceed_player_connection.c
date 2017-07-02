@@ -5,7 +5,7 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Tue Jun 27 01:43:58 2017 brout_m
-** Last update Sun Jul  2 19:18:28 2017 Edouard
+** Last update Sun Jul  2 21:51:24 2017 brout_m
 */
 #include <string.h>
 #include "server/logic_commands.h"
@@ -49,7 +49,7 @@ static int	send_position(t_server *server, ID playerId, t_team *team)
 
 static int	check_players(t_server *server, t_team *team, ID playerId)
 {
-  t_egg	*egg;
+  t_egg		*egg;
 
   if (team->memberCount < team->maxCount)
     {

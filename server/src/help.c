@@ -5,7 +5,7 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sat Jun 24 17:02:06 2017 brout_m
-** Last update Sun Jul  2 15:27:17 2017 Edouard
+** Last update Sun Jul  2 21:48:02 2017 brout_m
 */
 #include <stdio.h>
 
@@ -18,7 +18,7 @@ static const char	*usage =
   "\tclients Nb\tis the number of authorized clients per team\tdefault : 10\n"
   "\tfreq\t\tis the time limit for execution of actions\tdefault : 100\n";
 
-int	print_help(char *server_name)
+int			print_help(char *server_name)
 {
   return (printf(usage, server_name) || 1);
 }

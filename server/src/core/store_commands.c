@@ -5,7 +5,7 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sun Jun 25 02:54:50 2017 brout_m
-** Last update Sun Jul  2 19:21:19 2017 Edouard
+** Last update Sun Jul  2 21:52:47 2017 brout_m
 */
 #include <string.h>
 #include <stdlib.h>
@@ -15,8 +15,8 @@ static int	add_command(t_cmd **first,
 				    const char *cmd,
 				    uint64_t cooldown)
 {
-  t_cmd	*node;
-  t_cmd	*cur;
+  t_cmd		*node;
+  t_cmd		*cur;
 
   if ((node = calloc(1, sizeof(*node))) == NULL)
     return (1);
@@ -39,7 +39,7 @@ int		store_command_sequel(t_store *store,
 				     const char *cmd,
 				     uint64_t cooldown)
 {
-  t_cmd	*node;
+  t_cmd		*node;
 
   if (!store->commands)
     {
@@ -88,7 +88,7 @@ char		*get_command_from_store(t_store *store)
 
 void		pop_command(t_store *store)
 {
-  t_cmd	*first;
+  t_cmd		*first;
 
   if (store->commands)
     {
