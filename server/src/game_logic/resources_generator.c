@@ -94,24 +94,18 @@ static int	generate(t_server *server,
 
 static int	generate_resources(t_server *server, uint32_t alive)
 {
-  uint16_t	j = 0;
   ID 		cli = 0;
   size_t 	max;
+  Object	obj;
 
-  while (j < OBJ_COUNT)
+  while (cli < (int) alive)
     {
-      cli = 0;
-      if (j == 0)
-	max = alive * server->game.width * server->game.height / 2;
-      else
-	max = drop_rates[j].value * server->config.team_count;
-      while (cli < (int) alive)
-	{
-	  if (generate(server, &drop_rates[j], alive, max))
-	    return (1);
-	  ++cli;
-	}
-      j = j + 1;
+      generate(server, &drop_rates[0], alive,
+	       alive * server->game.width * server->game.height / 2);
+      obj = rand() % (OBJ_COUNT - 1) + 1;
+      max = drop_rates[obj].value * server->config.team_count / 2;
+      generate(server, &drop_rates[obj], alive, max);
+      ++cli;
     }
   return (0);
 }
