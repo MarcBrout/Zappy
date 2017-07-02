@@ -84,9 +84,9 @@ int	argument_name(t_config *config, int ac, char **argv, int *pos)
   ++*pos;
   if (adding_names(config, ac, argv, pos))
     return (1);
-  if (config->team_count < 2)
+  if (config->team_count < 2 || config->team_count > 10)
     {
-      printf("Not enough team names, minimum 2 required.\n");
+      printf("Wrong team number, between 2 and 6.\n");
       return (1);
     }
   --*pos;
