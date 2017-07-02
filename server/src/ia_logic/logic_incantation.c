@@ -46,7 +46,7 @@ static void	incr_lvl_team(t_server *server, Team id, Level lvl)
   if (team->maxlvl == lvl)
     {
       ++team->lvlcount;
-      if (team->lvlcount == 6)
+      if (team->lvlcount >= 6)
 	{
 	  if (team->maxlvl == LEVEL_END)
 	    {
@@ -73,7 +73,8 @@ static int	send_incantation_end(t_server *server,
 	  server->game.clients[cli].ia.pos.y == client->ia.pos.y)
 	{
 	  ++server->game.clients[cli].ia.level;
-	  incr_lvl_team(server, client->ia.team, client->ia.level);
+	  incr_lvl_team(server, server->game.clients[cli].ia.team,
+			server->game.clients[cli].ia.level);
 	  send_player_lvl(server, cli);
 	  send_to_ia(server, cli, "Current level: %u\n",
 		     server->game.clients[cli].ia.level);
