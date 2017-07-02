@@ -523,7 +523,8 @@ namespace zappy
 	    if (str == "ko")
 	      {
 		ko = true;
-	      };
+                break;
+	      }
 	  }
 	if (ko)
 	  m_incant = false;
@@ -579,6 +580,8 @@ namespace zappy
   {
     Logger::log(Logger::_DEBUG_, "[AI] Received STOP broadcast, moving on");
     m_trackId = 0;
+    if (m_incant)
+      m_incant = false;
     m_state = STATE::INITIAL;
     return true;
   }
