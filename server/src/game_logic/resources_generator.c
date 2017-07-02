@@ -22,7 +22,7 @@ static t_luck		drop_rates[OBJ_COUNT] =
     {SIBUR, 34},
     {MENDIANE, 13},
     {PHIRAS, 21},
-    {THYSTAME, 2}
+    {THYSTAME, 4}
   };
 
 static void	kill_client(t_server *server, t_client *client)
@@ -100,8 +100,9 @@ static int	generate_resources(t_server *server, uint32_t alive)
 
   while (cli < (int) alive)
     {
-      generate(server, &drop_rates[0], alive,
-	       alive * server->game.width * server->game.height / 2);
+      max = (alive > 6 ? 6 : alive) *
+	    server->game.width * server->game.height / 2;
+      generate(server, &drop_rates[0], alive, max);
       obj = rand() % (OBJ_COUNT - 1) + 1;
       max = drop_rates[obj].value * server->config.team_count / 2;
       generate(server, &drop_rates[obj], alive, max);

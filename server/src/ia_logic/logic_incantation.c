@@ -105,11 +105,11 @@ int		logic_incantation(t_server *server, ID id, char *cmd)
   obj = LINEMATE;
   while (obj < OBJ_COUNT)
     {
-      cell->objects[obj] -= incant_tab[client->ia.level][obj];
-      server->game.object_tot[obj] -= incant_tab[client->ia.level][obj];
+      cell->objects[obj] -= incant_tab[client->ia.level - 1][obj];
+      server->game.object_tot[obj] -= incant_tab[client->ia.level - 1][obj];
       ++obj;
     }
   send_case_content(server, client->ia.pos.x, client->ia.pos.y);
   return (send_incantation_end(server, client,
-			       incant_tab[client->ia.level][0]));
+			       incant_tab[client->ia.level - 1][0]));
 }
