@@ -5,7 +5,7 @@
 ** Login   <edouard@epitech.net>
 **
 ** Started on  Tue Jun 27 17:31:57 2017 Edouard
-** Last update Tue Jun 27 17:32:03 2017 Edouard
+** Last update Sun Jul  2 16:07:23 2017 brout_m
 */
 
 #include <string.h>
@@ -13,15 +13,15 @@
 #include "server/logic_commands.h"
 
 static const char *obj_tab[OBJ_COUNT] =
- {
-  "food",
-  "linemate",
-  "deraumere",
-  "sibur",
-  "mendiane",
-  "phiras",
-  "thystame"
- };
+  {
+    "food",
+    "linemate",
+    "deraumere",
+    "sibur",
+    "mendiane",
+    "phiras",
+    "thystame"
+  };
 
 static bool	look_tile_player(t_server *server,
 				    t_client *client,
@@ -52,8 +52,8 @@ static bool	look_tile_player(t_server *server,
 static void	look_tile(t_server *server, t_client *client, t_position *pos)
 {
   Object	obj;
-  int 		i;
-  int 		tile;
+  int		i;
+  int		tile;
   bool		space;
 
   tile = FIND_POS(pos->x, pos->y, server->config.width);

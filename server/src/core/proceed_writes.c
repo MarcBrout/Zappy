@@ -5,7 +5,7 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sun Jun 25 02:55:25 2017 brout_m
-** Last update Sun Jun 25 02:55:39 2017 brout_m
+** Last update Sun Jul  2 15:59:36 2017 brout_m
 */
 #include <sys/socket.h>
 #include <stdio.h>
@@ -13,9 +13,9 @@
 #include <string.h>
 #include "server.h"
 
-int find_Socket(t_server *server, Socket sock)
+int			find_Socket(t_server *server, Socket sock)
 {
-  ID cli;
+  ID			cli;
 
   cli = 0;
   while (cli < server->game.max_slot)
@@ -27,16 +27,18 @@ int find_Socket(t_server *server, Socket sock)
   return (-1);
 }
 
-static int write_out(t_client *client, Socket sock, char out[MESSAGE_MAX_SIZE],
-                     bool cond)
+static int		write_out(t_client *client,
+				  Socket sock,
+				  char out[MESSAGE_MAX_SIZE],
+				  bool cond)
 {
-  size_t  len;
-  ssize_t written;
-  ssize_t notwritten;
+  size_t		len;
+  ssize_t		written;
+  ssize_t		notwritten;
 
   len = strlen(out);
   if (cond)
-      out[len] = '\n';
+    out[len] = '\n';
   if ((written = write(sock, out, strlen(out))) < 0)
     {
       perror("Write to client error");
@@ -47,8 +49,8 @@ static int write_out(t_client *client, Socket sock, char out[MESSAGE_MAX_SIZE],
     {
       client->w.remains = true;
       client->w.pos -= notwritten > client->w.pos
-                           ? BUFFER_MAX_SIZE - (notwritten - client->w.pos)
-                           : client->w.pos - notwritten;
+	? BUFFER_MAX_SIZE - (notwritten - client->w.pos)
+	: client->w.pos - notwritten;
       client->w.len += notwritten;
     }
   return (0);
@@ -59,14 +61,14 @@ static int write_out(t_client *client, Socket sock, char out[MESSAGE_MAX_SIZE],
 ** this function loop to not stop when reading certain commands:
 ** use strncmp to check whether to stop or not
 **/
-static int send_client(t_client *client, Socket sock)
+static int		send_client(t_client *client, Socket sock)
 {
-  size_t len;
-  char   out[MESSAGE_MAX_SIZE];
+  size_t		len;
+  char			out[MESSAGE_MAX_SIZE];
 
   memset(out, 0, MESSAGE_MAX_SIZE);
   while (strfromcircular(&client->w, out) || (strlen(out)) ||
-         client->w.remains)
+	 client->w.remains)
     {
       len = strlen(out);
       if (write_out(client, sock, out, len))
@@ -76,7 +78,7 @@ static int send_client(t_client *client, Socket sock)
   return (write_out(client, sock, out, strlen(out) > 0));
 }
 
-int write_client(t_client *client, Socket sock)
+int			write_client(t_client *client, Socket sock)
 {
   while (find_command(&client->w))
     {
@@ -92,11 +94,11 @@ int write_client(t_client *client, Socket sock)
   return (0);
 }
 
-int proceed_writes(t_server *server, fd_set *fds_write)
+int			proceed_writes(t_server *server, fd_set *fds_write)
 {
-  ID     id;
-  Socket sock;
-  int    pos;
+  ID			id;
+  Socket		sock;
+  int			pos;
 
   id = 0;
   while (id < server->game.max_slot)

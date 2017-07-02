@@ -5,7 +5,7 @@
 ** Login   <edouard@epitech.net>
 **
 ** Started on  Tue Jun 27 17:32:35 2017 Edouard
-** Last update Wed Jun 28 10:46:47 2017 brout_m
+** Last update Sun Jul  2 16:08:08 2017 brout_m
 */
 
 #include <string.h>
@@ -51,8 +51,8 @@ static void	update_cell(t_server *server, ID id, Object obj, bool take)
 int		logic_take(t_server *server, ID id, char *cmd)
 {
   Object	obj;
-  char 		*obj_str;
-  int 		pos;
+  char		*obj_str;
+  int		pos;
 
   strtok(cmd, " ");
   pos = FIND_POS(server->game.clients[id].ia.pos.x,
@@ -80,7 +80,7 @@ int		logic_take(t_server *server, ID id, char *cmd)
 int		logic_set(t_server *server, ID id, char *cmd)
 {
   Object	obj;
-  char 		*obj_str;
+  char		*obj_str;
 
   strtok(cmd, " ");
   if ((obj_str = strtok(NULL, " ")) == NULL ||

@@ -5,7 +5,7 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sun Jun 25 02:47:51 2017 brout_m
-** Last update Tue Jun 27 17:02:24 2017 brout_m
+** Last update Sun Jul  2 16:09:54 2017 brout_m
 */
 
 #include <string.h>
@@ -100,7 +100,7 @@ static int		proceed_gui(t_server *server)
     {
       strfromcircular(&server->gui.r, cmd);
       if (run(server, &server->gui, gui_commands, cmd))
-        return (1);
+	return (1);
     }
   return (0);
 }
@@ -116,15 +116,15 @@ static int		proceed_commands(t_server *server)
     while (find_command(&server->game.clients[i].r))
       {
 	if (server->game.clients[i].died)
-	  continue ;
+	  continue;
 	strfromcircular(&server->game.clients[i].r, cmd);
-        if (server->game.clients[i].active &&
+	if (server->game.clients[i].active &&
 	    !server->game.clients[i].alive)
 	  {
-	    player_connecting(server, i, cmd); // TODO check if -1
+	    player_connecting(server, i, cmd);
 	    continue;
 	  }
-        if (run(server, &server->game.clients[i], ia_commands, cmd))
+	if (run(server, &server->game.clients[i], ia_commands, cmd))
 	  return (1);
       }
     ++i;
@@ -163,11 +163,11 @@ int			proceed(t_server *server,
 				fd_set *fds_read, fd_set *fds_write)
 {
   return (proceed_server(server, fds_read) ||
-          proceed_gui_reads(server, fds_read) ||
-          proceed_reads(server, fds_read) ||
+	  proceed_gui_reads(server, fds_read) ||
+	  proceed_reads(server, fds_read) ||
 	  proceed_gui(server) ||
 	  proceed_commands(server) ||
 	  proceed_logic(server) ||
-          proceed_gui_writes(server, fds_write) ||
+	  proceed_gui_writes(server, fds_write) ||
 	  proceed_writes(server, fds_write));
 }

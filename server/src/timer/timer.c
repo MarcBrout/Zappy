@@ -5,7 +5,7 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sun Jun 25 03:07:02 2017 brout_m
-** Last update Sun Jul  2 15:59:40 2017 Edouard
+** Last update Sun Jul  2 16:14:06 2017 brout_m
 */
 
 #include <string.h>
@@ -50,13 +50,14 @@ bool		isTick()
   if (diff > last)
     {
       if (timer.new_freq != timer.freq)
-        {
-          timer.freq = timer.new_freq;
-          diff = ((1000000ll * timer.now.tv_sec +
+	{
+	  timer.freq = timer.new_freq;
+	  diff = ((1000000ll * timer.now.tv_sec +
 		   timer.now.tv_usec) -
-                  (1000000ll * timer.start.tv_sec +
-		   timer.start.tv_usec)) / timer.freq;
-        }
+		  (1000000ll * timer.start.tv_sec +
+		   timer.start.tv_usec)) /
+	    timer.freq;
+	}
       last = diff;
       log_this("\t======= TICK REACHED =======\n");
       return (true);

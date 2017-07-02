@@ -5,7 +5,7 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sun Jun 25 02:51:50 2017 brout_m
-** Last update Tue Jun 27 17:12:13 2017 brout_m
+** Last update Sun Jul  2 16:00:28 2017 brout_m
 */
 
 #include <sys/socket.h>
@@ -21,7 +21,6 @@ static bool		gl_stop = false;
 void	set_quit(int sig)
 {
   (void) sig;
-  //TODO check what happen when sigint
   gl_stop = true;
 }
 
