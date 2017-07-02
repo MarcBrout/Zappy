@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <algorithm>
 #include <iostream>
+#include "tools/Singleton.hpp"
 #include "ai_logic/AILogic.hpp"
 #include "tools/Logger.hpp"
 
@@ -326,7 +327,6 @@ namespace zappy
 	m_splitter.moveTokensTo(objs);
 	int  playerInCase(0);
 	bool objFind(false);
-	bool isFood = m_search.back().first == "food";
 
 	for (std::string obj : objs)
 	  {
@@ -339,19 +339,17 @@ namespace zappy
 		      m_searchings += "\n";
 		    ++m_nbObj;
 		    m_searchings += "Take " + inList.first;
-		    if (inList.first != "food")
-		      inList.second = true;
+                    inList.second = true;
 		  }
 	      }
 	    if (obj == "player")
 	      {
 		++playerInCase;
 	      }
-	    if ((objFind && !isFood && m_nbObj == m_search.size()) ||
-	        m_nbObj == 10)
-	      break;
 	  }
-	return (objFind && playerInCase < 2);
+        Logger::log(Logger::_DEBUG_, "[IA] MAY I SEARCH : " + m_searchings);
+	return ((objFind && playerInCase < 2) ||
+            m_searchings == "Take food");
       }
     return (false);
   }
@@ -955,6 +953,8 @@ namespace zappy
 
     initialVec.push_back(std::make_pair<condPtr, actionPtr>(
         &zappy::AILogic::needFood, &zappy::AILogic::searchFood));
+    initialVec.push_back(std::make_pair<condPtr, actionPtr>(
+        &zappy::AILogic::wasEndLevel, &zappy::AILogic::goTurn));
     initialVec.push_back(
         std::make_pair<condPtr, actionPtr>(&zappy::AILogic::wasOnWaitingState,
                                            &zappy::AILogic::goToWaitingState));
@@ -981,7 +981,7 @@ namespace zappy
       {
 	if (inventory[OBJECTS::FOOD] < 4)
 	  m_needFood = true;
-	else if (inventory[OBJECTS::FOOD] > 15 + std::rand() % m_curLvl + 1)
+	else if (inventory[OBJECTS::FOOD] > 15 + std::rand() % (m_curLvl * 3) + 1)
 	  m_needFood = false;
 	return (m_needFood);
       }
@@ -999,6 +999,17 @@ namespace zappy
     m_search.clear();
     m_search.push_back(std::make_pair<std::string, bool>("food", false));
     m_state = SEARCHING;
+    return true;
+  }
+
+  bool AILogic::wasEndLevel()
+  {
+    return m_curLvl == 8;
+  }
+
+  bool AILogic::goTurn()
+  {
+    sendActionAndCheckResponse(ACTION::LEFT, "", 1, {});
     return true;
   }
 
@@ -1098,7 +1109,7 @@ namespace zappy
 
   bool AILogic::missingObject()
   {
-    static int cooldown = std::rand() % 11 + 1;
+    static int cooldown = std::rand() % 4 + 2;
 
     sendActionAndCheckResponse(ACTION::INVENTORY, "", 1, {});
     if (!_response.empty())

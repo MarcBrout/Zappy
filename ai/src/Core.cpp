@@ -60,7 +60,8 @@ bool zappy::Core::waitForReponses(std::int32_t                    count,
 
 void zappy::Core::manageResponse(std::string servMessage)
 {
-  Logger::log(Logger::_DEBUG_, "command received : " + servMessage);
+  if (servMessage.size())
+    Logger::log(Logger::_DEBUG_, "command received : " + servMessage);
   if (servMessage == "dead")
     ::exit(0);
   else if (servMessage.substr(0, servMessage.find(" ")) == "message" ||
