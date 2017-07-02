@@ -5,7 +5,7 @@
 ## Login   <pierre@e	pitech.net>
 ##
 ## Started on  Sat Jun 10 21:33:53 2017 PierreBougon
-## Last update Thu Jun 29 10:06:45 2017 brout_m
+## Last update Sun Jul  2 21:56:54 2017 brout_m
 ##
 
 
@@ -67,8 +67,8 @@ SERVER_RAW_SRC=		server.c 			\
 			$(CORE)set_gui.c 		\
 			$(CORE)store_commands.c		\
 			$(CORE)proceed_player_connection.c \
-			$(CORE)free_resources.c \
-			$(CORE)proceed_gui.c \
+			$(CORE)free_resources.c 	\
+			$(CORE)proceed_gui.c 		\
 			$(GUICMD)unknown.c 		\
 			$(GUICMD)bct.c 			\
 			$(GUICMD)mct.c 			\
@@ -79,8 +79,8 @@ SERVER_RAW_SRC=		server.c 			\
 			$(GUICMD)sgt.c 			\
 			$(GUICMD)sst.c 			\
 			$(GUICMD)tna.c 			\
-			$(GUICMD)welcome.c 			\
-			$(GUICMD)starter.c 			\
+			$(GUICMD)welcome.c 		\
+			$(GUICMD)starter.c 		\
 			$(GUIEVE)ebo.c 			\
 			$(GUIEVE)edi.c 			\
 			$(GUIEVE)eht.c 			\
@@ -128,8 +128,8 @@ SERVER_SRC=		$(addprefix src/, $(SERVER_RAW_SRC))
 
 OBJ=			$(SERVER_SRC:.c=.o)
 
-INC=			-Iinclude \
-			-Iinclude/logger \
+INC=			-Iinclude 			\
+			-Iinclude/logger 		\
 			-Iinclude/timer
 
 LDFLAGS+=		-lm
