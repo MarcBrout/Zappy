@@ -5,14 +5,15 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sun Jun 25 02:33:24 2017 brout_m
-** Last update Tue Jun 27 17:17:01 2017 brout_m
+** Last update Sun Jul  2 15:53:36 2017 Edouard
 */
+
 #include "server.h"
 
 int		event_pic(t_server *server, t_client const *incantor)
 {
   t_position	pos = incantor->ia.pos;
-  t_client *	client;
+  t_client	*client;
   int		i = 0;
 
   log_this("[PIC] Incantation level '%d' started on:\n\tx: %d\n\ty: %d\n "

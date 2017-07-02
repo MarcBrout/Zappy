@@ -5,8 +5,9 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sat Jun 24 16:51:27 2017 brout_m
-** Last update Tue Jun 27 17:27:10 2017 Edouard
+** Last update Sun Jul  2 15:19:44 2017 Edouard
 */
+
 #ifndef STORE_COMMANDS_H_
 # define STORE_COMMANDS_H_
 # define MAX_CMD 10
@@ -15,21 +16,21 @@
 # include <stdint.h>
 # include <stdbool.h>
 
-typedef struct s_cmd	t_cmd;
-typedef struct s_store	t_store;
+typedef struct s_cmd t_cmd;
+typedef struct s_store t_store;
 
-struct			s_cmd
+struct		s_cmd
 {
-  char			command[CMD_LENGTH];
-  uint64_t		cooldown;
-  bool			in_limit;
-  struct s_cmd		*next;
+  char		command[CMD_LENGTH];
+  uint64_t	cooldown;
+  bool		in_limit;
+  struct s_cmd	*next;
 };
 
-struct			s_store
+struct		s_store
 {
-  t_cmd			*commands;
-  uint16_t		command_count;
+  t_cmd		*commands;
+  uint16_t	command_count;
 };
 
 /*
@@ -38,7 +39,9 @@ struct			s_store
 ** the queue is full. Queue size is defined by the macro MAX_CMD
 ** and updated automatically
 */
-int store_command(t_store *store, const char *cmd, uint64_t cooldown);
+int	store_command(t_store *store,
+		      const char *cmd,
+		      uint64_t cooldown);
 
 /*
 ** Returns 1 if an allocation error occurred, return -1 if there are no first
@@ -51,11 +54,11 @@ int	store_command_sequel(t_store *store,
 /*
 ** Returns NULL if no commands were found
 */
-char *get_command_from_store(t_store *store);
+char	*get_command_from_store(t_store *store);
 
 /*
 ** Remove the first command, has no effect if the queue is empty
 */
-void pop_command(t_store *store);
+void	pop_command(t_store *store);
 
 #endif /* !STORE_COMMANDS_H_ */

@@ -5,8 +5,9 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sun Jun 25 02:15:36 2017 brout_m
-** Last update Wed Jun 28 10:40:18 2017 brout_m
+** Last update Sun Jul  2 15:42:57 2017 Edouard
 */
+
 #include <string.h>
 #include <stdlib.h>
 #include "server.h"

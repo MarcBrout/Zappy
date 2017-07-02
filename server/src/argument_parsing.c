@@ -5,15 +5,16 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sat Jun 24 17:00:47 2017 brout_m
-** Last update Wed Jun 28 10:48:08 2017 brout_m
+** Last update Sun Jul  2 15:22:26 2017 Edouard
 */
+
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
 #include "arguments/arguments.h"
 #include "arguments/config.h"
 
-static t_arg		commands[7] =
+static t_arg	commands[7] =
   {
     {"-p", "port", argument_port, true},
     {"-x", "width", argument_width, true},
@@ -24,9 +25,9 @@ static t_arg		commands[7] =
     {NULL, NULL, NULL, false}
   };
 
-static void		print_missing_arguments()
+static void	print_missing_arguments()
 {
-  t_arg			*it;
+  t_arg		*it;
 
   it = commands;
   while (it->exec != NULL)
@@ -40,7 +41,7 @@ static void		print_missing_arguments()
     }
 }
 
-static void		default_initialization(t_config *config)
+static void	default_initialization(t_config *config)
 {
   config->port = 4242;
   config->height = 30;
@@ -49,9 +50,9 @@ static void		default_initialization(t_config *config)
   config->time = 100;
 }
 
-static int		arguments_validation(char **args)
+static int	arguments_validation(char **args)
 {
-  t_arg			*it;
+  t_arg		*it;
 
   it = commands;
   while (it->exec != NULL)
@@ -66,12 +67,12 @@ static int		arguments_validation(char **args)
   return (0);
 }
 
-int			process_command_line(t_config *config,
-					     int ac,
-					     char **args)
+int	process_command_line(t_config *config,
+			     int ac,
+			     char **args)
 {
-  int			argument;
-  t_arg			*it;
+  int	argument;
+  t_arg	*it;
 
   argument = 1;
   default_initialization(config);

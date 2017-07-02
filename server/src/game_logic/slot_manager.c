@@ -5,12 +5,12 @@
 ** Login   <edouard.puillandre@epitech.eu>
 **
 ** Started on  mer. juin 28 17:16:11 2017 Edouard
-** Last update mer. juin 28 17:16:11 2017 Edouard
+** Last update Sun Jul  2 15:40:14 2017 Edouard
 */
 
 #include "server.h"
 
-static size_t 	count_eggs(t_server *server, Team team)
+static size_t	count_eggs(t_server *server, Team team)
 {
   t_egg		*egg;
   size_t 	nb_eggs;
