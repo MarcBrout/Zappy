@@ -49,12 +49,16 @@ const std::string &zappy::ParseOptions::getTeamName() const
     return _teamName;
 }
 
-const std::string &zappy::ParseOptions::getServName() const
+const std::string &zappy::ParseOptions::getServName()
 {
+    if (_servName == "")
+        _servName = "127.0.0.1";
     return _servName;
 }
 
-uint16_t zappy::ParseOptions::getPort() const
+uint16_t zappy::ParseOptions::getPort()
 {
+    if (_port == 0)
+        _port = 4242;
     return _port;
 }

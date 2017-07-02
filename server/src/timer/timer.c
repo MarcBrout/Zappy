@@ -50,9 +50,14 @@ bool		isTick()
   if (diff > last)
     {
       if (timer.new_freq != timer.freq)
-	timer.freq = timer.new_freq;
-      log_this("\t======= TICK REACHED =======\n");
+        {
+          timer.freq = timer.new_freq;
+          diff = ((1000000ll * timer.now.tv_sec + timer.now.tv_usec) -
+                  (1000000ll * timer.start.tv_sec + timer.start.tv_usec)) /
+                 timer.freq;
+        }
       last = diff;
+      log_this("\t======= TICK REACHED =======\n");
       return (true);
     }
   return (false);

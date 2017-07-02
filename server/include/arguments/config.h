@@ -13,7 +13,7 @@
 # define MAX_WIDTH 31
 # define MAX_HEIGHT 31
 # define MAX_CLIENT 21
-# define MAX_TIME 65535
+# define MAX_TIME 501
 
 # include <stdint.h>
 # include <stddef.h>
