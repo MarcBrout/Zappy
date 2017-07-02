@@ -76,7 +76,7 @@ typedef struct		s_command
 int	proceed(t_server *server, fd_set *fds_read, fd_set *fds_write);
 int	proceed_writes(t_server *server, fd_set *fds_write);
 int	proceed_reads(t_server *server, fd_set *fds_read);
-in	proceed_server(t_server *server, fd_set *fds_read);
+int	proceed_server(t_server *server, fd_set *fds_read);
 int	launch_server(t_server *server);
 int	set_gui(t_server *server, fd_set *fds_read, fd_set *fds_write);
 int	accept_new_gui(t_server *server);
