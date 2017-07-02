@@ -80,10 +80,8 @@ static uint32_t		check_deads(t_server *server,
 
 static int	generate(t_server *server,
 			 t_luck const *luck,
-			 uint32_t alive,
 			 size_t max)
 {
-  (void) alive;
   if (server->game.object_tot[luck->type] < (int) max &&
       rand() % 100 < luck->value)
     {
@@ -100,12 +98,12 @@ static int	generate_resources(t_server *server, uint32_t alive)
 
   while (cli < (int) alive)
     {
-      max = (alive > 6 ? 6 : alive) *
+      max = server->config.team_count *
 	    server->game.width * server->game.height / 2;
-      generate(server, &drop_rates[0], alive, max);
+      generate(server, &drop_rates[0], max);
       obj = rand() % (OBJ_COUNT - 1) + 1;
-      max = drop_rates[obj].value * server->config.team_count / 2;
-      generate(server, &drop_rates[obj], alive, max);
+      max = drop_rates[obj].value * server->config.team_count;
+      generate(server, &drop_rates[obj], max);
       ++cli;
     }
   return (0);
