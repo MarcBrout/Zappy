@@ -99,7 +99,7 @@ static int	generate_resources(t_server *server, uint32_t alive)
   while (cli < (int) alive)
     {
       max = server->config.team_count *
-	    server->game.width * server->game.height / 2;
+	    server->game.width * server->game.height * 2 / 3;
       generate(server, &drop_rates[0], max);
       obj = rand() % (OBJ_COUNT - 1) + 1;
       max = drop_rates[obj].value * server->config.team_count;

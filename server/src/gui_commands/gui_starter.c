@@ -5,7 +5,7 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Tue Jun 27 01:34:53 2017 brout_m
-** Last update Sun Jul  2 15:46:38 2017 Edouard
+** Last update Sun Jul  2 18:12:36 2017 Edouard
 */
 
 #include <stdbool.h>
@@ -56,10 +56,15 @@ static int	send_player_informations(t_server *server)
       newClient = &server->game.clients[id];
       if (newClient->alive)
 	{
+	  log_this("[PPO] GUI asked for Client '%d' position on:"
+		    "\n\tx: %d\n\ty: %d\n\tdir: %d\n ", id,
+		   newClient->ia.pos.x,
+		   newClient->ia.pos.y,
+		   newClient->ia.dir);
 	  if (send_to_gui(server, "pnw %d %d %d %d %d %s\n", newClient->id,
-	                  newClient->ia.pos.x, newClient->ia.pos.y,
-	                  newClient->ia.dir, newClient->ia.level,
-	                  server->config.teams[newClient->ia.team]))
+			  newClient->ia.pos.x, newClient->ia.pos.y,
+			  newClient->ia.dir, newClient->ia.level,
+			  server->config.teams[newClient->ia.team]))
 	    return (1);
 	}
       ++id;
