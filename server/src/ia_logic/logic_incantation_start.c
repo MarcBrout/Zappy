@@ -5,7 +5,7 @@
 ** Login   <edouard@epitech.net>
 **
 ** Started on  Tue Jun 27 17:30:59 2017 Edouard
-** Last update Tue Jun 27 17:31:04 2017 Edouard
+** Last update Sun Jul  2 16:06:33 2017 brout_m
 */
 
 #include <string.h>
@@ -27,9 +27,9 @@ static void	send_incantation_start(t_server *server,
 				       t_client *client,
 				       int max_player)
 {
-  ID 		cli;
-  int 		nb_player;
-  int 		len;
+  ID		cli;
+  int		nb_player;
+  int		len;
 
   cli = 0;
   nb_player = 0;
@@ -53,8 +53,8 @@ static void	send_incantation_start(t_server *server,
 static int	count_player(t_server *server,
 			       t_client *client)
 {
-  ID 		cli;
-  int 		nb_player;
+  ID		cli;
+  int		nb_player;
 
   cli = 0;
   nb_player = 0;
@@ -101,7 +101,7 @@ int		logic_incantation_start(t_server *server, ID id, char *cmd)
 {
   t_client	*client;
   t_cell	*cell;
-  int 		ret;
+  int		ret;
 
   (void)cmd;
   client = &server->game.clients[id];

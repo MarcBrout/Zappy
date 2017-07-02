@@ -5,11 +5,11 @@
 ** Login   <edouard@epitech.net>
 **
 ** Started on  Tue Jun 27 17:27:50 2017 Edouard
-** Last update Tue Jun 27 18:21:56 2017 brout_m
+** Last update Sun Jul  2 16:04:11 2017 brout_m
 */
 
 #include <string.h>
-#include <server/ia_commands.h>
+#include "server/ia_commands.h"
 #include "server/gui_events.h"
 #include "server/direction_manager.h"
 
@@ -17,7 +17,7 @@ static int	pos_text(char *cmd)
 {
   int 		len;
 
-  len = (int) strlen("Broadcast");
+  len = (int)strlen("Broadcast");
   if (cmd[len] != ' ')
     return (0);
   if (cmd[len] == '\0')
@@ -44,7 +44,7 @@ int		logic_broadcast(t_server *server, ID id, char *cmd)
 		     "message %d, %s\n",
 		     find_direction(server, &client->ia.pos,
 				    &tmp->ia.pos, tmp->ia.dir),
-		                    pos == 0 ? "" : cmd + pos);
+		     pos == 0 ? "" : cmd + pos);
 	}
       ++cli;
     }
