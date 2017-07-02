@@ -10,6 +10,7 @@
 #include <netinet/in.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "server/gui_commands.h"
 #include "server.h"
 
@@ -20,6 +21,7 @@ static int		add_slot(t_server *server, int *cli)
   size = sizeof(t_client) * (server->game.max_slot + 1);
   if ((server->game.clients = realloc(server->game.clients, size)) == NULL)
     return (1);
+  memset(&server->game.clients[server->game.max_slot], 0, sizeof(t_client));
   *cli = server->game.max_slot++;
   return (0);
 }

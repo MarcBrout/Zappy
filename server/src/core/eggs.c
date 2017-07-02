@@ -5,7 +5,7 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sun Jun 25 02:36:40 2017 brout_m
-** Last update Wed Jun 28 10:35:56 2017 brout_m
+** Last update Sun Jul  2 21:46:16 2017 Edouard
 */
 
 #include <server.h>
@@ -13,10 +13,11 @@
 #include "server/gui_events.h"
 #include "server/eggs.h"
 
-t_egg		*add_egg(t_server *server, t_position *pos, Team id)
+t_egg			*add_egg(t_server *server, t_position *pos, Team id)
 {
-  t_egg		*egg;
-  t_egg		*tmp;
+  t_egg			*egg;
+  t_egg			*tmp;
+  static uint32_t       id_egg = 0;
 
   if ((egg = malloc(sizeof(*egg))) == NULL)
     return (NULL);
@@ -27,6 +28,7 @@ t_egg		*add_egg(t_server *server, t_position *pos, Team id)
   egg->hatched = false;
   egg->next = NULL;
   egg->layer = id;
+  egg->id = id_egg++;
   tmp = server->game.eggs;
   if (tmp == NULL)
     server->game.eggs = egg;
