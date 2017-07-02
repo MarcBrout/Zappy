@@ -9,10 +9,12 @@
 #include "tools/Logger.hpp"
 #include "network/ASocket.hpp"
 
-zappy::network::ASocket::ASocket(uint16_t _port, const std::string &_hostname)
-    : _socket(-1), _port(_port), _hostname(_hostname), _servAddr(),
+zappy::network::ASocket::ASocket(uint16_t port, const std::string &hostname)
+    : _socket(-1), _port(port), _hostname(hostname), _servAddr(),
       _server(nullptr)
 {
+  if (_port == 0)
+    _port = 4242;
   init();
 }
 

@@ -78,6 +78,8 @@ std::vector<std::string> zappy::network::TCPClient::receive()
 
 void zappy::network::TCPClient::connect()
 {
+  if (_hostname.empty() || _hostname == "")
+    _hostname = "127.0.0.1";
   _server = ::gethostbyname(_hostname.c_str());
   if (!_server)
     throw network::SocketError("No such host");
