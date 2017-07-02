@@ -5,8 +5,9 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sun Jun 25 03:07:02 2017 brout_m
-** Last update Wed Jun 28 10:32:21 2017 brout_m
+** Last update Sun Jul  2 15:55:58 2017 Edouard
 */
+
 #include <string.h>
 #include <stdio.h>
 #include <time.h>
@@ -16,9 +17,9 @@
 static Timer		timer;
 static suseconds_t	last = 0;
 
-int			init_timer(uint16_t freq)
+int		init_timer(uint16_t freq)
 {
-  double		unit = 1.0;
+  double	unit = 1.0;
 
   memset(&timer, 0, sizeof(timer));
   if (gettimeofday(&timer.start, NULL))
@@ -38,9 +39,9 @@ void	set_new_timer(uint16_t freq)
   timer.new_freq = (uint64_t)((1.0 / (double)freq) * 1000000.0);
 }
 
-bool			isTick()
+bool		isTick()
 {
-  suseconds_t		diff;
+  suseconds_t	diff;
 
   gettimeofday(&timer.now, NULL);
   diff = ((1000000ll * timer.now.tv_sec + timer.now.tv_usec) -

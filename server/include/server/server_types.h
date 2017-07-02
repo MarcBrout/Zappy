@@ -5,7 +5,7 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sat Jun 24 16:49:08 2017 brout_m
-** Last update Tue Jun 27 16:58:41 2017 brout_m
+** Last update Sun Jul  2 15:18:03 2017 Edouard
 */
 #ifndef SERVER_TYPES_H_
 # define SERVER_TYPES_H_
@@ -16,16 +16,16 @@
 # define FOOD_START 10
 # define LEVEL_END 8
 
-typedef int			Socket;
-typedef int			Team;
-typedef enum e_object		Object;
-typedef unsigned int		Level;
-typedef enum e_direction	Direction;
-typedef enum e_rdirection	RDirection;
-typedef int			ID;
+typedef int Socket;
+typedef int Team;
+typedef enum e_object Object;
+typedef unsigned int Level;
+typedef enum e_direction Direction;
+typedef enum e_rdirection RDirection;
+typedef int ID;
 typedef struct s_luck t_luck;
 
-enum				e_object
+enum	e_object
   {
     FOOD = 0,
     LINEMATE,
@@ -37,13 +37,13 @@ enum				e_object
     OBJ_COUNT
   };
 
-struct				s_luck
+struct			s_luck
 {
-  const enum e_object		type;
-  double			value;
+  const enum e_object	type;
+  double		value;
 };
 
-enum				e_direction
+enum	e_direction
   {
     NORTH = 1,
     EAST,
@@ -51,7 +51,7 @@ enum				e_direction
     WEST
   };
 
-enum				e_rdirection
+enum	e_rdirection
   {
     RSOUTH = 1,
     RWEST,
@@ -59,6 +59,6 @@ enum				e_rdirection
     REAST
   };
 
-const char *nameof(enum e_object obj);
+const char	*nameof(enum e_object obj);
 
 #endif /* !SERVER_TYPES_H_ */

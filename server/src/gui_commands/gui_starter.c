@@ -5,16 +5,17 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Tue Jun 27 01:34:53 2017 brout_m
-** Last update Tue Jun 27 01:38:40 2017 brout_m
+** Last update Sun Jul  2 15:46:38 2017 Edouard
 */
+
 #include <stdbool.h>
 #include "server/gui_events.h"
 #include "server/gui_commands.h"
 
-static bool gl_guiConnected = false;
-static bool reset = false;
+static bool	gl_guiConnected = false;
+static bool	reset = false;
 
-bool set_gui_connected(bool value, bool set)
+bool	set_gui_connected(bool value, bool set)
 {
   if (set)
     {
@@ -27,11 +28,11 @@ bool set_gui_connected(bool value, bool set)
   return (gl_guiConnected);
 }
 
-static int send_map_cell(t_server *server, uint32_t *cellId)
+static int	send_map_cell(t_server *server, uint32_t *cellId)
 {
-  uint32_t cell = *cellId;
-  uint32_t height = (uint32_t)server->game.height;
-  uint32_t width = (uint32_t)server->game.width;
+  uint32_t	cell = *cellId;
+  uint32_t	height = (uint32_t)server->game.height;
+  uint32_t	width = (uint32_t)server->game.width;
 
   if (cell < width * height)
     {
@@ -45,10 +46,10 @@ static int send_map_cell(t_server *server, uint32_t *cellId)
   return (0);
 }
 
-static int send_player_informations(t_server *server)
+static int	send_player_informations(t_server *server)
 {
-  ID        id = 0;
-  t_client *newClient;
+  ID		id = 0;
+  t_client	*newClient;
 
   while (id < server->game.max_slot)
     {
@@ -66,9 +67,9 @@ static int send_player_informations(t_server *server)
   return (0);
 }
 
-static int send_eggs_informations(t_server *server)
+static int	send_eggs_informations(t_server *server)
 {
-  t_egg *egg;
+  t_egg		*egg;
 
   egg = server->game.eggs;
   while (egg)

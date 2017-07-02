@@ -5,16 +5,17 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sun Jun 25 02:21:23 2017 brout_m
-** Last update Wed Jun 28 10:41:27 2017 brout_m
+** Last update Sun Jul  2 15:45:27 2017 Edouard
 */
+
 #include <string.h>
 #include <stdlib.h>
 #include "server.h"
 
-int		gui_sst(t_server *server, ID id, char *cmd)
+int	gui_sst(t_server *server, ID id, char *cmd)
 {
-  char		*timestr;
-  int		time;
+  char	*timestr;
+  int	time;
 
   (void)id;
   strtok(cmd, " ");

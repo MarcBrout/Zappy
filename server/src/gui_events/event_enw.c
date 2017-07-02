@@ -5,11 +5,12 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sun Jun 25 02:27:41 2017 brout_m
-** Last update Wed Jun 28 10:42:19 2017 brout_m
+** Last update Sun Jul  2 15:50:03 2017 Edouard
 */
+
 #include "server.h"
 
-int event_enw(t_server *server, ID id, t_egg const *egg)
+int	event_enw(t_server *server, ID id, t_egg const *egg)
 {
   log_this("[ENW] Client '%d' layed egg '%d' on:\n\tx : %d\n\ty : %d\n",
 	   id, egg->id, egg->pos.x, egg->pos.y);

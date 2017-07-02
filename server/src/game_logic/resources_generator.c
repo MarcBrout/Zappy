@@ -5,7 +5,7 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Tue Jun 27 17:12:53 2017 brout_m
-** Last update Tue Jun 27 17:15:24 2017 puilla_e
+** Last update Sun Jul  2 15:38:33 2017 Edouard
 */
 
 #include <unistd.h>
@@ -14,7 +14,7 @@
 #include "server/gui_commands.h"
 #include "server/ia_commands.h"
 
-static t_luck		drop_rates[OBJ_COUNT] =
+static t_luck	drop_rates[OBJ_COUNT] =
   {
     {FOOD, 80},
     {LINEMATE, 42},
@@ -48,13 +48,13 @@ static void	kill_client(t_server *server, t_client *client)
   decrement_team_count(server, client->ia.team);
 }
 
-static uint32_t		check_deads(t_server *server,
-				    t_client *clients,
-				    int size)
+static uint32_t	check_deads(t_server *server,
+			    t_client *clients,
+			    int size)
 {
-  int			i = 0;
-  uint32_t		alive = 0;
-  t_client		*client = NULL;
+  int		i = 0;
+  uint32_t	alive = 0;
+  t_client	*client = NULL;
 
   while (i < size)
     {
