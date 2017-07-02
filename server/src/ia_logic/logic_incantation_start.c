@@ -5,7 +5,7 @@
 ** Login   <edouard@epitech.net>
 **
 ** Started on  Tue Jun 27 17:30:59 2017 Edouard
-** Last update Sun Jul  2 16:06:33 2017 brout_m
+** Last update Sun Jul  2 21:51:26 2017 Edouard
 */
 
 #include <string.h>
@@ -74,8 +74,8 @@ static int	count_player(t_server *server,
   return (nb_player);
 }
 
-int	check_incantation(t_server *server, ID id,
-			     t_client *client, t_cell *cell)
+int		check_incantation(t_server *server, ID id,
+				  t_client *client, t_cell *cell)
 {
   Object	obj;
 
