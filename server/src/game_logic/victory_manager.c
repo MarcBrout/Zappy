@@ -10,12 +10,12 @@
 
 #include "server.h"
 
-Team	check_winner(t_server *server)
+Team		check_winner(t_server *server)
 {
-  Team 	team = 0;
-  Level max = 0;
-  Team 	max_team = 0;
-  int 	nb_player = 0;
+  Team		team = 0;
+  Level		max = 0;
+  Team		max_team = 0;
+  size_t 	nb_player = 0;
 
   while (team < server->config.team_count)
     {
