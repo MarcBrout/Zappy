@@ -18,8 +18,8 @@ namespace zappy
         void parse(int ac, char **av);
 
         const std::string   &getTeamName() const;
-        const std::string   &getServName() const;
-        uint16_t            getPort() const;
+        const std::string   &getServName();
+        uint16_t            getPort();
 
     private:
         std::string     _teamName;
