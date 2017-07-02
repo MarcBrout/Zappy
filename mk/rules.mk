@@ -29,7 +29,7 @@ all:		$(NAME)
 
 clean:
 		@$(ECHO)
-		@$(ECHO) "$(BOLD_WHITE) [$(RED)RM$(BOLD_WHITE)] $(PROJECT_NAME) Obejcts files$(CLEAR)"
+		@$(ECHO) "$(BOLD_WHITE) [$(RED)RM$(BOLD_WHITE)] $(PROJECT_NAME) Objects files$(CLEAR)"
 		@$(RM) $(OBJ)
 
 fclean:     	clean

@@ -5,7 +5,7 @@
 ## Login   <pierre@epitech.net>
 ##
 ## Started on  Sat Jun 10 20:35:47 2017 PierreBougon
-## Last update Sun Jul  2 18:37:04 2017 Edouard
+## Last update Sun Jul  2 21:15:35 2017 brout_m
 ##
 
 include mk/colors.mk mk/commands.mk mk/definitions.mk
@@ -15,16 +15,16 @@ SERVER		=	server/
 CLIENT_AI	=	ai/
 
 
-all: server ai
+all: zappy_server zappy_ai
 
-server:
+zappy_server:
 	@$(ECHO) "$(BLUE)/========================\\"
 	@$(ECHO) "|         $(BOLD_WHITE)SERVER$(BLUE)         |"
 	@$(ECHO) "\========================/ $(WHITE)"
 	@$(ECHO)
 	@make -s -C $(SERVER) RELEASE=yes
 
-ai:
+zappy_ai:
 	@$(ECHO) "$(BLUE)/========================\\"
 	@$(ECHO) "|         $(BOLD_WHITE)  AI  $(BLUE)         |"
 	@$(ECHO) "\========================/ $(WHITE)"
@@ -41,4 +41,4 @@ clean:
 
 re:	fclean all
 
-.PHONY: clean fclean re ai server
+.PHONY: clean fclean re zappy_ai zappy_server
