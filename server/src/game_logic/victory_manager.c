@@ -15,13 +15,17 @@ Team	check_winner(t_server *server)
   Team 	team = 0;
   Level max = 0;
   Team 	max_team = 0;
+  int 	nb_player = 0;
 
   while (team < server->config.team_count)
     {
-      if (server->config.teams[team].maxlvl - 1 > max)
+      if (server->config.teams[team].maxlvl > max ||
+	  (server->config.teams[team].maxlvl == max &&
+	   nb_player < server->config.teams[team].lvlcount))
 	{
-	  max = server->config.teams[team].maxlvl - 1;
+	  max = server->config.teams[team].maxlvl;
 	  max_team = team;
+	  nb_player = server->config.teams[team].lvlcount;
 	}
       ++team;
     }
