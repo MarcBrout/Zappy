@@ -33,14 +33,14 @@ std::vector<std::string> zappy::network::TCPClient::receive(sock_t socket)
       if (ret < 0)
 	{
 	  // Stopping Client
-          perror("Receive error");
+	  perror("Receive error");
 	  disconnect();
 	  ::exit(84);
 	}
       else if (ret == 0)
 	{
-          std::cerr << "Server disconnected." << std::endl;
-          disconnect();
+	  std::cerr << "Server disconnected." << std::endl;
+	  disconnect();
 	  ::exit(84);
 	}
       else
@@ -56,7 +56,7 @@ std::vector<std::string> zappy::network::TCPClient::receive(sock_t socket)
 void zappy::network::TCPClient::send(const std::string &    data,
                                      zappy::network::sock_t socket)
 {
-  std::string          tosend;
+  std::string tosend;
 
   if (!isConnected())
     throw ClientError("Trying to send when client is not connected");
@@ -78,14 +78,14 @@ std::vector<std::string> zappy::network::TCPClient::receive()
 
 void zappy::network::TCPClient::connect()
 {
-  if (_hostname.empty() || _hostname == "")
-    _hostname = "127.0.0.1";
   _server = ::gethostbyname(_hostname.c_str());
   if (!_server)
     throw network::SocketError("No such host");
-  ::bcopy((char *)_server->h_addr_list[0], (char *)&_servAddr.sin_addr.s_addr,
+  ::bcopy(_server->h_addr_list[0],
+          reinterpret_cast<char *>(&_servAddr.sin_addr.s_addr),
           static_cast<size_t>(_server->h_length));
-  if (::connect(_socket, (sockaddr *)(&_servAddr), sizeof(_servAddr)) == -1)
+  if (::connect(_socket, reinterpret_cast<sockaddr *>(&_servAddr),
+                sizeof(_servAddr)) == -1)
     throw network::SocketError("Cannot connect to server");
   Logger::log(Logger::_DEBUG_, "Connected");
 }
@@ -125,7 +125,8 @@ std::vector<std::string> zappy::network::TCPClient::splitReceived()
   std::vector<std::string> listCommands;
   size_t                   tmpHead = head;
 
-  for (size_t i = 0; i < BUFFER_SIZE && tmpHead % BUFFER_SIZE != tail % BUFFER_SIZE; ++i)
+  for (size_t i = 0;
+       i < BUFFER_SIZE && tmpHead % BUFFER_SIZE != tail % BUFFER_SIZE; ++i)
     {
       if (buf[tmpHead % BUFFER_SIZE] == END_OF_COMMAND)
 	{

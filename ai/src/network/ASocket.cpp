@@ -13,8 +13,6 @@ zappy::network::ASocket::ASocket(uint16_t port, const std::string &hostname)
     : _socket(-1), _port(port), _hostname(hostname), _servAddr(),
       _server(nullptr)
 {
-  if (_port == 0)
-    _port = 4242;
   init();
 }
 
