@@ -21,7 +21,7 @@ int proceed_gui_writes(t_server *server, fd_set *fds_write)
   if (FD_ISSET(server->gui.sock, fds_write))
     {
       log_this("Sending commands to GUI\n");
-      return (write_client(&server->gui, server->gui.sock));
+      return (write_client(server, &server->gui, server->gui.sock));
     }
   return (0);
 }

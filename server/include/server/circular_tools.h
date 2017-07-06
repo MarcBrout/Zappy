@@ -5,7 +5,7 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Sat Jun 24 16:40:57 2017 brout_m
-** Last update Sun Jul  2 13:38:10 2017 Edouard
+** Last update Thu Jul  6 16:22:09 2017 brout_m
 */
 
 #ifndef CIRCULAR_TOOLS_H_
@@ -30,5 +30,6 @@ struct	s_circular
 void	strncircular(t_circular *read_cir, char *str, int n);
 bool	find_command(t_circular *cir);
 bool	strfromcircular(t_circular *cir, char out[MESSAGE_MAX_SIZE]);
+void	resetBuffer(t_circular *c);
 
 #endif /* !CIRCULAR_TOOLS_H_ */

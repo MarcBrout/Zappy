@@ -27,8 +27,8 @@ int			find_Socket(t_server *server, Socket sock)
   return (-1);
 }
 
-static int		write_out(t_client *client,
-				  Socket sock,
+static int		write_out(t_server *server,
+                                  t_client *client,
 				  char out[MESSAGE_MAX_SIZE],
 				  bool cond)
 {
@@ -39,10 +39,13 @@ static int		write_out(t_client *client,
   len = strlen(out);
   if (cond)
     out[len] = '\n';
-  if ((written = write(sock, out, strlen(out))) < 0)
+  if ((written = write(client->sock, out, strlen(out))) < 0)
     {
       perror("Write to client error");
-      return (1);
+      --server->config.teams[client->ia.team].memberCount;
+      close(client->sock);
+      memset(client, 0, sizeof(t_client));
+      return (0);
     }
   notwritten = strlen(out) - written;
   if (notwritten > 0)
@@ -56,7 +59,7 @@ static int		write_out(t_client *client,
   return (0);
 }
 
-static int		send_client(t_client *client, Socket sock)
+static int		send_client(t_server *server, t_client *client)
 {
   size_t		len;
   char			out[MESSAGE_MAX_SIZE];
@@ -66,18 +69,18 @@ static int		send_client(t_client *client, Socket sock)
 	 client->w.remains)
     {
       len = strlen(out);
-      if (write_out(client, sock, out, len))
+      if (write_out(server, client, out, len))
 	return (1);
       memset(out, 0, MESSAGE_MAX_SIZE);
     }
-  return (write_out(client, sock, out, strlen(out) > 0));
+  return (write_out(server, client, out, strlen(out) > 0));
 }
 
-int			write_client(t_client *client, Socket sock)
+int			write_client(t_server *server, t_client *client, Socket sock)
 {
   while (find_command(&client->w))
     {
-      if (send_client(client, sock))
+      if (send_client(server, client))
 	return (1);
     }
   if (client->died)
@@ -105,7 +108,7 @@ int			proceed_writes(t_server *server, fd_set *fds_write)
 	    {
 	      log_this("Sending commands to CLIENT : %d\n", sock);
 	      pos = find_Socket(server, sock);
-	      if (write_client(&server->game.clients[pos], sock))
+	      if (write_client(server, &server->game.clients[pos], sock))
 		return (1);
 	    }
 	}

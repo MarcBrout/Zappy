@@ -93,7 +93,7 @@ void	initiate_client_egg(t_server *server,
 void	initiate_client(t_server *server, ID id, Team team);
 void	set_quit(int sig);
 Team	check_winner(t_server *server);
-int	write_client(t_client *client, Socket sock);
+int	write_client(t_server *server, t_client *client, Socket sock);
 int	proceed_gui_writes(t_server *server, fd_set *fds_write);
 int	read_gui(t_client *gui, Socket sock);
 int	proceed_gui_reads(t_server *server, fd_set *fds_read);

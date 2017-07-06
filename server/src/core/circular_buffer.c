@@ -5,17 +5,12 @@
 ** Login   <marc.brout@epitech.eu>
 **
 ** Started on  Wed May 31 11:22:18 2017 brout_m
-** Last update Sun Jun 25 02:36:33 2017 brout_m
+** Last update Thu Jul  6 16:21:13 2017 brout_m
 */
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
 #include "server.h"
-
-bool		is_full(t_circular *c)
-{
-  return (c->len == BUFFER_MAX_SIZE - 1);
-}
 
 void		strncircular(t_circular *c, char *str, int n)
 {
@@ -91,4 +86,17 @@ bool		strfromcircular(t_circular *c, char out[MESSAGE_MAX_SIZE])
   INCR(c->pos);
   c->len -= 1;
   return (false);
+}
+
+void		resetBuffer(t_circular *c)
+{
+  int		i = 0;
+
+  while (i < BUFFER_MAX_SIZE)
+    {
+      if (c->buffer[i] == '\n')
+        return ;
+      ++i;
+    }
+  memset(c, 0, sizeof(t_circular));
 }
