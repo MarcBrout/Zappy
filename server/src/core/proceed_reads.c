@@ -23,7 +23,10 @@ int			find_ID(t_server *server, ID client, bool active)
   while (cli < server->game.max_slot)
     {
       if (!active && !server->game.clients[cli].active)
-	return (cli);
+        {
+          memset(&server->game.clients[cli], 0, sizeof(t_client));
+          return (cli);
+        }
       if (active && client == server->game.clients[cli].id)
 	return (cli);
       ++cli;

@@ -78,12 +78,12 @@ static int		send_client(t_server *server, t_client *client)
 
 int			write_client(t_server *server, t_client *client, Socket sock)
 {
-  while (find_command(&client->w))
+  while (client->active && find_command(&client->w))
     {
       if (send_client(server, client))
 	return (1);
     }
-  if (client->died)
+  if (client->died || (!client->active && client->alive))
     {
       memset(client, 0, sizeof(*client));
       close(sock);

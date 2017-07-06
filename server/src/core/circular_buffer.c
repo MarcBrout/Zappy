@@ -19,6 +19,7 @@ void		strncircular(t_circular *c, char *str, int n)
 
   i = 0;
   cpos = (c->pos + c->len) % BUFFER_MAX_SIZE;
+  log_this("IN CPOS = %d\n", cpos);
   while (i < n && c->len < BUFFER_MAX_SIZE - 2)
     {
       c->buffer[cpos] = str[i];
@@ -80,6 +81,7 @@ bool		strfromcircular(t_circular *c, char out[MESSAGE_MAX_SIZE])
       ++i;
       --c->len;
     }
+  log_this("OUT CPOS = %d\n", c->pos);
   out[i] = 0;
   if (!end(c, c->pos))
     return (true);
@@ -92,6 +94,8 @@ void		resetBuffer(t_circular *c)
 {
   int		i = 0;
 
+  if (c->len < BUFFER_MAX_SIZE - 2)
+    return ;
   while (i < BUFFER_MAX_SIZE)
     {
       if (c->buffer[i] == '\n')

@@ -94,6 +94,7 @@ int		player_connecting(t_server *server, ID playerId, char *cmd)
 	}
       ++j;
     }
+  server->game.clients[playerId].active = false;
   if (send_to_ia(server, playerId, "ko\n"))
     return (1);
   return (0);
