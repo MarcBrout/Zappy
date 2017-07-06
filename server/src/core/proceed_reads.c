@@ -53,6 +53,7 @@ static int		read_client(t_server *server,
     {
       event_pdi(server, client->id);
       close(sock);
+      --server->config.teams[client->ia.team].memberCount;
       memset(client, 0, sizeof(t_client));
       return (0);
     }
