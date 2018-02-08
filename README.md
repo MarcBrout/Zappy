@@ -18,20 +18,20 @@ There is a world, managed by the Server, there are some peoples to live in this 
 
 ## The world
 <p align="center"> 
-<img src="Documentation/images/world.png" width="200" height="200">
+<img src="Documentation/images/world.png" width="350" height="350">
 </p>
 
 
 
 ## The peoples
 <p align="center"> 
-<img src="Documentation/images/robot2.png" width="50" height="150">
+<img src="Documentation/images/robot2.png" width="140" height="290">
 </p>
 <p align="center"> 
-<img src="Documentation/images/AIDiagram.png" width="200" height="200">
+<img src="Documentation/images/AIDiagram.png" width="450" height="400">
 </p>
 <p align="center"> 
-<img src="Documentation/images/AIStates.png" width="200" height="200">
+<img src="Documentation/images/AIStates.png" width="450" height="400">
 </p>
 
 ## The view
