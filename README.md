@@ -2,9 +2,11 @@
 
 AI trying to survive and evolve in a survival hostile world
 <p align="center">
+
 | Client (AI)   | Server        | Graphic      |
 |:-------------:|:-------------:|:------------:|
 | C++           | C             | C# with Unity|
+
 </p>
 
 <p align="center"> 
