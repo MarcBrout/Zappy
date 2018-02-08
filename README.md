@@ -1,7 +1,7 @@
 # Zappy
 
 AI trying to survive and evolve in a survival hostile world
-<p style="text-align: center;">
+<p align="center">
 | Client (AI)   | Server        | Graphic      |
 |:-------------:|:-------------:|:------------:|
 | C++           | C             | C# with Unity|
