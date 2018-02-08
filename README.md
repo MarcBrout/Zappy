@@ -1,13 +1,14 @@
 # Zappy
 
 AI trying to survive and evolve in a survival hostile world
-
+<p style="text-align: center;">
 | Client (AI)   | Server        | Graphic      |
 |:-------------:|:-------------:|:------------:|
 | C++           | C             | C# with Unity|
+</p>
 
 <p align="center"> 
-<img src="Documentation/images/ZappyLogo.png">
+<img src="Documentation/images/ZappyLogo.png" width="100" height="100">
 </p>
 
 ## The idea
