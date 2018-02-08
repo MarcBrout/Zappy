@@ -1,17 +1,13 @@
 # Zappy
 
 AI trying to survive and evolve in a survival hostile world
-<p align="center">
+
+<img src="Documentation/images/ZappyLogo.png" width="200" height="220" align="center">
 
 | Client (AI)   | Server        | Graphic      |
 |:-------------:|:-------------:|:------------:|
 | C++           | C             | C# with Unity|
 
-</p>
-
-<p align="right"> 
-<img src="Documentation/images/ZappyLogo.png" width="200" height="220">
-</p>
 
 ## The idea
 There is a world, managed by the Server, there are some peoples to live in this world, they are AI, and there you are, as a spectator to look at the evolution of some Robots in a realistic (well they need to eat at least) world.
