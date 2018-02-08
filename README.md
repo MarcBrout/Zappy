@@ -9,7 +9,7 @@ AI trying to survive and evolve in a survival hostile world
 
 </p>
 
-<p align="center"> 
+<p align="right"> 
 <img src="Documentation/images/ZappyLogo.png" width="200" height="220">
 </p>
 
