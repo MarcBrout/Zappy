@@ -31,7 +31,7 @@ There is a world, managed by the Server, there are some peoples to live in this 
 <img src="Documentation/images/AIDiagram.png" width="450" height="400">
 </p>
 <p align="center"> 
-<img src="Documentation/images/AIStates.png" width="450" height="400">
+<img src="Documentation/images/AIStates.png">
 </p>
 
 ## The view
