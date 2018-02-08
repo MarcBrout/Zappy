@@ -10,7 +10,7 @@ AI trying to survive and evolve in a survival hostile world
 </p>
 
 <p align="center"> 
-<img src="Documentation/images/ZappyLogo.png" width="100" height="100">
+<img src="Documentation/images/ZappyLogo.png" width="200" height="220">
 </p>
 
 ## The idea
@@ -18,20 +18,20 @@ There is a world, managed by the Server, there are some peoples to live in this 
 
 ## The world
 <p align="center"> 
-<img src="Documentation/images/world.png">
+<img src="Documentation/images/world.png" width="200" height="200">
 </p>
 
 
 
 ## The peoples
 <p align="center"> 
-<img src="Documentation/images/robot2.png">
+<img src="Documentation/images/robot2.png" width="50" height="150">
 </p>
 <p align="center"> 
-<img src="Documentation/images/AIDiagram.png">
+<img src="Documentation/images/AIDiagram.png" width="200" height="200">
 </p>
 <p align="center"> 
-<img src="Documentation/images/AIStates.png">
+<img src="Documentation/images/AIStates.png" width="200" height="200">
 </p>
 
 ## The view
