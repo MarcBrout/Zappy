@@ -19,7 +19,7 @@ There is a world, managed by the Server, there are some peoples to live in this 
 
 
 
-## The peoples
+## The people
 <p align="center"> 
 <img src="Documentation/images/robot2.png" width="140" height="290">
 </p>
